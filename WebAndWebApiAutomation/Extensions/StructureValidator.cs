@@ -1,5 +1,4 @@
-﻿using WebAndWebApiAutomation.Models;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,12 +6,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using static WebAndWebApiAutomation.WebAutomationEnums;
+using WebAndWebApiAutomation.SelectorDataObjects;
 
-namespace WebAndWebApiAutomation.WebExtensions
+namespace WebAndWebApiAutomation.Extensions
 {
-    public class StructureValidator
+    internal class StructureValidator
     {
-        #region Public Methods
 
         /// <summary>
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
@@ -22,7 +21,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="attributeValue">The value to look for on the attributetype provided</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        public List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
+        internal List<By> GetAllXpathBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
         {
             List<By> xPathBys = new List<By>();
             var cssBy = BuildCssSelectorBy(selectorData);
@@ -44,7 +43,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="tagType">The HTML tag type to look for</param>
         /// <param name="attributeTypesAndValues">The value to look for on the attributetype provided</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        public bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
+        internal bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
         {
             try
             {
@@ -83,7 +82,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        public IWebElement CheckElementExists(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement CheckElementExists(SelectorData selectorData, IWebDriver driver)
         {
             try
             {
@@ -113,7 +112,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        public By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver)
+        internal By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver)
         {
             try
             {
@@ -137,7 +136,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="parentElement">The element to find the child element with</param>
         /// <param name="selectorData">>Data to build the CssSelector with</param>
         /// <returns></returns>
-        public IWebElement CheckChildElementExists(IWebElement parentElement, SelectorData selectorData, IWebDriver driver)
+        internal IWebElement CheckChildElementExists(IWebElement parentElement, SelectorData selectorData, IWebDriver driver)
         {
             try
             {
@@ -162,7 +161,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="elements"></param>
         /// <param name="driver"></param>
         /// <returns></returns>
-        public List<By> ConvertToXPathBy(ReadOnlyCollection<IWebElement> elements, IWebDriver driver)
+        internal List<By> ConvertToXPathBy(ReadOnlyCollection<IWebElement> elements, IWebDriver driver)
         {
             List<By> x = new List<By>();
 
@@ -192,7 +191,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="element"></param>
         /// <param name="driver"></param>
         /// <returns></returns>
-        public By ConvertToXPathBy(IWebElement element, IWebDriver driver)
+        internal By ConvertToXPathBy(IWebElement element, IWebDriver driver)
         {
             if (element == null) throw new NullReferenceException();
 
@@ -214,7 +213,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// </summary>
         /// <param name="innerText">Raw innerText from an IWebElement that contains html to be removed</param>
         /// <returns></returns>
-        public string ParseInnerText(string innerText)
+        internal string ParseInnerText(string innerText)
         {
             if (string.IsNullOrEmpty(innerText))
                 return null;
@@ -270,9 +269,6 @@ namespace WebAndWebApiAutomation.WebExtensions
             return parsedInnertext;
         }
 
-        #endregion
-
-        #region Private Methods
         /// <summary>
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
         /// </summary>
@@ -281,7 +277,7 @@ namespace WebAndWebApiAutomation.WebExtensions
         /// <param name="innerText">Text the element is expected to contain</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        private IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
         {
             try
             {
@@ -311,7 +307,7 @@ namespace WebAndWebApiAutomation.WebExtensions
             }
         }
 
-        private By BuildCssSelectorBy(SelectorData selectorData)
+        internal By BuildCssSelectorBy(SelectorData selectorData)
         {
             By CssSelector = null;
             var tag = selectorData.TagType.GetString().ToLower();
@@ -357,7 +353,7 @@ namespace WebAndWebApiAutomation.WebExtensions
             return CssSelector;
         }
 
-        private string AttemptToMatchToTagType(int startingIndex, string value)
+        internal string AttemptToMatchToTagType(int startingIndex, string value)
         {
             string tagName = null;
             int potentialTagEnd = value.IndexOf(" ", startingIndex);
@@ -369,8 +365,6 @@ namespace WebAndWebApiAutomation.WebExtensions
                 
             return tagName;
         }
-
-
-        #endregion
+        
     }
 }

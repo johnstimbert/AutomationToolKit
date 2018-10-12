@@ -4,9 +4,9 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Linq;
 
-namespace WebAndWebApiAutomation.WebExtensions
+namespace WebAndWebApiAutomation.Extensions
 {
-    public static class GenericIWebDriverActions
+    public static class IWebDriverActions
     {
         internal static readonly int TimeoutForWait = 5;
         internal static readonly int TimeourForImplicitWait = 5;

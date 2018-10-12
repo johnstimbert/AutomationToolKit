@@ -117,12 +117,7 @@ namespace WebAndWebApiAutomation
             the,
             var,
             wbr,
-            xml,
-            //The values below will be flipped to their description attributes
-            [Description("mat-card")]
-            matcard,
-            [Description("mat-dialog-container")]
-            matdialogcontainer
+            xml
             #endregion
         }
 
