@@ -60,9 +60,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebAndApiAutomation\WebAndApiAutomation.csproj">
-      <Project>{fdc55aa6-510c-4939-8e44-6463b7595e96}</Project>
-      <Name>WebAndApiAutomation</Name>
+    <ProjectReference Include="..\WebAndWebApiAutomation\WebAndWebApiAutomation.csproj">
+      <Project>{ca40aa39-2dd5-4b9f-97e2-ea1ee4209a1f}</Project>
+      <Name>WebAndWebApiAutomation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

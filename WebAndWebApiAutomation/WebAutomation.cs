@@ -1,11 +1,11 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Configuration;
-using WebAndApiAutomation.DriverFactory;
-using WebAndApiAutomation.Exceptions;
-using static WebAndApiAutomation.WebAutomationEnums;
+using WebAndWebApiAutomation.DriverFactory;
+using WebAndWebApiAutomation.Exceptions;
+using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace WebAndApiAutomation
+namespace WebAndWebApiAutomation
 {
     public class WebAutomation
     {

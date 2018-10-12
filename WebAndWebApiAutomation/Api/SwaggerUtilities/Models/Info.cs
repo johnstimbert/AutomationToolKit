@@ -1,9 +1,9 @@
-﻿using WebAndApiAutomation.Exceptions;
+﻿using WebAndWebApiAutomation.Exceptions;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using static WebAndApiAutomation.Api.SwaggerUtilities.Enums;
+using static WebAndWebApiAutomation.Api.SwaggerUtilities.Enums;
 
-namespace WebAndApiAutomation.Api.SwaggerUtilities.Models
+namespace WebAndWebApiAutomation.Api.SwaggerUtilities.Models
 {
     internal class Info : ModelsBase
     {
