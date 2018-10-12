@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAndApiAutomation", "WebAndApiAutomation\WebAndApiAutomation.csproj", "{FDC55AA6-510C-4939-8E44-6463B7595E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAndApiAutomation.Tests", "WebAndApiAutomation.Tests\WebAndApiAutomation.Tests.csproj", "{D8240CEE-88A4-475E-A6D7-F8A7266E6507}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDC55AA6-510C-4939-8E44-6463B7595E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC55AA6-510C-4939-8E44-6463B7595E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC55AA6-510C-4939-8E44-6463B7595E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC55AA6-510C-4939-8E44-6463B7595E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8240CEE-88A4-475E-A6D7-F8A7266E6507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8240CEE-88A4-475E-A6D7-F8A7266E6507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8240CEE-88A4-475E-A6D7-F8A7266E6507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8240CEE-88A4-475E-A6D7-F8A7266E6507}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {262D9DFF-2892-409F-A272-A8A69AC369AF}
+	EndGlobalSection
+EndGlobal
