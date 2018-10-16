@@ -1,10 +1,10 @@
 ﻿using log4net;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Configuration;
 using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
-using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.SelectorDataObjects;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
@@ -13,9 +13,12 @@ namespace WebAndWebApiAutomation
     public class WebAutomation
     {
         private readonly StructureValidator _structureValidator;
+        private readonly int _timeoutForWait = 5;
+        WebDriverWait _wait;
 
-        public WebAutomation()
+        public WebAutomation(int TimeoutForWait)
         {
+            _timeoutForWait = TimeoutForWait;
             _structureValidator = new StructureValidator();
         }
 
@@ -50,6 +53,8 @@ namespace WebAndWebApiAutomation
                         webDriver = EdgeDriverManager.Create_WebDriver_Instance(driverPath);
                         break;
                 }
+
+                _wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(_timeoutForWait));
 
                 return webDriver;
             }
@@ -144,6 +149,204 @@ namespace WebAndWebApiAutomation
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 Helper.ClickUsingJavaScript(driver, cssBy);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clicks the provided element after verifying it exists and is clickable
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to click</param>
+        /// <returns>IWebDriver</returns>
+        public IWebDriver Click(IWebDriver driver, SelectorData selectorData)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                driver.Click(cssBy, _wait);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Double clicks the provided element after verifying it exists and is clickable
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to double click</param>
+        /// <returns>IWebDriver</returns>
+        public IWebDriver DoubleClick(IWebDriver driver, SelectorData selectorData)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                driver.DoubleClick(cssBy, _wait);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Enters text into the provided element after verifying it exists and is visible
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to receive the text</param>
+        /// <param name="textToEnter">Text that will be entered</param>
+        /// <returns>IWebDriver</returns>
+        public IWebDriver SendText(IWebDriver driver, SelectorData selectorData, string textToEnter)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                driver.SendText(cssBy, _wait, textToEnter);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Enters text into the provided element one character at a time with a delay between each after verifying it exists and is visible.
+        /// Note: Only use this method to send text to elements that have autocomplete and require a delay on each letter typed.
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to receive the text</param>
+        /// <param name="textToEnter">Text that will be entered</param>
+        /// <param name="delay">Interval before each character is entered</param>
+        /// <returns>IWebDriver</returns>
+        public IWebDriver SendTextWithDelay(IWebDriver driver, SelectorData selectorData, string textToEnter, int delay = 500)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                driver.SendTextWithDelay(cssBy, _wait, textToEnter, delay);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clears the text from the provided element after verifiying the element is visible
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to be cleared</param>
+        /// <returns>IWebDriver</returns>
+        public IWebDriver Clear(IWebDriver driver, SelectorData selectorData)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                driver.Clear(cssBy, _wait);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clears the text from the provided element after verifiying the element is visible
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to move to</param>
+        /// <returns>IWebDriver</returns>
+        public IWebDriver MoveToElement(IWebDriver driver, SelectorData selectorData)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                driver.MoveToElement(cssBy, _wait);
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is selected
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        public bool IsElementSelected(IWebDriver driver, SelectorData selectorData)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return driver.WaitForElementToBeSelected(cssBy, _wait);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is visible
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        public bool IsElementVisible(IWebDriver driver, SelectorData selectorData)
+        {
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return driver.WaitForElementToBeVisible(cssBy, _wait);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the current url contains the provided text
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="text">Text to loof for in the current Url</param>
+        /// <returns>IWebDriver</returns>
+        public bool DoesUrlContain(IWebDriver driver, string text)
+        {
+            try
+            {
+                return driver.WaitForUrlContains(text, _wait);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the current url contains the provided pattern using regex
+        /// </summary>
+        /// <param name="driver">IWebDriver object</param>
+        /// <param name="pattern">Text to loof for in the current Url</param>
+        /// <returns>IWebDriver</returns>
+        public bool DoesUrlContainUseingRegex(IWebDriver driver, string pattern)
+        {
+            try
+            {
+                return driver.WaitForUrlRegexContains(pattern, _wait);
             }
             catch (Exception ex)
             {

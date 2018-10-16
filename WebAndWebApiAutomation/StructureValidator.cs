@@ -8,7 +8,7 @@ using System.Threading;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 using WebAndWebApiAutomation.SelectorDataObjects;
 
-namespace WebAndWebApiAutomation.Extensions
+namespace WebAndWebApiAutomation
 {
     internal class StructureValidator
     {

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 
-namespace WebAndWebApiAutomation.Extensions
+namespace WebAndWebApiAutomation
 {
     internal static class Helper
     {
@@ -45,6 +45,10 @@ namespace WebAndWebApiAutomation.Extensions
             js.ExecuteScript(script, driver.FindElement(locator));
         }
 
+        #region 
+        /*
+         * Both of these methods are used by the structure validator class and should not be exposed outside of the assembly
+         */
         internal static string GetEnumDescription(Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
@@ -71,5 +75,6 @@ namespace WebAndWebApiAutomation.Extensions
             }
             return value.ToString();
         }
+        #endregion
     }
 }
