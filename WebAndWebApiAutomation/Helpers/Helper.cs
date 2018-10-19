@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 
-namespace WebAndWebApiAutomation
+namespace WebAndWebApiAutomation.Helpers
 {
     internal static class Helper
     {

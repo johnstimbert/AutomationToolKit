@@ -3,7 +3,7 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 
-namespace WebAndWebApiAutomation
+namespace WebAndWebApiAutomation.Extensions
 {
     internal static class DriverExtension
     {

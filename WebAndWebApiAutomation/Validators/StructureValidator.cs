@@ -7,12 +7,13 @@ using System.Reflection;
 using System.Threading;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 using WebAndWebApiAutomation.SelectorDataObjects;
+using WebAndWebApiAutomation.Helpers;
+using WebAndWebApiAutomation.Extensions;
 
-namespace WebAndWebApiAutomation
+namespace WebAndWebApiAutomation.Validators
 {
     internal class StructureValidator
     {
-
         /// <summary>
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
         /// /// </summary>
