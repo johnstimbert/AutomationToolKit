@@ -13,7 +13,7 @@ namespace WebAndApiAutomation.Tests
         [TestInitialize]
         public void BeforeEachTest()
         {
-            _webAutomation = new WebAutomation();
+            _webAutomation = new WebAutomation(5);
         }
 
         [TestCleanup]

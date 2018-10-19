@@ -61,11 +61,11 @@ namespace WebAndWebApiAutomation
 
                 return webDriver;
             }
-            catch(DriverServiceNotFoundException dsnf)
+            catch (DriverServiceNotFoundException dsnf)
             {
                 throw new WebAutomationException(dsnf.ToString());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new WebAutomationException(ex.ToString());
             }
@@ -132,7 +132,7 @@ namespace WebAndWebApiAutomation
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                Helper.HighlightElement(driver, cssBy);                
+                Helper.HighlightElement(driver, cssBy);
             }
             catch (Exception ex)
             {
@@ -345,7 +345,7 @@ namespace WebAndWebApiAutomation
         /// <param name="driver">IWebDriver object</param>
         /// <param name="pattern">Text to loof for in the current Url</param>
         /// <returns>IWebDriver</returns>
-        public bool DoesUrlContainUseingRegex(IWebDriver driver, string pattern)
+        public bool DoesUrlContainUsingRegex(IWebDriver driver, string pattern)
         {
             try
             {
@@ -357,6 +357,160 @@ namespace WebAndWebApiAutomation
             }
         }
 
+        /// <summary>
+        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
+        /// </summary>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>IWebElementreturns>
+        public IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver)
+        {
+            try
+            {
+                return _structureValidator.CheckElementExistsReturnIWebElement(selectorData, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
 
+        /// <summary>
+        /// Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned
+        /// </summary>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>By.CssSelector</returns>
+        public By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver)
+        {
+            try
+            {
+                return _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data
+        /// </summary>
+        /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>bool</returns>
+        public bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
+        {
+            try
+            {
+                return _structureValidator.CheckElementsExist(selectorDataSet, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned
+        /// </summary>
+        /// <param name="parentSelectorData">Data to find the parent element with</param>
+        /// <param name="childSelectorData">>Data to find the child element with</param>
+        /// <returns>IWebElement</returns>
+        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriver driver)
+        {
+            try
+            {
+                var parentElement = CheckElementExistsReturnIWebElement(parentSelectorData, driver);
+                if (parentElement == null)
+                    return parentElement;
+
+                return _structureValidator.CheckChildElementExists(parentElement, childSelectorData, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates and returns an XPath By object for the element provided, returns null if the element is not found
+        /// </summary>
+        /// <param name="selectorData">Data to locate the element with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>By.XPath</returns>
+        public By ConvertToXPathBy(SelectorData selectorData, IWebDriver driver)
+        {
+            try
+            {
+                var element = CheckElementExistsReturnIWebElement(selectorData, driver);
+                if (element == null)
+                    return null;
+
+                return _structureValidator.ConvertToXPathBy(element, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// This method will remove html data from the innerText of a given element and return only text NOT go beyon the first element. 
+        /// This method will not parse the innerText of a child element passed in as part of a larger set
+        /// </summary>
+        /// <param name="innerText">Raw innerText from an IWebElement that contains html to be removed</param>
+        /// <returns>string</returns>
+        public string ParseInnerText(string htmlText)
+        {
+            try
+            {
+                return _structureValidator.ParseInnerText(htmlText);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
+        /// </summary>
+        /// <param name="htmlTagType">Html tag containing the inner text</param>
+        /// <param name="innerText">The text to match</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns></returns>
+        public IWebElement CheckElementExistsByTagAndInnerText_ExactMatch(HtmlTagType htmlTagType, string innerText, IWebDriver driver)
+        {
+            try
+            {
+                var data = new SelectorData("CheckElementExistsByTagAndInnerText_ExactMatch", htmlTagType, HtmlAttributeType.InnerText_ExactMatch, innerText);
+                return _structureValidator.CheckElementExistsByTagAndInnerText(data, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
+        /// </summary>
+        /// <param name="htmlTagType">Html tag containing the inner text</param>
+        /// <param name="innerText">The text to perform a contains with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns></returns>
+        public IWebElement CheckElementExistsByTagAndInnerText_Contains(HtmlTagType htmlTagType, string innerText, IWebDriver driver)
+        {
+            try
+            {
+                var data = new SelectorData("CheckElementExistsByTagAndInnerText_Contains", htmlTagType, HtmlAttributeType.InnerText_Contains, innerText);
+                return _structureValidator.CheckElementExistsByTagAndInnerText(data, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
     }
 }

@@ -15,35 +15,11 @@ namespace WebAndWebApiAutomation.Validators
     internal class StructureValidator
     {
         /// <summary>
-        /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
-        /// /// </summary>
-        /// <param name="tagType">The HTML tag type to look for</param>
-        /// <param name="attributeType">The type of attribute to build the CssSelector with</param>
-        /// <param name="attributeValue">The value to look for on the attributetype provided</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns></returns>
-        internal List<By> GetAllXpathBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
-        {
-            List<By> xPathBys = new List<By>();
-            var cssBy = BuildCssSelectorBy(selectorData);
-
-            Thread.Sleep(2000);
-            var elements = driver.FindElements(cssBy);
-
-            foreach(var element in elements)
-            {
-                xPathBys.Add(ConvertToXPathBy(element, driver));
-            }
-
-            return xPathBys;
-        }
-
-        /// <summary>
-        /// Builds a CssSelector with the params provided and uses it to check that an element exists with that data
+        /// Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data
         /// </summary>
-        /// <param name="tagType">The HTML tag type to look for</param>
-        /// <param name="attributeTypesAndValues">The value to look for on the attributetype provided</param>
+        /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>bool</returns>
         internal bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
         {
             try
@@ -82,28 +58,26 @@ namespace WebAndWebApiAutomation.Validators
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns></returns>
-        internal IWebElement CheckElementExists(SelectorData selectorData, IWebDriver driver)
+        /// <returns>IWebElementreturns>
+        internal IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver)
         {
+            IWebElement webElement = null;
             try
             {
-                IWebElement webElement = null;
-
-                if(selectorData.AttributeType == HtmlAttributeType.InnerText_Contains || selectorData.AttributeType == HtmlAttributeType.InnerText_ExactMatch)
+                if (selectorData.AttributeType == HtmlAttributeType.InnerText_Contains || selectorData.AttributeType == HtmlAttributeType.InnerText_ExactMatch)
                 {
                     webElement = CheckElementExistsByTagAndInnerText(selectorData, driver);
                 }
                 else
                 {
                     webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData));
-                }                
+                }
 
                 return webElement;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.Logger.Info($"[Structure Exception] ==== {ex} ====");
-                return null;
+                return webElement;
             }
         }
 
@@ -121,12 +95,11 @@ namespace WebAndWebApiAutomation.Validators
 
                 var cssBy = BuildCssSelectorBy(selectorData);
                 webElement = driver.WaitForElementExists(cssBy);
-
+                               
                 return cssBy;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.Logger.Info($"[Structure Exception] ==== {ex} ====");
                 return null;
             }
         }
@@ -151,41 +124,10 @@ namespace WebAndWebApiAutomation.Validators
             }
             catch (Exception ex)
             {
-                Helper.Logger.Info($"[Structure Exception] ==== {ex} ====");
                 return null;
             }
         }
-
-        /// <summary>
-        /// Creates and returns XPath By objects for each of the elements provided
-        /// </summary>
-        /// <param name="elements"></param>
-        /// <param name="driver"></param>
-        /// <returns></returns>
-        internal List<By> ConvertToXPathBy(ReadOnlyCollection<IWebElement> elements, IWebDriver driver)
-        {
-            List<By> x = new List<By>();
-
-            foreach (var element in elements)
-            {
-                if (element == null) throw new NullReferenceException();
-
-                var attributes =
-                    ((IJavaScriptExecutor)driver).ExecuteScript(
-                        "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
-                        element) as Dictionary<string, object>;
-                if (attributes == null) throw new NullReferenceException();
-
-                var selector = "//" + element.TagName;
-                selector = attributes.Aggregate(selector, (current, attribute) =>
-                     current + "[@" + attribute.Key + "='" + attribute.Value + "']");
-
-                x.Add(By.XPath(selector));
-            }
-
-            return x;
-        }
-
+               
         /// <summary>
         /// Creates and returns an XPath By object for the element provided
         /// </summary>
@@ -196,11 +138,9 @@ namespace WebAndWebApiAutomation.Validators
         {
             if (element == null) throw new NullReferenceException();
 
-            var attributes =
-                ((IJavaScriptExecutor)driver).ExecuteScript(
+            if (!(((IJavaScriptExecutor)driver).ExecuteScript(
                     "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
-                    element) as Dictionary<string, object>;
-            if (attributes == null) throw new NullReferenceException();
+                    element) is Dictionary<string, object> attributes)) throw new NullReferenceException();
 
             var selector = "//" + element.TagName;
             selector = attributes.Aggregate(selector, (current, attribute) =>
