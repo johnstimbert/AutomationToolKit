@@ -2,6 +2,9 @@
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace WebAndWebApiAutomation.Extensions
 {
@@ -81,6 +84,30 @@ namespace WebAndWebApiAutomation.Extensions
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(locator));
+        }
+
+        internal static List<By> ConvertToXPathBy(this ReadOnlyCollection<IWebElement> elements, IWebDriver driver)
+        {
+            List<By> x = new List<By>();
+
+            foreach (var element in elements)
+            {
+                if (element == null) throw new NullReferenceException();
+
+                var attributes =
+                    ((IJavaScriptExecutor)driver).ExecuteScript(
+                        "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
+                        element) as Dictionary<string, object>;
+                if (attributes == null) throw new NullReferenceException();
+
+                var selector = "//" + element.TagName;
+                selector = attributes.Aggregate(selector, (current, attribute) =>
+                     current + "[@" + attribute.Key + "='" + attribute.Value + "']");
+
+                x.Add(By.XPath(selector));
+            }
+
+            return x;
         }
 
     }

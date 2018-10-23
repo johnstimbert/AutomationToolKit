@@ -1,5 +1,4 @@
-﻿using log4net;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -9,15 +8,12 @@ namespace WebAndWebApiAutomation.Helpers
 {
     internal static class Helper
     {
-        internal static readonly ILog Logger =
-           LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        internal static void TakeScreenShot(IWebDriver driver, string sreenShotPath, string screenShotName)
+        internal static void TakeScreenShot(IWebDriver driver, string screenShotPath, string screenShotName)
         {
-            if (!Directory.Exists(sreenShotPath))
-                Directory.CreateDirectory(sreenShotPath);
+            if (!Directory.Exists(screenShotPath))
+                Directory.CreateDirectory(screenShotPath);
 
-            var SSName = Path.Combine(sreenShotPath, $"{screenShotName}_{DateTime.Now.ToFileTime()}.jpeg");
+            var SSName = Path.Combine(screenShotPath, $"{screenShotName}_{DateTime.Now.ToFileTime()}.jpeg");
             Screenshot ss = ((ITakesScreenshot)driver).GetScreenshot();                
             ss.SaveAsFile(SSName, ScreenshotImageFormat.Jpeg);
         }

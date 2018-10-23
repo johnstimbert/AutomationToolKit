@@ -1,7 +1,7 @@
-﻿using log4net;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
@@ -16,12 +16,14 @@ namespace WebAndWebApiAutomation
     public class WebAutomation
     {
         private readonly StructureValidator _structureValidator;
+        private readonly string _driverPath;
         private readonly int _timeoutForWait = 5;
         WebDriverWait _wait;
 
-        public WebAutomation(int TimeoutForWait)
+        public WebAutomation(int TimeoutForWait, string driverPath)
         {
             _timeoutForWait = TimeoutForWait;
+            _driverPath = driverPath;
             _structureValidator = new StructureValidator();
         }
 
@@ -34,26 +36,21 @@ namespace WebAndWebApiAutomation
         {
             try
             {
-                string driverPath = ConfigurationManager.AppSettings["DriverPath"];
-
-                if (string.IsNullOrEmpty(driverPath))
-                    throw new WebAutomationException("DriverPath not defined in the app.config. Please add '<add key=\"DriverPath\" value=\"PathToDriverExecutables\"/>' to the app.config ");
-
                 IWebDriver webDriver = null;
 
                 switch (driverType)
                 {
                     case DriverType.Chrome:
-                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(driverPath);
+                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath);
                         break;
                     case DriverType.Firefox:
-                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(driverPath);
+                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath);
                         break;
                     case DriverType.Ie:
-                        webDriver = IEDriverManager.Create_WebDriver_Instance(driverPath);
+                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath);
                         break;
                     case DriverType.Edge:
-                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(driverPath);
+                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath);
                         break;
                 }
 
@@ -64,22 +61,6 @@ namespace WebAndWebApiAutomation
             catch (DriverServiceNotFoundException dsnf)
             {
                 throw new WebAutomationException(dsnf.ToString());
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Returns an instance of the log4net logger to standardize log output
-        /// </summary>
-        /// <returns>ILog</returns>
-        public ILog GetLogger()
-        {
-            try
-            {
-                return Helper.Logger;
             }
             catch (Exception ex)
             {
@@ -506,6 +487,25 @@ namespace WebAndWebApiAutomation
             {
                 var data = new SelectorData("CheckElementExistsByTagAndInnerText_Contains", htmlTagType, HtmlAttributeType.InnerText_Contains, innerText);
                 return _structureValidator.CheckElementExistsByTagAndInnerText(data, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Validates that all the anchor tags <a /> found on the page the driver is currently navigated to.
+        /// It returns the XPath By object and NavigationResult for every link found and tested
+        /// </summary>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>List<KeyValuePair<By, NavigationResult>></returns>
+        public List<KeyValuePair<By, NavigationResult>> TestLinkNavigationForAllAnchorsFoundInPage(IWebDriver driver)
+        {
+            try
+            {
+                var navValidator = new NavigationValidator(_wait);
+                return navValidator.TestLinkNavigationForAllAnchorsFoundInPage(driver);
             }
             catch (Exception ex)
             {

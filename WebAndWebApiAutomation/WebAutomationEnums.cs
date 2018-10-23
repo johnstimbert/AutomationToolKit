@@ -129,5 +129,25 @@ namespace WebAndWebApiAutomation
             Edge
         }
 
+        public enum NavigationResult
+        {
+            /// <summary>
+            /// Navigation was successful
+            /// </summary>
+            Success,
+            /// <summary>
+            /// No href attribute was found
+            /// </summary>
+            HrefIsNotPresent,
+            /// <summary>
+            /// Navigation failed see message
+            /// </summary>
+            Failed,
+            /// <summary>
+            /// No navigation was attempted
+            /// </summary>
+            NavigationNotAttempted
+        }
+
     }
 }

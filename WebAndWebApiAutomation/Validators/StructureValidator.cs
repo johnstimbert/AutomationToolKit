@@ -22,35 +22,15 @@ namespace WebAndWebApiAutomation.Validators
         /// <returns>bool</returns>
         internal bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
         {
-            try
+            bool result = true;
+            var items = selectorDataSet.SelectorDataItems;
+            for (int i = 0; i < items.Count; i++)
             {
-                bool result = true;
-                var items = selectorDataSet.SelectorDataItems;
-                for (int i = 0; i < items.Count; i++)
-                {
-                    var item = items[i];
-                    Helper.Logger.Info($"[Structure Test] ==== Checking if an {selectorDataSet.TagType} tag exists containing an attribute of " +
-                        $"{item.AttributeType} with a value of {item.AttributeValue} ====");
-                    if (driver.WaitForElementExists(BuildCssSelectorBy(item)) == null)
-                    {
-                        result = false;
-                        Helper.Logger.Info($"[Structure Test] ==== A {selectorDataSet.TagType} tag containing an attribute of {item.AttributeType} with a value of {item.AttributeValue} was not found ====");
-                        Helper.Logger.Info($"[Structure Test] ==== Failed ====");
-                    }
-                    else
-                    {
-                        Helper.Logger.Info($"[Structure Test] ==== Passed ====");
-                    }
-                }
+                var item = items[i];
+                driver.WaitForElementExists(BuildCssSelectorBy(item));
+            }
 
-                return result;
-            }
-            catch(Exception ex)
-            {
-                Helper.Logger.Info($"[Structure Exception] ==== {ex} ====");
-                Helper.Logger.Info($"[Structure Test] ==== Failed ====");
-                throw ex;
-            }
+            return result;
         }
 
         /// <summary>
@@ -122,7 +102,7 @@ namespace WebAndWebApiAutomation.Validators
 
                 return webElement;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -220,32 +200,24 @@ namespace WebAndWebApiAutomation.Validators
         /// <returns></returns>
         internal IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
         {
-            try
+            IWebElement webElement = null;
+            Thread.Sleep(2000);
+            var findSelector = new SelectorData(selectorData.Name, selectorData.TagType, HtmlAttributeType.None, string.Empty);
+            var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
+            switch(selectorData.AttributeType)
             {
-                IWebElement webElement = null;
-                Thread.Sleep(2000);
-                var findSelector = new SelectorData(selectorData.Name, selectorData.TagType, HtmlAttributeType.None, string.Empty);
-                var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
-                switch(selectorData.AttributeType)
-                {
-                    case HtmlAttributeType.InnerText_Contains:
-                        webElement = elements.FirstOrDefault(element => element.Text.Contains(selectorData.AttributeValue));
-                        break;
-                    case HtmlAttributeType.InnerText_ExactMatch:
-                        webElement = elements.FirstOrDefault(element => element.Text.Equals(selectorData.AttributeValue));
-                        break;
-                    default:
-                        throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod().Name} use either " +
-                                            $"{HtmlAttributeType.InnerText_Contains} or {HtmlAttributeType.InnerText_ExactMatch}");
-                }
+                case HtmlAttributeType.InnerText_Contains:
+                    webElement = elements.FirstOrDefault(element => element.Text.Contains(selectorData.AttributeValue));
+                    break;
+                case HtmlAttributeType.InnerText_ExactMatch:
+                    webElement = elements.FirstOrDefault(element => element.Text.Equals(selectorData.AttributeValue));
+                    break;
+                default:
+                    throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod().Name} use either " +
+                                        $"{HtmlAttributeType.InnerText_Contains} or {HtmlAttributeType.InnerText_ExactMatch}");
+            }
 
-                return webElement;
-            }
-            catch (Exception ex)
-            {
-                Helper.Logger.Info($"[Structure Exception] ==== {ex} ====");
-                return null;
-            }
+            return webElement;
         }
 
         internal By BuildCssSelectorBy(SelectorData selectorData)
@@ -287,7 +259,7 @@ namespace WebAndWebApiAutomation.Validators
                     CssSelector = By.CssSelector($"{tag}");
                     break;
                 default:
-                    Helper.Logger.Info($"[Structure Test] ==== Attribute type {selectorData.AttributeType} is not supported ====");
+                    //Helper.Logger.Info($"[Structure Test] ==== Attribute type {selectorData.AttributeType} is not supported ====");
                     break;
             }
             

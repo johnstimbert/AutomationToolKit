@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAndApiAutomation.Tests", "WebAndApiAutomation.Tests\WebAndApiAutomation.Tests.csproj", "{D8240CEE-88A4-475E-A6D7-F8A7266E6507}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA40AA39-2DD5-4B9F-97E2-EA1EE4209A1F} = {CA40AA39-2DD5-4B9F-97E2-EA1EE4209A1F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAndWebApiAutomation", "WebAndWebApiAutomation\WebAndWebApiAutomation.csproj", "{CA40AA39-2DD5-4B9F-97E2-EA1EE4209A1F}"
 EndProject
