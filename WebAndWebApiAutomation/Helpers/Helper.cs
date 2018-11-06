@@ -1,8 +1,10 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using WebAndWebApiAutomation.Exceptions;
 
 namespace WebAndWebApiAutomation.Helpers
 {
@@ -39,6 +41,17 @@ namespace WebAndWebApiAutomation.Helpers
             var js = (IJavaScriptExecutor)driver;
             var script = "arguments[0].click();";
             js.ExecuteScript(script, driver.FindElement(locator));
+        }
+        
+        internal static string GetDriverBrowserName(IWebDriver driver)
+        {
+            return (driver as RemoteWebDriver).Capabilities.GetCapability("browserName").ToString();
+        }
+
+        internal static void IsDriverNull(IWebDriver driver)
+        {
+            if (driver == null)
+                throw new WebAutomationException("Driver Provided was null. Instantiate the driver before performing actions on or with it");
         }
 
         #region 

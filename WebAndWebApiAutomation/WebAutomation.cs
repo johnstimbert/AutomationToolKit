@@ -455,46 +455,6 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
-        /// </summary>
-        /// <param name="htmlTagType">Html tag containing the inner text</param>
-        /// <param name="innerText">The text to match</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns></returns>
-        public IWebElement CheckElementExistsByTagAndInnerText_ExactMatch(HtmlTagType htmlTagType, string innerText, IWebDriver driver)
-        {
-            try
-            {
-                var data = new SelectorData("CheckElementExistsByTagAndInnerText_ExactMatch", htmlTagType, HtmlAttributeType.InnerText_ExactMatch, innerText);
-                return _structureValidator.CheckElementExistsByTagAndInnerText(data, driver);
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
-        /// </summary>
-        /// <param name="htmlTagType">Html tag containing the inner text</param>
-        /// <param name="innerText">The text to perform a contains with</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns></returns>
-        public IWebElement CheckElementExistsByTagAndInnerText_Contains(HtmlTagType htmlTagType, string innerText, IWebDriver driver)
-        {
-            try
-            {
-                var data = new SelectorData("CheckElementExistsByTagAndInnerText_Contains", htmlTagType, HtmlAttributeType.InnerText_Contains, innerText);
-                return _structureValidator.CheckElementExistsByTagAndInnerText(data, driver);
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
-        /// <summary>
         /// Validates that all the anchor tags <a /> found on the page the driver is currently navigated to.
         /// It returns the XPath By object and NavigationResult for every link found and tested
         /// </summary>

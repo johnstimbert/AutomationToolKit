@@ -9,11 +9,23 @@ using static WebAndWebApiAutomation.WebAutomationEnums;
 using WebAndWebApiAutomation.SelectorDataObjects;
 using WebAndWebApiAutomation.Helpers;
 using WebAndWebApiAutomation.Extensions;
+using WebAndWebApiAutomation.Exceptions;
 
 namespace WebAndWebApiAutomation.Validators
 {
     internal class StructureValidator
     {
+        internal static SelectorData _reCaptchaSelectorData = new SelectorData("reCaptcha", HtmlTagType.iframe, HtmlAttributeType.AttributeText_Contains, "https://www.google.com/recaptcha");
+
+        internal bool RecaptchaPresent(IWebDriver driver)
+        {
+            bool result = false;
+
+
+
+            return result;
+        }
+
         /// <summary>
         /// Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data
         /// </summary>
@@ -48,6 +60,10 @@ namespace WebAndWebApiAutomation.Validators
                 {
                     webElement = CheckElementExistsByTagAndInnerText(selectorData, driver);
                 }
+                else if(selectorData.AttributeType == HtmlAttributeType.AttributeText_Contains || selectorData.AttributeType == HtmlAttributeType.AttributeText_ExactMatch)
+                {
+                    webElement = CheckElementExistsByAttributevalue(selectorData, driver);
+                }
                 else
                 {
                     webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData));
@@ -59,6 +75,33 @@ namespace WebAndWebApiAutomation.Validators
             {
                 return webElement;
             }
+        }
+
+        /// <summary>
+        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
+        /// </summary>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns></returns>
+        internal IWebElement CheckElementExistsByAttributevalue(SelectorData selectorData, IWebDriver driver)
+        {
+            IWebElement webElement = null;
+            var findSelector = new SelectorData(selectorData.Name, selectorData.TagType, HtmlAttributeType.None, string.Empty);
+            var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
+            switch (selectorData.AttributeType)
+            {
+                case HtmlAttributeType.AttributeText_Contains:
+                    webElement = elements.FirstOrDefault(element => element.Text.Contains(selectorData.AttributeValue));
+                    break;
+                case HtmlAttributeType.AttributeText_ExactMatch:
+                    webElement = elements.FirstOrDefault(element => element.Text.Equals(selectorData.AttributeValue));
+                    break;
+                default:
+                    throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod().Name} use either " +
+                                        $"{HtmlAttributeType.InnerText_Contains} or {HtmlAttributeType.InnerText_ExactMatch}");
+            }
+
+            return webElement;
         }
 
         /// <summary>
@@ -193,20 +236,26 @@ namespace WebAndWebApiAutomation.Validators
         /// <summary>
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
         /// </summary>
-        /// <param name="htmlTagType">The HTML tag type to look for</param>
-        /// <param name="attributeType">The</param>
-        /// <param name="innerText">Text the element is expected to contain</param>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
         internal IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
         {
             IWebElement webElement = null;
-            Thread.Sleep(2000);
+
+            IJavaScriptExecutor javaScriptExecutor = Helper.JavaScriptExecutor(driver);
+            if(javaScriptExecutor == null)
+                throw new WebAutomationException($"Could not create the needed IJavaScriptExecutor object using the {Helper.GetDriverBrowserName(driver)}");
+
             var findSelector = new SelectorData(selectorData.Name, selectorData.TagType, HtmlAttributeType.None, string.Empty);
             var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
             switch(selectorData.AttributeType)
             {
                 case HtmlAttributeType.InnerText_Contains:
+                    foreach(var element in elements)
+                    {
+                        
+                    }
                     webElement = elements.FirstOrDefault(element => element.Text.Contains(selectorData.AttributeValue));
                     break;
                 case HtmlAttributeType.InnerText_ExactMatch:

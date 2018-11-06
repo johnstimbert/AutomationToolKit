@@ -6,6 +6,8 @@ namespace WebAndWebApiAutomation
     {
         public enum HtmlAttributeType
         {
+            AttributeText_Contains,
+            AttributeText_ExactMatch,
             Id,
             Class,
             Name,
