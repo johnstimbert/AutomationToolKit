@@ -83,17 +83,17 @@ namespace WebAndWebApiAutomation.Validators
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        internal IWebElement CheckElementExistsByAttributevalue(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
         {
             IWebElement webElement = null;
             var findSelector = new SelectorData(selectorData.Name, selectorData.TagType, HtmlAttributeType.None, string.Empty);
             var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
             switch (selectorData.AttributeType)
             {
-                case HtmlAttributeType.AttributeText_Contains:
+                case HtmlAttributeType.InnerText_Contains:
                     webElement = elements.FirstOrDefault(element => element.Text.Contains(selectorData.AttributeValue));
                     break;
-                case HtmlAttributeType.AttributeText_ExactMatch:
+                case HtmlAttributeType.InnerText_ExactMatch:
                     webElement = elements.FirstOrDefault(element => element.Text.Equals(selectorData.AttributeValue));
                     break;
                 default:
@@ -239,10 +239,10 @@ namespace WebAndWebApiAutomation.Validators
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        internal IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement CheckElementExistsByAttributevalue(SelectorData selectorData, IWebDriver driver)
         {
             IWebElement webElement = null;
-
+            Dictionary<string, object> attributes = new Dictionary<string, object>();
             IJavaScriptExecutor javaScriptExecutor = Helper.JavaScriptExecutor(driver);
             if(javaScriptExecutor == null)
                 throw new WebAutomationException($"Could not create the needed IJavaScriptExecutor object using the {Helper.GetDriverBrowserName(driver)}");
@@ -251,15 +251,33 @@ namespace WebAndWebApiAutomation.Validators
             var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
             switch(selectorData.AttributeType)
             {
-                case HtmlAttributeType.InnerText_Contains:
+                case HtmlAttributeType.AttributeText_Contains:
                     foreach(var element in elements)
                     {
-                        
+                        //Get the attributes of the element using a javascript query
+                        var attsObject = javaScriptExecutor.ExecuteScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", element);
+                        //Cast them to a dictionary object
+                        attributes = (Dictionary<string, object>)attsObject;
+                        foreach(var attribute in attributes)
+                        {
+                            if (attribute.Value.ToString().ToLower().Contains(selectorData.AttributeValue.ToLower()))
+                                return element;
+                        }
                     }
-                    webElement = elements.FirstOrDefault(element => element.Text.Contains(selectorData.AttributeValue));
                     break;
-                case HtmlAttributeType.InnerText_ExactMatch:
-                    webElement = elements.FirstOrDefault(element => element.Text.Equals(selectorData.AttributeValue));
+                case HtmlAttributeType.AttributeText_ExactMatch:
+                    foreach (var element in elements)
+                    {
+                        //Get the attributes of the element using a javascript query
+                        var attsObject = javaScriptExecutor.ExecuteScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", element);
+                        //Cast them to a dictionary object
+                        attributes = (Dictionary<string, object>)attsObject;
+                        foreach (var attribute in attributes)
+                        {
+                            if (attribute.Value.ToString().ToLower().Equals(selectorData.AttributeValue.ToLower()))
+                                return element;
+                        }
+                    }
                     break;
                 default:
                     throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod().Name} use either " +
