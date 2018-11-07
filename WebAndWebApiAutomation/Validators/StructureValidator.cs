@@ -1,12 +1,10 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using static WebAndWebApiAutomation.WebAutomationEnums;
-using WebAndWebApiAutomation.SelectorDataObjects;
+using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using WebAndWebApiAutomation.Helpers;
 using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.Exceptions;
@@ -17,11 +15,12 @@ namespace WebAndWebApiAutomation.Validators
     {
         internal static SelectorData _reCaptchaSelectorData = new SelectorData("reCaptcha", HtmlTagType.iframe, HtmlAttributeType.AttributeText_Contains, "https://www.google.com/recaptcha");
 
-        internal bool RecaptchaPresent(IWebDriver driver)
+        internal bool ReCaptchaPresent(IWebDriver driver)
         {
             bool result = false;
 
-
+            if (CheckElementExistsReturnIWebElement(_reCaptchaSelectorData, driver) != null)
+                result = true;
 
             return result;
         }

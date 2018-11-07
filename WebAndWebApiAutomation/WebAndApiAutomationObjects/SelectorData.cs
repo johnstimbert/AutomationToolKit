@@ -1,6 +1,6 @@
 ﻿using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace WebAndWebApiAutomation.SelectorDataObjects
+namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
 {
     public class SelectorData
     {

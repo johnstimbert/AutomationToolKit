@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace WebAndWebApiAutomation.SelectorDataObjects
+namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
 {
     public class SelectorDataSet
     {        

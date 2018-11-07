@@ -2,12 +2,11 @@
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
 using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.Helpers;
-using WebAndWebApiAutomation.SelectorDataObjects;
+using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using WebAndWebApiAutomation.Validators;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
@@ -76,6 +75,7 @@ namespace WebAndWebApiAutomation
         /// <param name="screenShotName">Name of the screenshot file</param>
         public void TakeScreenShot(IWebDriver driver, string sreenShotPath, string screenShotName)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 Helper.TakeScreenShot(driver, sreenShotPath, screenShotName);
@@ -93,6 +93,7 @@ namespace WebAndWebApiAutomation
         /// <returns></returns>
         public IJavaScriptExecutor GetJavaScriptExecutor(IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 return Helper.JavaScriptExecutor(driver);
@@ -110,6 +111,7 @@ namespace WebAndWebApiAutomation
         /// <param name="selectorData">Object representing the element to highlight</param>
         public void HighlightElement(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -129,6 +131,7 @@ namespace WebAndWebApiAutomation
         /// <param name="selectorData">Object representing the element to highlight</param>
         public void JavaScriptClick(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -148,6 +151,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public IWebDriver Click(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -159,27 +163,7 @@ namespace WebAndWebApiAutomation
                 throw new WebAutomationException(ex.ToString());
             }
         }
-
-        /// <summary>
-        /// Double clicks the provided element after verifying it exists and is clickable
-        /// </summary>
-        /// <param name="driver">IWebDriver object</param>
-        /// <param name="selectorData">Object representing the element to double click</param>
-        /// <returns>IWebDriver</returns>
-        public IWebDriver DoubleClick(IWebDriver driver, SelectorData selectorData)
-        {
-            try
-            {
-                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                driver.DoubleClick(cssBy, _wait);
-                return driver;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
+        
         /// <summary>
         /// Enters text into the provided element after verifying it exists and is visible
         /// </summary>
@@ -189,6 +173,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public IWebDriver SendText(IWebDriver driver, SelectorData selectorData, string textToEnter)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -212,6 +197,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public IWebDriver SendTextWithDelay(IWebDriver driver, SelectorData selectorData, string textToEnter, int delay = 500)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -232,6 +218,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public IWebDriver Clear(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -252,6 +239,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public IWebDriver MoveToElement(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -272,6 +260,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public bool IsElementSelected(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -291,6 +280,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public bool IsElementVisible(IWebDriver driver, SelectorData selectorData)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
@@ -310,6 +300,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public bool DoesUrlContain(IWebDriver driver, string text)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 return driver.WaitForUrlContains(text, _wait);
@@ -328,6 +319,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         public bool DoesUrlContainUsingRegex(IWebDriver driver, string pattern)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 return driver.WaitForUrlRegexContains(pattern, _wait);
@@ -346,6 +338,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebElementreturns>
         public IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 return _structureValidator.CheckElementExistsReturnIWebElement(selectorData, driver);
@@ -364,6 +357,7 @@ namespace WebAndWebApiAutomation
         /// <returns>By.CssSelector</returns>
         public By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 return _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
@@ -382,6 +376,7 @@ namespace WebAndWebApiAutomation
         /// <returns>bool</returns>
         public bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 return _structureValidator.CheckElementsExist(selectorDataSet, driver);
@@ -400,6 +395,7 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebElement</returns>
         public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var parentElement = CheckElementExistsReturnIWebElement(parentSelectorData, driver);
@@ -422,6 +418,7 @@ namespace WebAndWebApiAutomation
         /// <returns>By.XPath</returns>
         public By ConvertToXPathBy(SelectorData selectorData, IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var element = CheckElementExistsReturnIWebElement(selectorData, driver);
@@ -462,6 +459,7 @@ namespace WebAndWebApiAutomation
         /// <returns>List<KeyValuePair<By, NavigationResult>></returns>
         public List<KeyValuePair<By, NavigationResult>> TestLinkNavigationForAllAnchorsFoundInPage(IWebDriver driver)
         {
+            Helper.IsDriverNull(driver);
             try
             {
                 var navValidator = new NavigationValidator(_wait);

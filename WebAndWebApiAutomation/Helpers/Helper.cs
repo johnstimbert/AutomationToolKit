@@ -54,7 +54,7 @@ namespace WebAndWebApiAutomation.Helpers
                 throw new WebAutomationException("Driver Provided was null. Instantiate the driver before performing actions on or with it");
         }
 
-        #region 
+        #region INTERNAL ONLY DO NOT EXPOSE
         /*
          * Both of these methods are used by the structure validator class and should not be exposed outside of the assembly
          */
