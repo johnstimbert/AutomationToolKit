@@ -81,6 +81,7 @@ namespace WebAndWebApiAutomation
             marquee,
             menu,
             meta,
+            nav,
             nobr,
             noframes,
             noscript,

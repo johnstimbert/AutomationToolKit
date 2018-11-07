@@ -411,29 +411,6 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Creates and returns an XPath By object for the element provided, returns null if the element is not found
-        /// </summary>
-        /// <param name="selectorData">Data to locate the element with</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns>By.XPath</returns>
-        public By ConvertToXPathBy(SelectorData selectorData, IWebDriver driver)
-        {
-            Helper.IsDriverNull(driver);
-            try
-            {
-                var element = CheckElementExistsReturnIWebElement(selectorData, driver);
-                if (element == null)
-                    return null;
-
-                return _structureValidator.ConvertToXPathBy(element, driver);
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
-        /// <summary>
         /// This method will remove html data from the innerText of a given element and return only text NOT go beyon the first element. 
         /// This method will not parse the innerText of a child element passed in as part of a larger set
         /// </summary>
