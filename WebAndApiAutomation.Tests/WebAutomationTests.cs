@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
 using WebAndWebApiAutomation;
 using WebAndWebApiAutomation.Exceptions;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
@@ -469,6 +470,291 @@ namespace WebAndApiAutomation.Tests
                 Assert.AreEqual(_nullDriverException, message, "The expected null driver exception was not found");
             }
         }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void Clear_Chrome()
+        {
+            string text = "ChromeShot";
+            SelectorData googleSearchInput = new SelectorData("SearchInput", WebAutomationEnums.HtmlTagType.input, WebAutomationEnums.HtmlAttributeType.Type, "text");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl(_navUrl);
+            Assert.IsNotNull(_driver, "Driver was null");
+            _webAutomation.SendText(_driver, googleSearchInput, text);
+            _webAutomation.Clear(_driver, googleSearchInput);
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void Clear_Firefox()
+        {
+            string text = "ChromeShot";
+            SelectorData googleSearchInput = new SelectorData("SearchInput", WebAutomationEnums.HtmlTagType.input, WebAutomationEnums.HtmlAttributeType.Type, "text");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Firefox);
+            _driver.Navigate().GoToUrl(_navUrl);
+            Assert.IsNotNull(_driver, "Driver was null");
+            _webAutomation.SendText(_driver, googleSearchInput, text);
+            _webAutomation.Clear(_driver, googleSearchInput);
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void Clear_IE()
+        {
+            string text = "ChromeShot";
+            SelectorData googleSearchInput = new SelectorData("SearchInput", WebAutomationEnums.HtmlTagType.input, WebAutomationEnums.HtmlAttributeType.Type, "text");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Ie);
+            _driver.Navigate().GoToUrl(_navUrl);
+            Assert.IsNotNull(_driver, "Driver was null");
+            _webAutomation.SendText(_driver, googleSearchInput, text);
+            _webAutomation.Clear(_driver, googleSearchInput);
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void Clear_Edge()
+        {
+            string text = "ChromeShot";
+            SelectorData googleSearchInput = new SelectorData("SearchInput", WebAutomationEnums.HtmlTagType.input, WebAutomationEnums.HtmlAttributeType.Type, "text");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Edge);
+            _driver.Navigate().GoToUrl(_navUrl);
+            Assert.IsNotNull(_driver, "Driver was null");
+            _webAutomation.SendText(_driver, googleSearchInput, text);
+            _webAutomation.Clear(_driver, googleSearchInput);
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void Clear_NullDriver()
+        {
+            SelectorData googleSearchInput = new SelectorData("SearchInput", WebAutomationEnums.HtmlTagType.input, WebAutomationEnums.HtmlAttributeType.Type, "text");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl(_navUrl);
+            Assert.IsNotNull(_driver, "Driver was null");
+
+            _driver.Quit();
+            _driver = null;
+
+            try
+            {
+                _webAutomation.Clear(_driver, googleSearchInput);
+            }
+            catch (WebAutomationException ex)
+            {
+                string message = ex.Message;
+                Assert.AreEqual(_nullDriverException, message, "The expected null driver exception was not found");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void MoveToElement_Chrome()
+        {
+            SelectorData copyrightDiv = new SelectorData("CopyrightDiv", WebAutomationEnums.HtmlTagType.div, WebAutomationEnums.HtmlAttributeType.Class, "copyright");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            _driver = _webAutomation.MoveToElement(_driver, copyrightDiv);
+            var element = _webAutomation.CheckElementExistsReturnIWebElement(copyrightDiv, _driver);
+            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void MoveToElement_Firefox()
+        {
+            SelectorData copyrightDiv = new SelectorData("CopyrightDiv", WebAutomationEnums.HtmlTagType.div, WebAutomationEnums.HtmlAttributeType.InnerText_Contains, "Intersys Consulting, Inc. All Rights Reserved");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Firefox);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            _driver = _webAutomation.MoveToElement(_driver, copyrightDiv);
+            var element = _webAutomation.CheckElementExistsReturnIWebElement(copyrightDiv, _driver);
+            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void MoveToElement_IE()
+        {
+            SelectorData copyrightDiv = new SelectorData("CopyrightDiv", WebAutomationEnums.HtmlTagType.div, WebAutomationEnums.HtmlAttributeType.InnerText_Contains, "Intersys Consulting, Inc. All Rights Reserved");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Ie);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            _driver = _webAutomation.MoveToElement(_driver, copyrightDiv);
+            var element = _webAutomation.CheckElementExistsReturnIWebElement(copyrightDiv, _driver);
+            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void MoveToElement_Edge()
+        {
+            SelectorData copyrightDiv = new SelectorData("CopyrightDiv", WebAutomationEnums.HtmlTagType.div, WebAutomationEnums.HtmlAttributeType.InnerText_Contains, "Intersys Consulting, Inc. All Rights Reserved");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Edge);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            _driver = _webAutomation.MoveToElement(_driver, copyrightDiv);
+            var element = _webAutomation.CheckElementExistsReturnIWebElement(copyrightDiv, _driver);
+            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void MoveToElement_NullDriver()
+        {
+            SelectorData copyrightDiv = new SelectorData("CopyrightDiv", WebAutomationEnums.HtmlTagType.div, WebAutomationEnums.HtmlAttributeType.InnerText_Contains, "Intersys Consulting, Inc. All Rights Reserved");
+
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+
+            _driver.Quit();
+            _driver = null;
+
+            try
+            {
+                _webAutomation.MoveToElement(_driver, copyrightDiv);
+            }
+            catch (WebAutomationException ex)
+            {
+                string message = ex.Message;
+                Assert.AreEqual(_nullDriverException, message, "The expected null driver exception was not found");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContain_Chrome()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");            
+            Assert.IsTrue(_webAutomation.DoesUrlContain(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContain_Firefox()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Firefox);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContain(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContain_IE()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Ie);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContain(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContain_Edge()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Edge);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContain(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContain_NullDriver()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+
+            _driver.Quit();
+            _driver = null;
+
+            try
+            {
+                Assert.IsTrue(_webAutomation.DoesUrlContain(_driver, "intersys"));
+            }
+            catch (WebAutomationException ex)
+            {
+                string message = ex.Message;
+                Assert.AreEqual(_nullDriverException, message, "The expected null driver exception was not found");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContainUsingRegex_Chrome()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContainUsingRegex_Firefox()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Firefox);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContainUsingRegex_IE()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Ie);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContainUsingRegex_Edge()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Edge);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driver, "intersys"));
+        }
+
+        [TestMethod]
+        [TestCategory(_driverInteractionTestCategory)]
+        public void DoesUrlContainUsingRegex_NullDriver()
+        {
+            _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            _driver.Navigate().GoToUrl("https://www.intersysconsulting.com/");
+            Assert.IsNotNull(_driver, "Driver was null");
+
+            _driver.Quit();
+            _driver = null;
+
+            try
+            {
+                Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driver, "intersys"));
+            }
+            catch (WebAutomationException ex)
+            {
+                string message = ex.Message;
+                Assert.AreEqual(_nullDriverException, message, "The expected null driver exception was not found");
+            }
+        }
+
         #endregion
 
         #region Element_Location_Method_Tests
@@ -621,5 +907,6 @@ namespace WebAndApiAutomation.Tests
 
         #endregion
 
+        
     }
 }

@@ -296,7 +296,7 @@ namespace WebAndWebApiAutomation
         /// Checks whether or not the current url contains the provided text
         /// </summary>
         /// <param name="driver">IWebDriver object</param>
-        /// <param name="text">Text to loof for in the current Url</param>
+        /// <param name="text">Text to look for in the current Url</param>
         /// <returns>IWebDriver</returns>
         public bool DoesUrlContain(IWebDriver driver, string text)
         {
@@ -315,7 +315,7 @@ namespace WebAndWebApiAutomation
         /// Checks whether or not the current url contains the provided pattern using regex
         /// </summary>
         /// <param name="driver">IWebDriver object</param>
-        /// <param name="pattern">Text to loof for in the current Url</param>
+        /// <param name="pattern">Text to look for in the current Url</param>
         /// <returns>IWebDriver</returns>
         public bool DoesUrlContainUsingRegex(IWebDriver driver, string pattern)
         {
