@@ -1,0 +1,1203 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "CIS API"
+  },
+  "paths": {
+    "/api/v1/fhir/actor/{federatedPrincipleId}/contract": {
+      "get": {
+        "tags": [
+          "Actor"
+        ],
+        "operationId": "ApiV1FhirActorByFederatedPrincipleIdContractGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "federatedPrincipleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ContractRelationshipListModel"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Application/{id}/ApplicationFormField": {
+      "get": {
+        "tags": [
+          "Application"
+        ],
+        "summary": "Gets the Application From assocaited for Enrollment",
+        "operationId": "ApiV1ApplicationByIdApplicationFormFieldGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Application Id.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FormlyFieldConfig"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Application/PortalUser/{portalUserId}": {
+      "get": {
+        "tags": [
+          "Application"
+        ],
+        "summary": "Gets applications by user",
+        "operationId": "ApiV1ApplicationPortalUserByPortalUserIdGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "portalUserId",
+            "in": "path",
+            "description": "Portal User Id.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FormlyFieldConfig"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/portal/AssociatedAlias": {
+      "patch": {
+        "tags": [
+          "AssociatedAlias"
+        ],
+        "operationId": "ApiV1PortalAssociatedAliasPatch",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "oktaUserId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/fhir/Authentication": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "ApiV1FhirAuthenticationPost",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/AuthenticationResponseModel"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/portal/Enrollment": {
+      "post": {
+        "tags": [
+          "Enrollment"
+        ],
+        "operationId": "ApiV1PortalEnrollmentPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "userEnrollment",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UserEnrollmentModel"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/portal/Identity": {
+      "post": {
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Creates the integrated Portal User to CIS/Okta/etc...",
+        "operationId": "ApiV1PortalIdentityPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "identity",
+            "in": "body",
+            "description": "Identity.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RegistrationIdentity"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/portal/Identity/Verify-Email/{verificationCode}": {
+      "put": {
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Verify users email",
+        "operationId": "ApiV1PortalIdentityVerify-EmailByVerificationCodePut",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "verificationCode",
+            "in": "path",
+            "description": "Verification code.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/portal/Identity/Verify-Email/{email}": {
+      "post": {
+        "tags": [
+          "Identity"
+        ],
+        "summary": "Send Verification Email",
+        "operationId": "ApiV1PortalIdentityVerify-EmailByEmailPost",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "email to verify.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Invitation": {
+      "post": {
+        "tags": [
+          "Invitation"
+        ],
+        "summary": "Creates the Application Invitation",
+        "operationId": "ApiV1InvitationPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "applicationInvitationModel",
+            "in": "body",
+            "description": "Application Invitation model.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ApplicationInvitationModel"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Invitation/{applicationInvitationCode}": {
+      "get": {
+        "tags": [
+          "Invitation"
+        ],
+        "summary": "Gets a specific Application Invitation",
+        "operationId": "ApiV1InvitationByApplicationInvitationCodeGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "applicationInvitationCode",
+            "in": "path",
+            "description": "Application Invitation Code",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PortalUserModel"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/OktaUser": {
+      "post": {
+        "tags": [
+          "OktaUser"
+        ],
+        "summary": "Creates an Okta User by registration identity model",
+        "operationId": "ApiV1OktaUserPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "value",
+            "in": "body",
+            "description": "Registration Identity Model.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RegistrationIdentity"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/OktaUser/Password": {
+      "patch": {
+        "tags": [
+          "OktaUser"
+        ],
+        "summary": "Updates an Okta User's password.",
+        "operationId": "ApiV1OktaUserPasswordPatch",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "changePasswordOptions",
+            "in": "body",
+            "description": "New Password.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ChangePasswordOptions"
+            }
+          },
+          {
+            "name": "oktaUserId",
+            "in": "query",
+            "description": "Okta User ID.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/fhir/Patient/{id}": {
+      "get": {
+        "tags": [
+          "Patient"
+        ],
+        "summary": "Get Cerner patient",
+        "operationId": "ApiV1FhirPatientByIdGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Fhir Person Id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PatientResource"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/fhir/Patient": {
+      "get": {
+        "tags": [
+          "Patient"
+        ],
+        "summary": "Get Cerner patient",
+        "operationId": "ApiV1FhirPatientGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "cmrn",
+            "in": "query",
+            "description": "Community Medical Record Number",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PatientListModel"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Patient"
+        ],
+        "summary": "Update Cerner Patient, This actual makes a call for each property to update",
+        "operationId": "ApiV1FhirPatientPatch",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "patientModel",
+            "in": "body",
+            "description": "Patient model.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PatientModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/PortalUser": {
+      "get": {
+        "tags": [
+          "PortalUser"
+        ],
+        "summary": "Gets all CIS portal users.",
+        "operationId": "ApiV1PortalUserGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PortalUserModel"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PortalUser"
+        ],
+        "summary": "Updates the CIS Portal User",
+        "operationId": "ApiV1PortalUserPut",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "portalUserModel",
+            "in": "body",
+            "description": "Portal user model.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PortalUserModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PortalUser"
+        ],
+        "summary": "Creates the CIS Portal User",
+        "operationId": "ApiV1PortalUserPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "portalUserModel",
+            "in": "body",
+            "description": "Portal user model.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PortalUserModel"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/PortalUser/search": {
+      "get": {
+        "tags": [
+          "PortalUser"
+        ],
+        "summary": "Gets a specific CIS portal User by Id or Email",
+        "operationId": "ApiV1PortalUserSearchGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "CIS Id for portal user",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "CIS Email for portal user",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PortalUserModel"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ContractRelationshipListModel": {
+      "type": "object",
+      "properties": {
+        "entry": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContractEntry"
+          }
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "total": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "link": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "ContractEntry": {
+      "type": "object",
+      "properties": {
+        "fullUrl": {
+          "type": "string"
+        },
+        "resource": {
+          "$ref": "#/definitions/ContractResource"
+        }
+      }
+    },
+    "Link": {
+      "type": "object",
+      "properties": {
+        "relation": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "ContractResource": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Identifier"
+          }
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "text": {
+          "$ref": "#/definitions/Text"
+        }
+      }
+    },
+    "Identifier": {
+      "type": "object",
+      "properties": {
+        "use": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/Type"
+        },
+        "system": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "period": {
+          "$ref": "#/definitions/Period"
+        }
+      }
+    },
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "versionId": {
+          "type": "string"
+        },
+        "lastUpdated": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Text": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "div": {
+          "type": "string"
+        }
+      }
+    },
+    "Type": {
+      "type": "object",
+      "properties": {
+        "coding": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Coding"
+          }
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "Period": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "end": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Coding": {
+      "type": "object",
+      "properties": {
+        "system": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "userSelected": {
+          "type": "boolean"
+        }
+      }
+    },
+    "FormlyFieldConfig": {
+      "type": "object",
+      "properties": {
+        "applicationFormFieldId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "key": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "templateOptions": {
+          "$ref": "#/definitions/FormlyTemplateOptions"
+        }
+      }
+    },
+    "FormlyTemplateOptions": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        },
+        "min": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "max": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "minLength": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "maxLength": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "options": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InputValues"
+          }
+        }
+      }
+    },
+    "InputValues": {
+      "type": "object",
+      "properties": {
+        "applicationFormFieldToValueId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "value": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthenticationResponseModel": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "token_type": {
+          "type": "string"
+        },
+        "expires_in": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "UserEnrollmentModel": {
+      "type": "object",
+      "properties": {
+        "portalUserId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "applicationEnrollments": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApplicationEnrollmentModel"
+          }
+        }
+      }
+    },
+    "ApplicationEnrollmentModel": {
+      "type": "object",
+      "properties": {
+        "applicationId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "applicationUserId": {
+          "type": "string"
+        },
+        "applicationName": {
+          "type": "string"
+        }
+      }
+    },
+    "RegistrationIdentity": {
+      "required": [
+        "password",
+        "firstName",
+        "lastName",
+        "email"
+      ],
+      "type": "object",
+      "properties": {
+        "password": {
+          "minLength": 8,
+          "type": "string"
+        },
+        "fhirPersonId": {
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date",
+          "type": "string"
+        },
+        "socialSecurityNumber": {
+          "maxLength": 9,
+          "minLength": 0,
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "ApplicationInvitationModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "applicationId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "invitationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "fhirPersonId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "socialSecurityNumber": {
+          "type": "string"
+        },
+        "securityChallengeQuestion": {
+          "type": "string"
+        },
+        "securityChallengeAnswer": {
+          "type": "string"
+        }
+      }
+    },
+    "PortalUserModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "oktaUserId": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "relatedAlias": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "socialSecurityNumber": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "ChangePasswordOptions": {
+      "type": "object",
+      "properties": {
+        "currentPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "PatientResource": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Identifier"
+          }
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "text": {
+          "$ref": "#/definitions/Text"
+        }
+      }
+    },
+    "PatientListModel": {
+      "type": "object",
+      "properties": {
+        "entry": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PatientEntry"
+          }
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "total": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "link": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "PatientEntry": {
+      "type": "object",
+      "properties": {
+        "fullUrl": {
+          "type": "string"
+        },
+        "resource": {
+          "$ref": "#/definitions/PatientResource"
+        }
+      }
+    },
+    "PatientModel": {
+      "type": "object",
+      "properties": {
+        "patientId": {
+          "type": "string"
+        },
+        "federatedPrincipleAlias": {
+          "type": "string"
+        },
+        "messageAlias": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -564,7 +564,7 @@ namespace WebAndApiAutomation.Tests
             {
                 _webAutomation.Clear(_driver, googleSearchInput);
             }
-            catch (WebAutomationException ex)
+            catch (WebAutomationException ex) 
             {
                 string message = ex.Message;
                 Assert.AreEqual(_nullDriverException, message, "The expected null driver exception was not found");
