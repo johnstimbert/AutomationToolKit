@@ -7,7 +7,7 @@ namespace WebAndWebApiAutomation.Api
         private readonly string _swaggerJsonDefintionString;
         private SwaggerReader _swaggerReader;
 
-        public SwaggerAutomator(string swaggerJsonDefintionString)
+        internal SwaggerAutomator(string swaggerJsonDefintionString)
         {
             _swaggerJsonDefintionString = swaggerJsonDefintionString;
             _swaggerReader = new SwaggerReader(_swaggerJsonDefintionString);
