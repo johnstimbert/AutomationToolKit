@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -13,7 +14,7 @@ namespace WebAndApiAutomation.Tests
     [TestClass]
     public class WebAutomationTests
     {
-        private const string _driverTestCategory = "Driver_Tests";
+        private const string _driverTestCategory = "Driver_Instance_Creation_Tests";
         private const string _driverInteractionTestCategory = "Driver_Interaction_Tests";
         private const string _elementLocationMethodsTestCategory = "Element_Location_Method_Tests";
 
@@ -22,7 +23,14 @@ namespace WebAndApiAutomation.Tests
         private readonly string _navUrlIntersys = "https://www.intersysconsulting.com/";
         private IWebDriver _driver = null;
         private readonly string _screenShotPath = @"C:\ScreenShots";
-        private readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndApiAutomation.Tests\bin\Debug\";
+
+        private const string _chromeDriverName = "chromedriver.exe";
+        private const string _firefoxDriverName = "geckodriver.exe";
+        private const string _ieDriverName = "IEDriverServer.exe";
+        private const string _edgeDriverName = "MicrosoftWebDriver.exe";
+
+        //private readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Release";
+        private readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
 
         private readonly string _nullDriverException = "Driver Provided was null. Instantiate the driver before performing actions on or with it";
 
@@ -46,7 +54,7 @@ namespace WebAndApiAutomation.Tests
         [TestInitialize]
         public void BeforeEachTest()
         {
-            _webAutomation = new WebAutomation(10, _driverPath);
+            _webAutomation = new WebAutomation(_driverPath, 10);
         }
 
         [TestCleanup]
@@ -61,7 +69,7 @@ namespace WebAndApiAutomation.Tests
                 dirInfo.Delete(true);
             }
 
-            _webAutomation = new WebAutomation(10, _driverPath);
+            _webAutomation = new WebAutomation(_driverPath, 10);
         }
 
         #region Driver_Tests
@@ -104,6 +112,86 @@ namespace WebAndApiAutomation.Tests
             _driver.Navigate().GoToUrl(_navUrlGoogle);
             Assert.AreEqual(_navUrlGoogle, _driver.Url, $"Expected url was {_navUrlGoogle}, Url found was {_driver.Url}");
         }
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetDriver_BadPath()
+        {
+            string badPath = @"C:\xyz";
+            try
+            {
+                var webAutomation = new WebAutomation(badPath);
+            }
+            catch(Exception ex)
+            {
+                Assert.AreEqual($"The path {badPath}\\ could not be found", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetChromeDriver_GoodPath_NoDriverexe()
+        {
+            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
+            try
+            {
+                var webAutomation = new WebAutomation(badPath);
+                _driver = webAutomation.GetDriver(WebAutomationEnums.DriverType.Chrome);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual($"The driver {_chromeDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetFirefoxDriver_GoodPath_NoDriverexe()
+        {
+            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
+            try
+            {
+                var webAutomation = new WebAutomation(badPath);
+                _driver = webAutomation.GetDriver(WebAutomationEnums.DriverType.Firefox);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual($"The driver {_firefoxDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetIEDriver_GoodPath_NoDriverexe()
+        {
+            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
+            try
+            {
+                var webAutomation = new WebAutomation(badPath);
+                _driver = webAutomation.GetDriver(WebAutomationEnums.DriverType.Edge);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual($"The driver {_ieDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetEdgeDriver_GoodPath_NoDriverexe()
+        {
+            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
+            try
+            {
+                var webAutomation = new WebAutomation(badPath);
+                _driver = webAutomation.GetDriver(WebAutomationEnums.DriverType.Edge);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual($"The driver {_edgeDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
 
         #endregion
 
@@ -603,7 +691,7 @@ namespace WebAndApiAutomation.Tests
         [TestCategory(_driverInteractionTestCategory)]
         public void MoveToElement_IE()
         {
-            _webAutomation = new WebAutomation(30, _driverPath);
+            _webAutomation = new WebAutomation(_driverPath, 30);
             SelectorData copyrightDiv = new SelectorData("CopyrightDiv", WebAutomationEnums.HtmlTagType.div, WebAutomationEnums.HtmlAttributeType.InnerText_Contains, "Intersys Consulting, Inc. All Rights Reserved");
 
             _driver = _webAutomation.GetDriver(WebAutomationEnums.DriverType.Ie);

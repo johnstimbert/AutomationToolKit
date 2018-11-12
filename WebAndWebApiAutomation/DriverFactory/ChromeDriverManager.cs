@@ -8,8 +8,7 @@ namespace WebAndWebApiAutomation.DriverFactory
     {
         internal static ChromeDriver Create_WebDriver_Instance(string driverPath)
         {
-            var driverLocation = Path.Combine(Path.GetDirectoryName(driverPath));
-            var driver = new ChromeDriver(driverLocation);
+            var driver = new ChromeDriver(driverPath);
             driver.Manage().Window.Maximize();
             return driver;
         }

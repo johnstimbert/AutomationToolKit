@@ -49,7 +49,7 @@ namespace WebAndWebApiAutomation.Validators
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns>IWebElementreturns>
+        /// <returns>IWebElement</returns>
         internal IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver)
         {
             IWebElement webElement = null;
@@ -131,6 +131,7 @@ namespace WebAndWebApiAutomation.Validators
         /// </summary>
         /// <param name="parentElement">The element to find the child element with</param>
         /// <param name="selectorData">>Data to build the CssSelector with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
         internal IWebElement CheckChildElementExists(IWebElement parentElement, SelectorData selectorData, IWebDriver driver)
         {
