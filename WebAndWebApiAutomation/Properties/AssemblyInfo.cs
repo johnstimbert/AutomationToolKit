@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WebAndWebApiAutomation")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Wraps the Selenium WebDriver and provides extended functionality to provide rapid development of web and web api automation test solutions")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Intersys Consulting")]
 [assembly: AssemblyProduct("WebAndWebApiAutomation")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

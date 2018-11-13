@@ -49,8 +49,7 @@ namespace WebAndApiAutomation.Tests
             new SelectorData("NavById", WebAutomationEnums.HtmlTagType.nav, WebAutomationEnums.HtmlAttributeType.None,
                              null)
         });
-
-
+        
         [TestInitialize]
         public void BeforeEachTest()
         {

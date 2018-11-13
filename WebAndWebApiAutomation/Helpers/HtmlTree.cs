@@ -13,6 +13,10 @@ namespace WebAndWebApiAutomation.Helpers
         private List<HtmlTag> _allTags;
         private List<HtmlTag> _innerTags;
         
+        /// <summary>
+        /// Creates an HtmlTree object using the raw html provided
+        /// </summary>
+        /// <param name="rawHtml"></param>
         public HtmlTree(string rawHtml)
         {
             _innerTags = new List<HtmlTag>();

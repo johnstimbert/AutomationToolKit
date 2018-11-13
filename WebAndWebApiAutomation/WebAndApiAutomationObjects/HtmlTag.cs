@@ -5,6 +5,9 @@ using static WebAndWebApiAutomation.WebAutomationEnums;
 
 namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
 {
+    /// <summary>
+    /// Object representation of a given html element
+    /// </summary>
     public class HtmlTag
     {
         private string _tag;
@@ -373,7 +376,7 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         }
 
         /// <summary>
-        /// Extracts the raw html from current tag and its inner tags. If it runs into <BR> or <P> tags they are replced with newlines.
+        /// Extracts the raw html from current tag and its inner tags. If it runs into (BR) or (P) tags they are replced with newlines.
         /// </summary>
         public string ToText()
         {

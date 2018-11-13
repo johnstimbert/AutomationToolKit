@@ -2,8 +2,12 @@
 
 namespace WebAndWebApiAutomation
 {
+    /// <summary>
+    /// Enum definitions used for method interaction
+    /// </summary>
     public class WebAutomationEnums
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public enum HtmlAttributeType
         {
             AttributeText_Contains,
@@ -151,6 +155,6 @@ namespace WebAndWebApiAutomation
             /// </summary>
             NavigationNotAttempted
         }
-
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
