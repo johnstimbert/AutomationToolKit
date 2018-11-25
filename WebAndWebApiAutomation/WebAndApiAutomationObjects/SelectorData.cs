@@ -10,19 +10,19 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// <summary>
         /// Used to uniquely identify a SelectorData object when used as part of a set
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; internal set; }
         /// <summary>
         /// Denotes the Html Element Name or Tag
         /// </summary>
-        public HtmlTagType TagType { get; set; }
+        public HtmlTagType TagType { get; internal set; }
         /// <summary>
         /// Denotes the attribute name, unless set to 'None'
         /// </summary>
-        public HtmlAttributeType AttributeType { get; set; }
+        public HtmlAttributeType AttributeType { get; internal set; }
         /// <summary>
         /// Denotes the attribute value text, unless the AttributeType property is set to 'None' 
         /// </summary>
-        public string AttributeValue { get; set; }
+        public string AttributeValue { get; internal set; }
 
         /// <summary>
         /// Use this contructor when creating a stand alone SelectorData object
