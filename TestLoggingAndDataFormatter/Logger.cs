@@ -51,7 +51,10 @@ namespace TestLoggingAndDataFormatter
             get { return _dateFormatProperty; }
             set { _dateFormatProperty = ValidateDateFormatValueBeingSet(value); }
         }
-
+        /// <summary>
+        /// If set to true, a file will be created containing the entries for a failed test
+        /// </summary>
+        public bool GenerateFailureLog = true;
         /// <summary>
         /// Appends the current date to the log file being written based on the DateFormatProperty.
         /// The default value is true.
@@ -109,23 +112,26 @@ namespace TestLoggingAndDataFormatter
                 {
                     case LogLevel.TESTSTART:
 
-                        WriteEntry("***Starting Test****", stackTrace.GetFrame(1).GetMethod().Name, message);
+                        WriteEntryToExecutionLog("***Starting Test****", stackTrace.GetFrame(1).GetMethod().Name, message);
 
                         break;
                     case LogLevel.TESTINFO:
 
-                        WriteEntry("Test Execution Info", stackTrace.GetFrame(1).GetMethod().Name, message);
+                        WriteEntryToExecutionLog("Test Execution Info", stackTrace.GetFrame(1).GetMethod().Name, message);
 
                         break;
                     case LogLevel.TESTFAILED:
 
-                        WriteEntry("******TEST FAILURE******", stackTrace.GetFrame(1).GetMethod().Name, message);
+                        WriteEntryToExecutionLog("******TEST FAILURE******", stackTrace.GetFrame(1).GetMethod().Name, message);
 
                         break;
 
                     case LogLevel.TESTPASSED:
 
-                        WriteEntry("******TEST FAILURE******", stackTrace.GetFrame(1).GetMethod().Name, message);
+                        WriteEntryToExecutionLog("******TEST FAILURE******", stackTrace.GetFrame(1).GetMethod().Name, message);
+
+                        if(GenerateFailureLog)
+                            WriteEntryToFailureLog("******TEST FAILURE******", stackTrace.GetFrame(1).GetMethod().Name, message);
 
                         break;
                 }
@@ -141,10 +147,19 @@ namespace TestLoggingAndDataFormatter
 
 
         #region private methods
-        private void WriteEntry(string level, string testMethodName, string message)
+        private void WriteEntryToExecutionLog(string level, string testMethodName, string message)
         {
             //Append new text to an existing file 
             using (StreamWriter file = new StreamWriter(Path.Combine(_logFilePath, _logFileName), true))
+            {
+                file.WriteLine($"{DateTime.Now.ToString("G")} - Message Type:{level} Test Method:{testMethodName} - {message}");
+            }
+        }
+
+        private void WriteEntryToFailureLog(string level, string testMethodName, string message)
+        {
+            //Append new text to an existing file 
+            using (StreamWriter file = new StreamWriter(Path.Combine(_logFilePath, $"{_logFileName}_Failures" ), true))
             {
                 file.WriteLine($"{DateTime.Now.ToString("G")} - Message Type:{level} Test Method:{testMethodName} - {message}");
             }
