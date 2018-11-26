@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAndWebApiAutomation", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLoggingAndDataFormatter", "TestLoggingAndDataFormatter\TestLoggingAndDataFormatter.csproj", "{C01C2F65-5F28-42BD-AE11-1BB979141B9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLoggingAndDataFormatter.Tests", "TestLoggingAndDataFormatter.Tests\TestLoggingAndDataFormatter.Tests.csproj", "{D9F7CC98-37B2-467D-957C-3EA6CFA48A3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{C01C2F65-5F28-42BD-AE11-1BB979141B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C01C2F65-5F28-42BD-AE11-1BB979141B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C01C2F65-5F28-42BD-AE11-1BB979141B9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9F7CC98-37B2-467D-957C-3EA6CFA48A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9F7CC98-37B2-467D-957C-3EA6CFA48A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9F7CC98-37B2-467D-957C-3EA6CFA48A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9F7CC98-37B2-467D-957C-3EA6CFA48A3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
