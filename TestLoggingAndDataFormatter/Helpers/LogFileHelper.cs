@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestLoggingAndDataFormatter.Helpers
 {
@@ -22,14 +20,14 @@ namespace TestLoggingAndDataFormatter.Helpers
             _logFileName = logFileName;
         }
 
-        internal void ClearLogFiles()
+        internal void ClearLogFiles(string logFileName)
         {
             if(Directory.Exists(_logFilePath))
             {
                 var logFiles = Directory.GetFiles(_logFilePath);
                 foreach(var logFile in logFiles)
                 {
-                    if (logFiles.Contains(_logFileName))
+                    if (logFile.Contains(logFileName))
                         File.Delete(logFile);
                 }
             }
@@ -39,7 +37,7 @@ namespace TestLoggingAndDataFormatter.Helpers
         {
             var existingLogFiles = GetSortedLogFilesAndRemoveOldFiles(numberOfLogFilesToPreserve);
 
-            for(int i = existingLogFiles.Count - 1; i <= 0; i--)
+            for(int i = existingLogFiles.Count - 1; i >= 0; i--)
             {
                 int logNum = GetlogNumFromFileName(existingLogFiles[i].Name);
 
@@ -55,6 +53,24 @@ namespace TestLoggingAndDataFormatter.Helpers
                     existingLogFiles[i].Delete();
                 }                
             }
+        }
+
+        internal string AppendDateToLogFile(string fileName, string dateFormatProperty)
+        {
+            var textToAppend = $"_{DateTime.Now.ToString(dateFormatProperty)}";
+
+            var extension = Path.GetExtension(fileName);
+            
+            if(string.IsNullOrEmpty(extension))
+            {
+                fileName += $"{textToAppend}.txt";
+            }
+            else
+            {
+                fileName = fileName.Replace(extension, $"{textToAppend}{extension}");
+            }
+
+            return fileName;
         }
 
         private List<FileInfo> GetSortedLogFilesAndRemoveOldFiles(int numberOfLogFilesToPreserve)

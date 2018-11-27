@@ -47,16 +47,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TestLoggingAndDataFormatter">
-      <HintPath>..\TestLoggingAndDataFormatter\bin\Release\TestLoggingAndDataFormatter.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoggerTestHelpers.cs" />
     <Compile Include="LoggerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestLoggingAndDataFormatter\TestLoggingAndDataFormatter.csproj">
+      <Project>{c01c2f65-5f28-42bd-ae11-1bb979141b9f}</Project>
+      <Name>TestLoggingAndDataFormatter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

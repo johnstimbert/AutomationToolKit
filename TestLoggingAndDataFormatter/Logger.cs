@@ -11,7 +11,7 @@ namespace TestLoggingAndDataFormatter
     /// <summary>
     /// Defines the type of message being logged
     /// </summary>
-    public enum LogLevel
+    public enum LogMessageType
     {
         #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         TESTINFO,
@@ -43,6 +43,9 @@ namespace TestLoggingAndDataFormatter
         {
             _logFileName = LogFileName;
             _logFilePath = LogFilePath;
+
+            if (!Directory.Exists(_logFilePath))
+                Directory.CreateDirectory(_logFilePath);
         }
 
         #region Public Properties
@@ -103,30 +106,41 @@ namespace TestLoggingAndDataFormatter
         /// </summary>
         /// <param name="level"></param>
         /// <param name="message"></param>
-        public void Log(LogLevel level, string message)
+        public void Log(LogMessageType level, string message)
         {
             try
             {
                 if (_newTestRun)
-                    ModifyExistingLogsBasedOnConfigs(NumberOfLogFilesToPreserve, PreservePreviousLogFiles);
+                {
+                    LogFileHelper fileHelper = new LogFileHelper(_logFilePath, _logFileName);
+                    var logFileName = _logFileName;
+
+                    if (AppendDateToLogFile)
+                        logFileName = fileHelper.AppendDateToLogFile(logFileName, _dateFormatProperty);
+
+                    ModifyExistingLogsBasedOnConfigs(NumberOfLogFilesToPreserve, PreservePreviousLogFiles, logFileName);
+                }
                 // Get call stack
                 StackTrace stackTrace = new StackTrace();
 
                 //Switch case for LogLevel message type
                 switch (level)
                 {
-                    case LogLevel.TESTINFO:
+                    case LogMessageType.TESTINFO:
+
                         if (!_inTest)
                         {
                             _testLogHistory.Clear();
                             WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"**** STARTING TEST ****: {message}", true);
                             _inTest = true;
                         }
-
-                        WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"Test Execution Info: {message}", true);
+                        else
+                        {
+                            WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"Test Execution Info: {message}", true);
+                        }
 
                         break;
-                    case LogLevel.TESTFAILED:
+                    case LogMessageType.TESTFAILED:
 
                         WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"****** TEST FAILURE ****** {message}", true);
 
@@ -137,7 +151,7 @@ namespace TestLoggingAndDataFormatter
                         _testLogHistory.Clear();
 
                         break;
-                    case LogLevel.TESTPASSED:
+                    case LogMessageType.TESTPASSED:
 
                         WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"****** TEST PASSED ****** {message}");
 
@@ -159,9 +173,10 @@ namespace TestLoggingAndDataFormatter
         #region private methods
         private void WriteEntryToExecutionLog(string level, string testMethodName, string message, bool addToTestHistory = false)
         {
+            var logHelper = new LogFileHelper(_logFilePath, _logFileName);
             string fileName = Path.Combine(_logFilePath, _logFileName);
             if (AppendDateToLogFile)
-                fileName = $"{fileName}_{DateTime.Now.ToString(_dateFormatProperty)}";
+                fileName = logHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
 
             string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} Test Method:{testMethodName} - {message}";
 
@@ -177,9 +192,10 @@ namespace TestLoggingAndDataFormatter
 
         private void WriteEntryToFailureLog(string level, string message)
         {
+            var logHelper = new LogFileHelper(_logFilePath, _logFileName);
             string fileName = Path.Combine(_logFilePath, $"{_logFileName}_Failures");
             if (AppendDateToLogFile)
-                fileName = $"{fileName}_{DateTime.Now.ToString(_dateFormatProperty)}";
+                fileName = logHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
 
             //Append new text to an existing file 
             using (StreamWriter file = new StreamWriter(fileName, true))
@@ -199,16 +215,16 @@ namespace TestLoggingAndDataFormatter
                 $"Please reference the folowing article for valid values https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings");
         }
 
-        private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, bool preservePreviousLogFiles)
+        private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, bool preservePreviousLogFiles, string logFileName)
         {
-            var logHelper = new LogFileHelper(_logFilePath, _logFilePath);
+            var logHelper = new LogFileHelper(_logFilePath, _logFileName);
             if(preservePreviousLogFiles)
             {
                 logHelper.IncrementLogFiles(numberOfLogFilesToPreserve);
             }
             else
             {
-                logHelper.ClearLogFiles();
+                logHelper.ClearLogFiles(logFileName);
             }
         }
 
