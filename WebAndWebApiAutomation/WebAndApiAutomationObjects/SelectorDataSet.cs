@@ -14,7 +14,7 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// <summary>
         /// Returns the tag type for all the items in this collection
         /// </summary>
-        public HtmlTagType TagType { get; private set; }
+        public string TagType { get; private set; }
 
         /// <summary>
         /// Returns the items in this collection
@@ -25,9 +25,23 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// <param name="selectorDataItems">Items to add to this collection</param>
         public SelectorDataSet(HtmlTagType tag, List<SelectorData> selectorDataItems)
         {
-            TagType = tag;
+            TagType = tag.ToString();
 
             foreach(var selectorDataItem in selectorDataItems)
+            {
+                selectorDataItem.TagType = tag.ToString();
+            }
+
+            SelectorDataItems = selectorDataItems;
+        }
+
+        /// <param name="tag">Tag type for all the items in this collection</param>
+        /// <param name="selectorDataItems">Items to add to this collection</param>
+        public SelectorDataSet(string tag, List<SelectorData> selectorDataItems)
+        {
+            TagType = tag;
+
+            foreach (var selectorDataItem in selectorDataItems)
             {
                 selectorDataItem.TagType = tag;
             }
@@ -38,7 +52,13 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// <param name="tag">Tag type for all the items in this collection</param>
         public SelectorDataSet(HtmlTagType tag)
         {
-            TagType = tag;            
+            TagType = tag.ToString();            
+        }
+
+        /// <param name="tag">Tag type for all the items in this collection</param>
+        public SelectorDataSet(string tag)
+        {
+            TagType = tag;
         }
 
         /// <summary>

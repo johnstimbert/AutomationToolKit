@@ -504,5 +504,25 @@ namespace WebAndWebApiAutomation
                 throw new WebAutomationException(ex.ToString());
             }
         }
+
+        /// <summary>
+        /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
+        /// /// </summary>
+        /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns></returns>
+        public List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
+        {
+            Helper.IsDriverNull(driver);
+            try
+            {
+                return _structureValidator.GetAllBysUsingMatchingSelectorData(selectorData, driver);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
     }
 }

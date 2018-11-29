@@ -14,7 +14,7 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// <summary>
         /// Denotes the Html Element Name or Tag
         /// </summary>
-        public HtmlTagType TagType { get; internal set; }
+        public string TagType { get; internal set; }
         /// <summary>
         /// Denotes the attribute name, unless set to 'None'
         /// </summary>
@@ -28,6 +28,17 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// Use this contructor when creating a stand alone SelectorData object
         /// </summary>
         public SelectorData(string name, HtmlTagType tag, HtmlAttributeType attType, string attValue)
+        {
+            Name = name;
+            TagType = tag.ToString();
+            AttributeType = attType;
+            AttributeValue = attValue;
+        }
+
+        /// <summary>
+        /// Use this contructor when creating a stand alone SelectorData object and the HtmlTagType enum does not contain your tag type
+        /// </summary>
+        public SelectorData(string name, string tag, HtmlAttributeType attType, string attValue)
         {
             Name = name;
             TagType = tag;
