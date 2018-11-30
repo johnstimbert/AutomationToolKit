@@ -508,7 +508,7 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
         /// /// </summary>
-        /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
+        /// <param name="selectorData">Data to check for in the current DOM instance</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
         public List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)

@@ -91,5 +91,56 @@ namespace TestLoggingAndDataFormatter.Tests
                 Assert.AreEqual(expectedErrorText, ex.Message, "Expected exception was not returned");
             }
         }
+
+        [TestMethod]
+        [TestCategory(_loggerTests)]
+        public void LogFileRetainsAllLinesForCurrentRun()
+        {
+            _logger.PreservePreviousLogFiles = false;//Clear the directory
+            _logger.AppendDateToLogFile = false;//The default is true
+
+            int i = 0;            
+            while(i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logFileName));
+
+            Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
+
+        }
+
+        [TestMethod]
+        [TestCategory(_loggerTests)]
+        public void LinesForCurrentRunAreWrittenInTheCorrectOrder()
+        {
+            _logger.PreservePreviousLogFiles = false;//Clear the directory
+            _logger.AppendDateToLogFile = false;//The default is true
+
+            int i = 0;            
+            while(i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logFileName));
+
+            Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
+
+            int x = 0;
+            while(x < i+1)
+            {
+                var expectedValue = $"Line{x}";
+                var result = lines[x].Contains(expectedValue);
+                Assert.IsTrue(result, $"Line {x} did not contain the expected value {expectedValue}");
+                x++;
+            }
+
+        }
     }
 }
