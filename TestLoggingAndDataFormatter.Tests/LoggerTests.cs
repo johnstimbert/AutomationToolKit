@@ -12,6 +12,7 @@ namespace TestLoggingAndDataFormatter.Tests
 
         private const string _logPath = @"c:\logger";
         private const string _logFileName = "logger.txt";
+        private const string _failedTestLogFileName = "logger.txt_Failures";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
 
         private Logger _logger;
@@ -140,7 +141,118 @@ namespace TestLoggingAndDataFormatter.Tests
                 Assert.IsTrue(result, $"Line {x} did not contain the expected value {expectedValue}");
                 x++;
             }
+        }
 
+        [TestMethod]
+        [TestCategory(_loggerTests)]
+        public void LinesForFailedTestAreWrittenInTheFailureLog()
+        {
+            _logger.PreservePreviousLogFiles = false;//Clear the directory
+            _logger.AppendDateToLogFile = false;//The default is true
+
+            int i = 0;
+            while (i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _failedTestLogFileName));
+
+            Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
+
+            int x = 0;
+            while (x < i + 1)
+            {
+                if (string.IsNullOrWhiteSpace(lines[i]))//errors are seperated by a blank line
+                    continue;
+
+                var expectedValue = $"Line{x}";
+                var result = lines[x].Contains(expectedValue);
+                Assert.IsTrue(result, $"Line {x} did not contain the expected value {expectedValue}");
+                x++;
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_loggerTests)]
+        public void LinesForFailedTestAreWrittenInTheFailureLogWithPreceedingSuccess()
+        {
+            _logger.PreservePreviousLogFiles = false;//Clear the directory
+            _logger.AppendDateToLogFile = false;//The default is true
+
+            int i = 0;
+            while (i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
+
+            i = 0;
+            while (i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _failedTestLogFileName));
+
+            Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
+
+            int x = 0;
+            while (x < i + 1)
+            {
+                if (string.IsNullOrWhiteSpace(lines[i]))//errors are seperated by a blank line
+                    continue;
+
+                var expectedValue = $"Line{x}";
+                var result = lines[x].Contains(expectedValue);
+                Assert.IsTrue(result, $"Line {x} did not contain the expected value {expectedValue}");
+                x++;
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_loggerTests)]
+        public void LinesForFailedTestAreWrittenInTheFailureLogWithFollowingingSuccess()
+        {
+            _logger.PreservePreviousLogFiles = false;//Clear the directory
+            _logger.AppendDateToLogFile = false;//The default is true
+
+            int i = 0;
+            while (i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
+
+            i = 0;
+            while (i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _failedTestLogFileName));
+
+            Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
+
+            int x = 0;
+            while (x < i + 1)
+            {
+                if (string.IsNullOrWhiteSpace(lines[i]))//errors are seperated by a blank line
+                    continue;
+
+                var expectedValue = $"Line{x}";
+                var result = lines[x].Contains(expectedValue);
+                Assert.IsTrue(result, $"Line {x} did not contain the expected value {expectedValue}");
+                x++;
+            }
         }
     }
 }

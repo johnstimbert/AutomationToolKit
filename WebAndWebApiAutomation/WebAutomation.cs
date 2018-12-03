@@ -40,7 +40,7 @@ namespace WebAndWebApiAutomation
 
             _timeoutForWait = TimeoutForWaitOverride;
             _driverPath = driverPath;
-            _structureValidator = new StructureValidator();
+            _structureValidator = new StructureValidator(_wait);
         }
 
         private string ValidateDriverPath(string driverPath)

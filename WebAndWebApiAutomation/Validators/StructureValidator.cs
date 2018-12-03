@@ -8,12 +8,19 @@ using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using WebAndWebApiAutomation.Helpers;
 using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.Exceptions;
+using OpenQA.Selenium.Support.UI;
 
 namespace WebAndWebApiAutomation.Validators
 {
     internal class StructureValidator
     {
         internal static SelectorData _reCaptchaSelectorData = new SelectorData("reCaptcha", HtmlTagType.iframe, HtmlAttributeType.AttributeText_Contains, "https://www.google.com/recaptcha");
+        private WebDriverWait _wait;
+
+        public StructureValidator(WebDriverWait wait)
+        {
+            _wait = wait;
+        }
 
         internal bool ReCaptchaPresent(IWebDriver driver)
         {
@@ -28,7 +35,7 @@ namespace WebAndWebApiAutomation.Validators
         /// <summary>
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
         /// /// </summary>
-        /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
+        /// <param name="selectorData">Data to check for in the current DOM instance</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
         internal List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
@@ -59,7 +66,7 @@ namespace WebAndWebApiAutomation.Validators
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                driver.WaitForElementExists(BuildCssSelectorBy(item));
+                driver.WaitForElementExists(BuildCssSelectorBy(item), _wait);
             }
 
             return result;
@@ -86,7 +93,7 @@ namespace WebAndWebApiAutomation.Validators
                 }
                 else
                 {
-                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData));
+                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), _wait);
                 }
 
                 return webElement;
@@ -137,7 +144,7 @@ namespace WebAndWebApiAutomation.Validators
                 IWebElement webElement = null;
 
                 var cssBy = BuildCssSelectorBy(selectorData);
-                webElement = driver.WaitForElementExists(cssBy);
+                webElement = driver.WaitForElementExists(cssBy, _wait);
                                
                 return cssBy;
             }
