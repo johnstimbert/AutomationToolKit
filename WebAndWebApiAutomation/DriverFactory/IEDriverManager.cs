@@ -4,7 +4,7 @@ namespace WebAndWebApiAutomation.DriverFactory
 {
     internal static class IEDriverManager
     {
-        internal static InternetExplorerDriver Create_WebDriver_Instance(string driverPath)
+        internal static InternetExplorerDriver Create_WebDriver_Instance(string driverPath, bool rundHeadless)
         {
             var optionsIE = new InternetExplorerOptions
             {
@@ -12,8 +12,12 @@ namespace WebAndWebApiAutomation.DriverFactory
                 EnableNativeEvents = false,
                 IgnoreZoomLevel = true
             };
+
             var driver = new InternetExplorerDriver(driverPath, optionsIE);
-            driver.Manage().Window.Maximize();
+
+            if(!rundHeadless)
+                driver.Manage().Window.Maximize();
+
             return driver;
         }
     }

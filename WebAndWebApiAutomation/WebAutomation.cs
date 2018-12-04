@@ -23,7 +23,7 @@ namespace WebAndWebApiAutomation
         private const string _ieDriverName = "IEDriverServer.exe";
         private const string _edgeDriverName = "MicrosoftWebDriver.exe";
 
-        private readonly StructureValidator _structureValidator;
+        private StructureValidator _structureValidator;
         private readonly string _driverPath;
         private readonly int _timeoutForWait;
         WebDriverWait _wait;
@@ -40,7 +40,6 @@ namespace WebAndWebApiAutomation
 
             _timeoutForWait = TimeoutForWaitOverride;
             _driverPath = driverPath;
-            _structureValidator = new StructureValidator(_wait);
         }
 
         private string ValidateDriverPath(string driverPath)
@@ -56,11 +55,13 @@ namespace WebAndWebApiAutomation
 
         /// <summary>
         /// Creates and returns and instance of the driver specified by the driverType parameter
+        /// NOTE: The INTERNET EXPLORER and EDGE browsers do not currently support headless functionality
         /// </summary>
         /// <param name="driverType">Specifies the driver for the desired browser</param>
+        /// <param name="runHeadless">If true the driver will not open a browser. Default is false</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver GetDriver(DriverType driverType)
+        public IWebDriver GetDriver(DriverType driverType, bool runHeadless = false)
         {
             try
             {
@@ -72,29 +73,30 @@ namespace WebAndWebApiAutomation
                         if (!File.Exists(Path.Combine(_driverPath, _chromeDriverName)))
                             throw new WebAutomationException($"The driver {_chromeDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath);
+                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
                         break;
                     case DriverType.Firefox:
                         if (!File.Exists(Path.Combine(_driverPath, _firefoxDriverName)))
                             throw new WebAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath);
+                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
                         break;
                     case DriverType.Ie:
                         if (!File.Exists(Path.Combine(_driverPath, _ieDriverName)))
                             throw new WebAutomationException($"The driver {_ieDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath);
+                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
                         break;
                     case DriverType.Edge:
                         if (!File.Exists(Path.Combine(_driverPath, _edgeDriverName)))
                             throw new WebAutomationException($"The driver {_edgeDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath);
+                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
                         break;
                 }
 
                 _wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(_timeoutForWait));
+                _structureValidator = new StructureValidator(_wait);
 
                 return webDriver;
             }

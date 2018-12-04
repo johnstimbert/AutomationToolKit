@@ -318,7 +318,7 @@ namespace WebAndWebApiAutomation.Validators
         internal By BuildCssSelectorBy(SelectorData selectorData)
         {
             By CssSelector = null;
-            var tag = selectorData.TagType.GetString().ToLower();
+            var tag = selectorData.TagType.ToLower();
             
             switch (selectorData.AttributeType)
             {
@@ -326,29 +326,20 @@ namespace WebAndWebApiAutomation.Validators
                     CssSelector = By.CssSelector($"#{selectorData.AttributeValue}");
                     break;
                 case HtmlAttributeType.Class:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Class.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Name:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Name.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Type:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Type.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Href:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Href.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Src:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Src.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Title:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Title.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.FormControlName:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.FormControlName.ToString().ToLower()}='{selectorData.AttributeValue}']");
+                case HtmlAttributeType.PlaceHolder:
+                    CssSelector = By.CssSelector($"{tag}[{selectorData.AttributeType.ToString().ToLower()}='{selectorData.AttributeValue}']");
                     break;
                 case HtmlAttributeType.None:
                     CssSelector = By.CssSelector($"{tag}");
                     break;
+                case HtmlAttributeType.AttributeText_ExactMatch:
+                case HtmlAttributeType.AttributeText_Contains:
                 case HtmlAttributeType.InnerText_ExactMatch:
                 case HtmlAttributeType.InnerText_Contains:
                     CssSelector = By.CssSelector($"{tag}");
