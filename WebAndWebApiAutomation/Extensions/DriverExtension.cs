@@ -80,9 +80,8 @@ namespace WebAndWebApiAutomation.Extensions
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.UrlMatches(pattern));
         }
 
-        internal static IWebElement WaitForElementExists(this IWebDriver _driver, By locator)
+        internal static IWebElement WaitForElementExists(this IWebDriver _driver, By locator, WebDriverWait wait)
         {
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(locator));
         }
 

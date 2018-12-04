@@ -10,7 +10,7 @@ namespace WebAndWebApiAutomation.Validators
 {
     internal class NavigationValidator
     {
-        private By _mainElementSelector = By.TagName("Body");
+        private By _mainElementSelector = By.TagName("body");
         private List<By> _anchorXPathBys = new List<By>();
         WebDriverWait _wait;
 
@@ -49,13 +49,13 @@ namespace WebAndWebApiAutomation.Validators
                     //Get and return the Url resulting from the navigation
                     string postNavigationUrl = GetPostNavigationUrl(driver);
 
-                    string result = AttemptNavigation(_anchorXPathBys.ElementAt(i), postNavigationUrl, driver);
+                    bool result = AttemptNavigation(_anchorXPathBys.ElementAt(i), postNavigationUrl, driver);
                     switch (result)
                     {
-                        case "True":
+                        case true:
                             navResult = NavigationResult.Success;
                             break;
-                        case "False":
+                        case false:
                             navResult = NavigationResult.Failed;
                             break;
                         default:
@@ -72,7 +72,7 @@ namespace WebAndWebApiAutomation.Validators
             return results;
         }
 
-        private string AttemptNavigation(By currentAnchor, string postNavigationUrl, IWebDriver driver)
+        private bool AttemptNavigation(By currentAnchor, string postNavigationUrl, IWebDriver driver)
         {
             var element = driver.FindElement(currentAnchor);
             //Navigate
@@ -82,7 +82,7 @@ namespace WebAndWebApiAutomation.Validators
             driver.WaitForUrlContains(postNavigationUrl, _wait);
 
             //Return the result of comparing the expected result to the actual
-            return postNavigationUrl.Equals(driver.Url, StringComparison.CurrentCultureIgnoreCase).ToString();
+            return postNavigationUrl.Equals(driver.Url, StringComparison.CurrentCultureIgnoreCase);
         }
 
         private string GetPostNavigationUrl(IWebDriver driver)

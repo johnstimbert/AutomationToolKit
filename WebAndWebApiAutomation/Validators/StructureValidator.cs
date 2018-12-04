@@ -8,12 +8,19 @@ using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using WebAndWebApiAutomation.Helpers;
 using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.Exceptions;
+using OpenQA.Selenium.Support.UI;
 
 namespace WebAndWebApiAutomation.Validators
 {
     internal class StructureValidator
     {
         internal static SelectorData _reCaptchaSelectorData = new SelectorData("reCaptcha", HtmlTagType.iframe, HtmlAttributeType.AttributeText_Contains, "https://www.google.com/recaptcha");
+        private WebDriverWait _wait;
+
+        public StructureValidator(WebDriverWait wait)
+        {
+            _wait = wait;
+        }
 
         internal bool ReCaptchaPresent(IWebDriver driver)
         {
@@ -23,6 +30,27 @@ namespace WebAndWebApiAutomation.Validators
                 result = true;
 
             return result;
+        }
+
+        /// <summary>
+        /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
+        /// /// </summary>
+        /// <param name="selectorData">Data to check for in the current DOM instance</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns></returns>
+        internal List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
+        {
+            List<By> xPathBys = new List<By>();
+            var cssBy = BuildCssSelectorBy(selectorData);
+
+            var elements = driver.FindElements(cssBy);
+
+            foreach (var element in elements)
+            {
+                xPathBys.Add(ConvertToXPathBy(element, driver));
+            }
+
+            return xPathBys;
         }
 
         /// <summary>
@@ -38,7 +66,7 @@ namespace WebAndWebApiAutomation.Validators
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                driver.WaitForElementExists(BuildCssSelectorBy(item));
+                driver.WaitForElementExists(BuildCssSelectorBy(item), _wait);
             }
 
             return result;
@@ -65,7 +93,7 @@ namespace WebAndWebApiAutomation.Validators
                 }
                 else
                 {
-                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData));
+                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), _wait);
                 }
 
                 return webElement;
@@ -116,7 +144,7 @@ namespace WebAndWebApiAutomation.Validators
                 IWebElement webElement = null;
 
                 var cssBy = BuildCssSelectorBy(selectorData);
-                webElement = driver.WaitForElementExists(cssBy);
+                webElement = driver.WaitForElementExists(cssBy, _wait);
                                
                 return cssBy;
             }
@@ -290,7 +318,7 @@ namespace WebAndWebApiAutomation.Validators
         internal By BuildCssSelectorBy(SelectorData selectorData)
         {
             By CssSelector = null;
-            var tag = selectorData.TagType.GetString().ToLower();
+            var tag = selectorData.TagType.ToLower();
             
             switch (selectorData.AttributeType)
             {
@@ -298,29 +326,20 @@ namespace WebAndWebApiAutomation.Validators
                     CssSelector = By.CssSelector($"#{selectorData.AttributeValue}");
                     break;
                 case HtmlAttributeType.Class:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Class.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Name:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Name.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Type:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Type.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Href:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Href.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Src:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Src.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.Title:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.Title.ToString().ToLower()}='{selectorData.AttributeValue}']");
-                    break;
                 case HtmlAttributeType.FormControlName:
-                    CssSelector = By.CssSelector($"{tag}[{HtmlAttributeType.FormControlName.ToString().ToLower()}='{selectorData.AttributeValue}']");
+                case HtmlAttributeType.PlaceHolder:
+                    CssSelector = By.CssSelector($"{tag}[{selectorData.AttributeType.ToString().ToLower()}='{selectorData.AttributeValue}']");
                     break;
                 case HtmlAttributeType.None:
                     CssSelector = By.CssSelector($"{tag}");
                     break;
+                case HtmlAttributeType.AttributeText_ExactMatch:
+                case HtmlAttributeType.AttributeText_Contains:
                 case HtmlAttributeType.InnerText_ExactMatch:
                 case HtmlAttributeType.InnerText_Contains:
                     CssSelector = By.CssSelector($"{tag}");

@@ -22,6 +22,7 @@ namespace WebAndWebApiAutomation
             InnerText_Contains,
             InnerText_ExactMatch,
             FormControlName,
+            PlaceHolder,
             None
         }
 
