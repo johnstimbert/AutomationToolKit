@@ -10,6 +10,7 @@ using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using WebAndWebApiAutomation.Validators;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 using System.IO;
+using System.Threading;
 
 namespace WebAndWebApiAutomation
 {
@@ -198,8 +199,9 @@ namespace WebAndWebApiAutomation
             Helper.IsDriverNull(driver);
             try
             {
-                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                driver.Click(cssBy, _wait);
+                var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, driver);
+                clickTarget.Click();
+                Thread.Sleep(_timeoutForWait * 1000);
                 return driver;
             }
             catch (Exception ex)
