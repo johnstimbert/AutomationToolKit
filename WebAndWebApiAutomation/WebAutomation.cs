@@ -199,8 +199,10 @@ namespace WebAndWebApiAutomation
             Helper.IsDriverNull(driver);
             try
             {
-                var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, driver);
-                clickTarget.Click();
+                var clickTarget = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
+                driver.MoveToElement(clickTarget, _wait);
+                driver.WaitForElementToBeVisible(clickTarget, _wait);
+                driver.Click(clickTarget, _wait);
                 Thread.Sleep(_timeoutForWait * 1000);
                 return driver;
             }
@@ -223,7 +225,9 @@ namespace WebAndWebApiAutomation
             Helper.IsDriverNull(driver);
             try
             {
-                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
+                driver.MoveToElement(cssBy, _wait);
+                driver.WaitForElementToBeVisible(cssBy, _wait);
                 driver.SendText(cssBy, _wait, textToEnter);
                 return driver;
             }
