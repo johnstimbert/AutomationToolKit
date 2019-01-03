@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
-using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
 using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.Helpers;
@@ -17,30 +15,25 @@ namespace WebAndWebApiAutomation
     /// <summary>
     /// This class conatins the utility and driver instance creation methods for automating the cross browser testing of a web site
     /// </summary>
-    public class WebAutomation
+    public sealed class WebAutomation : IWebAutomation
     {
-        private const string _chromeDriverName = "chromedriver.exe";
-        private const string _firefoxDriverName = "geckodriver.exe";
-        private const string _ieDriverName = "IEDriverServer.exe";
-        private const string _edgeDriverName = "MicrosoftWebDriver.exe";
-
-        private StructureValidator _structureValidator;
+        private readonly StructureValidator _structureValidator;
         private readonly string _driverPath;
         private readonly int _timeoutForWait;
-        WebDriverWait _wait;
 
         /// <summary>
         /// Creates an instance of the WebAutomation class
         /// </summary>
         /// <param name="driverPath">The path to the driver service executables</param>
-        /// <param name="TimeoutForWaitOverride">THis can be set to override the defauslt five (5) second timeout in the webdriver</param>
+        /// <param name="timeoutForWaitOverride">THis can be set to override the defauslt five (5) second timeout in the webdriver</param>
         /// <exception cref="WebAutomationException"></exception>
-        public WebAutomation(string driverPath, int TimeoutForWaitOverride = 5)
+        public WebAutomation(string driverPath, int timeoutForWaitOverride = 5)
         {
             driverPath = ValidateDriverPath(driverPath);
 
-            _timeoutForWait = TimeoutForWaitOverride;
+            _timeoutForWait = timeoutForWaitOverride;
             _driverPath = driverPath;
+            _structureValidator = new StructureValidator();
         }
 
         private string ValidateDriverPath(string driverPath)
@@ -55,71 +48,39 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Creates and returns and instance of the driver specified by the driverType parameter
-        /// NOTE: The INTERNET EXPLORER and EDGE browsers do not currently support headless functionality
+        /// Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects
         /// </summary>
-        /// <param name="driverType">Specifies the driver for the desired browser</param>
-        /// <param name="runHeadless">If true the driver will not open a browser. Default is false</param>
-        /// <returns>IWebDriver</returns>
+        /// <returns>IWebDriverManager</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver GetDriver(DriverType driverType, bool runHeadless = false)
+        public IWebDriverManager GetIWebDriverManager()
         {
             try
             {
-                IWebDriver webDriver = null;
-
-                switch (driverType)
-                {
-                    case DriverType.Chrome:
-                        if (!File.Exists(Path.Combine(_driverPath, _chromeDriverName)))
-                            throw new WebAutomationException($"The driver {_chromeDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
-                        break;
-                    case DriverType.Firefox:
-                        if (!File.Exists(Path.Combine(_driverPath, _firefoxDriverName)))
-                            throw new WebAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
-                        break;
-                    case DriverType.Ie:
-                        if (!File.Exists(Path.Combine(_driverPath, _ieDriverName)))
-                            throw new WebAutomationException($"The driver {_ieDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
-                        break;
-                    case DriverType.Edge:
-                        if (!File.Exists(Path.Combine(_driverPath, _edgeDriverName)))
-                            throw new WebAutomationException($"The driver {_edgeDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, runHeadless);
-                        break;
-                }
-
-                _wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(_timeoutForWait));
-                _structureValidator = new StructureValidator(_wait);
-
-                return webDriver;
+                return new WebDriverManager(_driverPath, _timeoutForWait);
             }
-            catch (DriverServiceNotFoundException dsnf)
+            catch (WebAutomationException wea)
             {
-                throw new WebAutomationException(dsnf.ToString());
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
             }
         }
 
         /// <summary>
         /// Takes a screenshot and saves it in the provided path. THe file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"
         /// </summary>
-        /// <param name="driver">IWebDriver object to take the screenshot with</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="sreenShotPath">Path to save the screenshot to</param>
         /// <param name="screenShotName">Name of the screenshot file</param>
         /// <exception cref="WebAutomationException"></exception>
-        public void TakeScreenShot(IWebDriver driver, string sreenShotPath, string screenShotName)
+        public void TakeScreenShot(IWebDriverManager webDriverManager, string sreenShotPath, string screenShotName)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                Helper.TakeScreenShot(driver, sreenShotPath, screenShotName);
+                Helper.TakeScreenShot(manager.GetActiveDriver(), sreenShotPath, screenShotName);
             }
             catch (Exception ex)
             {
@@ -130,15 +91,15 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Creates and returns an IJavaScriptExecutor object using the provided IWebDriver
         /// </summary>
-        /// <param name="driver">IWebDriver object to create the IJavaScriptExecutor with</param>
+        /// <param name="webDriverManager"></param>
         /// <returns></returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IJavaScriptExecutor GetJavaScriptExecutor(IWebDriver driver)
+        public IJavaScriptExecutor GetJavaScriptExecutor(IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return Helper.JavaScriptExecutor(driver);
+                return Helper.JavaScriptExecutor(manager.GetActiveDriver());
             }
             catch (Exception ex)
             {
@@ -149,16 +110,16 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Modifies the style associated with the selector data object provided to highlight the element on the page
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebAutomationException"></exception>
-        public void HighlightElement(IWebDriver driver, SelectorData selectorData)
+        public void HighlightElement(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                Helper.HighlightElement(driver, cssBy);
+                Helper.HighlightElement(manager.GetActiveDriver(), cssBy);
             }
             catch (Exception ex)
             {
@@ -170,16 +131,16 @@ namespace WebAndWebApiAutomation
         /// Clicks the element associated with the selector data object provided using a JavaScript query.
         /// This is useful when the element being clicked may be obstructed
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebAutomationException"></exception>
-        public void JavaScriptClick(IWebDriver driver, SelectorData selectorData)
+        public void JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                Helper.ClickUsingJavaScript(driver, cssBy);
+                Helper.ClickUsingJavaScript(manager.GetActiveDriver(), cssBy);
             }
             catch (Exception ex)
             {
@@ -190,21 +151,19 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Clicks the provided element after verifying it exists and is clickable
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to click</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver Click(IWebDriver driver, SelectorData selectorData)
+        public IWebDriverManager Click(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                var clickTarget = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
-                driver.MoveToElement(clickTarget, _wait);
-                driver.WaitForElementToBeVisible(clickTarget, _wait);
-                driver.Click(clickTarget, _wait);
+                var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                clickTarget.Click();
                 Thread.Sleep(_timeoutForWait * 1000);
-                return driver;
+                return webDriverManager;
             }
             catch (Exception ex)
             {
@@ -215,21 +174,21 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Enters text into the provided element after verifying it exists and is visible
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to receive the text</param>
         /// <param name="textToEnter">Text that will be entered</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver SendText(IWebDriver driver, SelectorData selectorData, string textToEnter)
+        public IWebDriverManager SendText(IWebDriverManager webDriverManager, SelectorData selectorData, string textToEnter)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
-                driver.MoveToElement(cssBy, _wait);
-                driver.WaitForElementToBeVisible(cssBy, _wait);
-                driver.SendText(cssBy, _wait, textToEnter);
-                return driver;
+                var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
+                manager.GetActiveDriver().WaitForElementToBeVisible(cssBy, manager.GetWait());
+                manager.GetActiveDriver().SendText(cssBy, manager.GetWait(), textToEnter);
+                return manager;
             }
             catch (Exception ex)
             {
@@ -241,20 +200,20 @@ namespace WebAndWebApiAutomation
         /// Enters text into the provided element one character at a time with a delay between each after verifying it exists and is visible.
         /// Note: Only use this method to send text to elements that have autocomplete and require a delay on each letter typed.
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to receive the text</param>
         /// <param name="textToEnter">Text that will be entered</param>
         /// <param name="delay">Interval before each character is entered</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver SendTextWithDelay(IWebDriver driver, SelectorData selectorData, string textToEnter, int delay = 500)
+        public IWebDriverManager SendTextWithDelay(IWebDriverManager webDriverManager, SelectorData selectorData, string textToEnter, int delay = 500)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                driver.SendTextWithDelay(cssBy, _wait, textToEnter, delay);
-                return driver;
+                manager.GetActiveDriver().SendTextWithDelay(cssBy, manager.GetWait(), textToEnter, delay);
+                return manager;
             }
             catch (Exception ex)
             {
@@ -265,18 +224,18 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Clears the text from the provided element after verifiying the element is visible
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to be cleared</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver Clear(IWebDriver driver, SelectorData selectorData)
+        public IWebDriverManager Clear(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                driver.Clear(cssBy, _wait);
-                return driver;
+                manager.GetActiveDriver().Clear(cssBy, manager.GetWait());
+                return manager;
             }
             catch (Exception ex)
             {
@@ -287,18 +246,28 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Clears the text from the provided element after verifiying the element is visible
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to move to</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebDriver MoveToElement(IWebDriver driver, SelectorData selectorData)
+        public IWebDriverManager MoveToElement(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                driver.MoveToElement(cssBy, _wait);
-                return driver;
+                //Needed as a workaround for a bug in the geckodriver(firefox)
+                if (manager.GetActiveDriverType() == DriverType.Firefox)
+                {
+                    manager.GetActiveDriver().WaitForElementExists(cssBy, manager.GetWait());
+                    manager.GetActiveDriver().FindElement(cssBy);
+                }
+                else
+                {
+                    manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
+                }
+
+                return manager;
             }
             catch (Exception ex)
             {
@@ -309,17 +278,17 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Checks whether or not the provided element is selected
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to check</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool IsElementSelected(IWebDriver driver, SelectorData selectorData)
+        public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return driver.WaitForElementToBeSelected(cssBy, _wait);
+                return manager.GetActiveDriver().WaitForElementToBeSelected(cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -330,17 +299,17 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Checks whether or not the provided element is visible
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to check</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool IsElementVisible(IWebDriver driver, SelectorData selectorData)
+        public bool IsElementVisible(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return driver.WaitForElementToBeVisible(cssBy, _wait);
+                return manager.GetActiveDriver().WaitForElementToBeVisible(cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -351,16 +320,16 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Checks whether or not the current url contains the provided text
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="text">Text to look for in the current Url</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool DoesUrlContain(IWebDriver driver, string text)
+        public bool DoesUrlContain(IWebDriverManager webDriverManager, string text)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return driver.WaitForUrlContains(text, _wait);
+                return manager.GetActiveDriver().WaitForUrlContains(text, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -371,16 +340,16 @@ namespace WebAndWebApiAutomation
         /// <summary>
         /// Checks whether or not the current url contains the provided pattern using regex
         /// </summary>
-        /// <param name="driver">IWebDriver object</param>
+        /// <param name="webDriverManager"></param>
         /// <param name="pattern">Text to look for in the current Url</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool DoesUrlContainUsingRegex(IWebDriver driver, string pattern)
+        public bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return driver.WaitForUrlRegexContains(pattern, _wait);
+                return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -392,15 +361,15 @@ namespace WebAndWebApiAutomation
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager"></param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver)
+        public IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return _structureValidator.CheckElementExistsReturnIWebElement(selectorData, driver);
+                return _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -412,15 +381,15 @@ namespace WebAndWebApiAutomation
         /// Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager"></param>
         /// <returns>By.CssSelector</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver)
+        public By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return _structureValidator.CheckElementExistsReturnCssSelector(selectorData, driver);
+                return _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -432,15 +401,15 @@ namespace WebAndWebApiAutomation
         /// Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data
         /// </summary>
         /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager"></param>
         /// <returns>bool</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
+        public bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return _structureValidator.CheckElementsExist(selectorDataSet, driver);
+                return _structureValidator.CheckElementsExist(selectorDataSet, manager.GetActiveDriver(), manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -453,19 +422,19 @@ namespace WebAndWebApiAutomation
         /// </summary>
         /// <param name="parentSelectorData">Data to find the parent element with</param>
         /// <param name="childSelectorData">>Data to find the child element with</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager"></param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriver driver)
+        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                var parentElement = CheckElementExistsReturnIWebElement(parentSelectorData, driver);
+                var parentElement = CheckElementExistsReturnIWebElement(parentSelectorData, webDriverManager);
                 if (parentElement == null)
                     return parentElement;
 
-                return _structureValidator.CheckChildElementExists(parentElement, childSelectorData, driver);
+                return _structureValidator.CheckChildElementExists(parentElement, childSelectorData, manager.GetActiveDriver());
             }
             catch (Exception ex)
             {
@@ -496,16 +465,16 @@ namespace WebAndWebApiAutomation
         /// Validates that all the anchor tags <a /> found on the page the driver is currently navigated to.
         /// It returns the XPath By object and NavigationResult for every link found and tested
         /// </summary>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager"></param>
         /// <returns>A list of locators and the corresponding navigation result</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public List<KeyValuePair<By, NavigationResult>> TestLinkNavigationForAllAnchorsFoundInPage(IWebDriver driver)
+        public List<KeyValuePair<By, NavigationResult>> TestLinkNavigationForAllAnchorsFoundInPage(IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                var navValidator = new NavigationValidator(_wait);
-                return navValidator.TestLinkNavigationForAllAnchorsFoundInPage(driver);
+                var navValidator = new NavigationValidator(manager.GetWait());
+                return navValidator.TestLinkNavigationForAllAnchorsFoundInPage(manager.GetActiveDriver());
             }
             catch (Exception ex)
             {
@@ -517,14 +486,14 @@ namespace WebAndWebApiAutomation
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
         /// /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager"></param>
         /// <returns></returns>
-        public List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
+        public List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)
         {
-            Helper.IsDriverNull(driver);
+            var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                return _structureValidator.GetAllBysUsingMatchingSelectorData(selectorData, driver);
+                return _structureValidator.GetAllBysUsingMatchingSelectorData(selectorData, manager.GetActiveDriver());
             }
             catch (Exception ex)
             {

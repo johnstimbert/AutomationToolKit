@@ -134,9 +134,10 @@ namespace WebAndWebApiAutomation
             Chrome,
             Firefox,
             Ie,
-            Edge
+            Edge,
+            None
         }
-
+        
         public enum NavigationResult
         {
             /// <summary>

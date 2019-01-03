@@ -15,18 +15,16 @@ namespace WebAndWebApiAutomation.Validators
     internal class StructureValidator
     {
         internal static SelectorData _reCaptchaSelectorData = new SelectorData("reCaptcha", HtmlTagType.iframe, HtmlAttributeType.AttributeText_Contains, "https://www.google.com/recaptcha");
-        private WebDriverWait _wait;
 
-        public StructureValidator(WebDriverWait wait)
+        internal StructureValidator()
         {
-            _wait = wait;
         }
 
-        internal bool ReCaptchaPresent(IWebDriver driver)
+        internal bool ReCaptchaPresent(IWebDriver driver, WebDriverWait wait)
         {
             bool result = false;
 
-            if (CheckElementExistsReturnIWebElement(_reCaptchaSelectorData, driver) != null)
+            if (CheckElementExistsReturnIWebElement(_reCaptchaSelectorData, driver, wait) != null)
                 result = true;
 
             return result;
@@ -58,15 +56,25 @@ namespace WebAndWebApiAutomation.Validators
         /// </summary>
         /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="wait"></param>
         /// <returns>bool</returns>
-        internal bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver)
+        internal bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriver driver, WebDriverWait wait)
         {
             bool result = true;
             var items = selectorDataSet.SelectorDataItems;
             for (int i = 0; i < items.Count; i++)
             {
-                var item = items[i];
-                driver.WaitForElementExists(BuildCssSelectorBy(item), _wait);
+                string itemName = string.Empty;
+                try
+                {
+                    var item = items[i];
+                    itemName = item.Name;
+                    driver.WaitForElementExists(BuildCssSelectorBy(item), wait);
+                }
+                catch(WebDriverTimeoutException)
+                {
+                    throw new WebAutomationException($"Timeout locating SelectorData item with the name : {itemName}");
+                }
             }
 
             return result;
@@ -77,8 +85,9 @@ namespace WebAndWebApiAutomation.Validators
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="wait"></param>
         /// <returns>IWebElement</returns>
-        internal IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver, WebDriverWait wait)
         {
             IWebElement webElement = null;
             try
@@ -93,12 +102,14 @@ namespace WebAndWebApiAutomation.Validators
                 }
                 else
                 {
-                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), _wait);
+                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), wait);
                 }
 
                 return webElement;
             }
-            catch (Exception)
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 return webElement;
             }
@@ -136,15 +147,16 @@ namespace WebAndWebApiAutomation.Validators
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="wait"></param>
         /// <returns></returns>
-        internal By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver)
+        internal By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver, WebDriverWait wait)
         {
             try
             {
                 IWebElement webElement = null;
 
                 var cssBy = BuildCssSelectorBy(selectorData);
-                webElement = driver.WaitForElementExists(cssBy, _wait);
+                webElement = driver.WaitForElementExists(cssBy, wait);
                                
                 return cssBy;
             }

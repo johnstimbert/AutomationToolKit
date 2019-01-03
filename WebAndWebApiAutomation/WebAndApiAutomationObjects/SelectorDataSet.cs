@@ -52,13 +52,15 @@ namespace WebAndWebApiAutomation.WebAndApiAutomationObjects
         /// <param name="tag">Tag type for all the items in this collection</param>
         public SelectorDataSet(HtmlTagType tag)
         {
-            TagType = tag.ToString();            
+            TagType = tag.ToString();
+            SelectorDataItems = new List<SelectorData>();
         }
 
         /// <param name="tag">Tag type for all the items in this collection</param>
         public SelectorDataSet(string tag)
         {
             TagType = tag;
+            SelectorDataItems = new List<SelectorData>();
         }
 
         /// <summary>

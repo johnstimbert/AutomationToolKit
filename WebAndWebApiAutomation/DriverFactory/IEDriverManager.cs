@@ -4,7 +4,7 @@ namespace WebAndWebApiAutomation.DriverFactory
 {
     internal static class IEDriverManager
     {
-        internal static InternetExplorerDriver Create_WebDriver_Instance(string driverPath, bool rundHeadless)
+        internal static InternetExplorerDriver Create_WebDriver_Instance(string driverPath, string[] driverOptions)
         {
             var optionsIE = new InternetExplorerOptions
             {
@@ -15,8 +15,7 @@ namespace WebAndWebApiAutomation.DriverFactory
 
             var driver = new InternetExplorerDriver(driverPath, optionsIE);
 
-            if(!rundHeadless)
-                driver.Manage().Window.Maximize();
+            driver.Manage().Window.Maximize();
 
             return driver;
         }
