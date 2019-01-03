@@ -8,7 +8,7 @@ namespace WebAndWebApiAutomation.DriverFactory
     internal static class EdgeDriverManager
     {
 
-        internal static EdgeDriver Create_WebDriver_Instance(string driverPath, bool rundHeadless)
+        internal static EdgeDriver Create_WebDriver_Instance(string driverPath, string[] driverOptions)
         {
             //var driverLocation = Path.Combine(Path.GetDirectoryName(driverPath));
             var driver = new EdgeDriver(driverPath);

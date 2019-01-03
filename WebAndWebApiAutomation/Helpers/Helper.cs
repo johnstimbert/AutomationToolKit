@@ -48,10 +48,17 @@ namespace WebAndWebApiAutomation.Helpers
             return (driver as RemoteWebDriver).Capabilities.GetCapability("browserName").ToString();
         }
 
-        internal static void IsDriverNull(IWebDriver driver)
+        internal static WebDriverManager IsDriverNull(IWebDriverManager webDriverManager)
         {
-            if (driver == null)
+            WebDriverManager m = (WebDriverManager)webDriverManager;
+
+            if(m.GetActiveDriverType() == WebAutomationEnums.DriverType.None)
+                throw new WebAutomationException("DriverType Provided was not found. Instantiate the driver before performing actions on or with it");
+
+            if (m.GetActiveDriver() == null)
                 throw new WebAutomationException("Driver Provided was null. Instantiate the driver before performing actions on or with it");
+
+            return m;
         }
 
         #region INTERNAL ONLY DO NOT EXPOSE
