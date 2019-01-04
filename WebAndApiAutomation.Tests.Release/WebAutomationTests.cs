@@ -8,7 +8,7 @@ using WebAndWebApiAutomation.Exceptions;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace WebAndApiAutomation.Tests
+namespace WebAndApiAutomation.Tests.Release
 {
     [TestClass]
     public class WebAutomationTests
@@ -34,8 +34,8 @@ namespace WebAndApiAutomation.Tests
         private const string _firefoxDriverName = "geckodriver.exe";
         private const string _ieDriverName = "IEDriverServer.exe";
         private const string _edgeDriverName = "MicrosoftWebDriver.exe";
-                
-        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
+
+        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Release";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 

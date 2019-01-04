@@ -102,10 +102,21 @@ namespace WebAndWebApiAutomation.Validators
                 }
                 else
                 {
-                    webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), wait);
+                    var elements = driver.FindElements(BuildCssSelectorBy(selectorData));
+                    
+                    if (elements.Count > 1)
+                        throw new WebAutomationException($"{elements.Count} elements were found with a class attribute of '{selectorData.AttributeValue}'. " +
+                            $"Consider using the method GetAllBysUsingMatchingSelectorData and then filtering it to find the desired element.");
+
+                    if(elements.Count == 1)
+                        webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), wait);
                 }
 
                 return webElement;
+            }
+            catch(WebAutomationException wae)
+            {
+                throw wae;
             }
 #pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
