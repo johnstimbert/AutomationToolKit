@@ -270,6 +270,83 @@ namespace WebAndWebApiAutomation
                 throw new WebAutomationException(ex.ToString());
             }
         }
+
+        public void CloseLastTabWithActiveDriver(string mainWindow)
+        {
+            try
+            {
+                _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last()).Close();
+                _drivers[_activeDriver].SwitchTo().Window(mainWindow);
+                Thread.Sleep(1000);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        public void CloseTabWithActiveDriver(string windowToClose, string windowToBack)
+        {
+            try
+            {
+                _drivers[_activeDriver].SwitchTo().Window(windowToClose).Close();
+                _drivers[_activeDriver].SwitchTo().Window(windowToBack);
+                Thread.Sleep(1000);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        public void SwitchToLastTabWithActiveDriver()
+        {
+            try
+            {
+                _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last());
+                if (_drivers[_activeDriver] is OpenQA.Selenium.IE.InternetExplorerDriver)
+                    _drivers[_activeDriver].Manage().Window.Maximize();
+
+                Thread.Sleep(1000);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }            
+        }
+
+        public void CloseAllTabsExceptCurrentWithActiveDriver()
+        {
+            try
+            {
+                var currentWindow = _drivers[_activeDriver].CurrentWindowHandle;
+                var windows = _drivers[_activeDriver].WindowHandles.Where(w => !w.Equals(currentWindow));
+                foreach (var win in windows)
+                    CloseTabWithActiveDriver(win, currentWindow);
+
+                Thread.Sleep(1000);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }            
+        }
         #endregion
 
         #region Internal Methods

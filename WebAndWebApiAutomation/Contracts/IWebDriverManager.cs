@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
 namespace WebAndWebApiAutomation
@@ -64,5 +59,24 @@ namespace WebAndWebApiAutomation
         /// </summary>
         /// <param name="url"></param>
         void NavigateWithActiveDriver(string url);
+        /// <summary>
+        /// Closes the farthest tab to the right in the current browser window
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        void CloseLastTabWithActiveDriver(string mainWindow);
+        /// <summary>
+        /// Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter
+        /// </summary>
+        /// <param name="tabToClose"></param>
+        /// <param name="targetTab"></param>
+        void CloseTabWithActiveDriver(string tabToClose, string targetTab);
+        /// <summary>
+        /// Switches the context to the farthest tab to the right in the current browser window
+        /// </summary>
+        void SwitchToLastTabWithActiveDriver();
+        /// <summary>
+        /// Closes all tabs except for the one currently with focus
+        /// </summary>
+        void CloseAllTabsExceptCurrentWithActiveDriver();
     }
 }

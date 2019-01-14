@@ -20,6 +20,7 @@ namespace WebAndWebApiAutomation
         private readonly StructureValidator _structureValidator;
         private readonly string _driverPath;
         private readonly int _timeoutForWait;
+        private static WebDriverManager _webDriverManagerInstance;
 
         /// <summary>
         /// Creates an instance of the WebAutomation class
@@ -48,7 +49,7 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects
+        /// Returns an instance of the IWebDriverManager used to create and manage IWebDriver objects. This is a Singleton.
         /// </summary>
         /// <returns>IWebDriverManager</returns>
         /// <exception cref="WebAutomationException"></exception>
@@ -56,7 +57,10 @@ namespace WebAndWebApiAutomation
         {
             try
             {
-                return new WebDriverManager(_driverPath, _timeoutForWait);
+                if(_webDriverManagerInstance == null)
+                    _webDriverManagerInstance = new WebDriverManager(_driverPath, _timeoutForWait);
+
+                return _webDriverManagerInstance;
             }
             catch (WebAutomationException wea)
             {

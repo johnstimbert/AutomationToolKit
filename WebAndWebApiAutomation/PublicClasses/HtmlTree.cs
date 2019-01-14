@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 
-namespace WebAndWebApiAutomation.Helpers
+namespace WebAndWebApiAutomation
 {
     /// <summary>
     /// HtmlTree parses HTML code into a tree-like structure of objects and provides a tool-set for extracting data from it.

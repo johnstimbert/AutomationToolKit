@@ -75,7 +75,7 @@
     <Compile Include="DriverFactory\IEDriverManager.cs" />
     <Compile Include="Exceptions\SwaggerAutomatorException.cs" />
     <Compile Include="Exceptions\WebAutomationException.cs" />
-    <Compile Include="Helpers\HtmlTree.cs" />
+    <Compile Include="PublicClasses\HtmlTree.cs" />
     <Compile Include="Contracts\IWebDriverManager.cs" />
     <Compile Include="Contracts\IWebAutomation.cs" />
     <Compile Include="WebAndApiAutomationObjects\HtmlTag.cs" />
