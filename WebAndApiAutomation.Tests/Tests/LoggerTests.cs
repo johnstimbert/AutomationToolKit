@@ -1,27 +1,42 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestLoggingAndDataFormatter.Exceptions;
+using WebAndWebApiAutomation.Exceptions;
+using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace TestLoggingAndDataFormatter.Tests
+namespace WebAndWebApiAutomation.Tests
 {
     [TestClass]
     public class LoggerTests
     {
+        private static TestContext _testContext;
+        public TestContext TestContext { get { return _testContext; } set { _testContext = value; } }
+
+        private static WebAutomation _webAutomation;
+        private static IWebDriverManager _driverManager;
+        LoggerSettings _loggerSettings;
+
         private const string _loggerTests = "Logger_Tests";
 
         private const string _logPath = @"c:\logger";
         private const string _logFileName = "logger.txt";
         private const string _failedTestLogFileName = "logger.txt_Failures";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
+        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
 
-        private Logger _logger;
-
-
+        private ILogger _logger;
+        
         [TestInitialize]
         public void BeforeEachTest()
         {
-            _logger = new Logger(_logFileName, _logPath);
+            if(_webAutomation == null)
+                _webAutomation = new WebAutomation(_driverPath, 10);
+
+            _loggerSettings = new LoggerSettings()
+            {
+                LogFileName = _logFileName,
+                LogFilePath = _logPath
+            };
         }
 
         [TestCleanup]
@@ -41,10 +56,13 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LogIsSavedToTheCorrectLocation()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
-            _logger.Log(LogMessageType.TESTINFO, "Test Message");
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = false;//The default is true
 
+            _logger = _webAutomation.GetLogger(_loggerSettings);
+
+            _logger.Log(LogMessageType.TESTINFO, "Test Message");
+                        
             Assert.IsTrue(File.Exists(Path.Combine(_logPath, _logFileName)), $"The file {_logFileName} was not founf in the path {_logPath}");
         }
 
@@ -52,8 +70,10 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LogFileNameDoesNotChangeWhenAppendDateConfigIsFalse()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = false;//The default is true
+
+            _logger = _webAutomation.GetLogger(_loggerSettings);
             _logger.Log(LogMessageType.TESTINFO, "Test Message");
 
             Assert.IsTrue(File.Exists(Path.Combine(_logPath, _logFileName)), $"The file {_logFileName} was not founf in the path {_logPath}");
@@ -63,13 +83,15 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LogFileNameIsCorrectWhenAppendDateConfigIsTrue_DefaultDateTimeFormat()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = true;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = true;//The default is true
+
+            _logger = _webAutomation.GetLogger(_loggerSettings);
             _logger.Log(LogMessageType.TESTINFO, "Test Message");
 
             var fileName = LoggerTestHelpers.AppendDateToLogFile(_logFileName, _defaultDateFormatProperty);
 
-            Assert.IsTrue(File.Exists(Path.Combine(_logPath, fileName)), $"The file {fileName} was not founf in the path {_logPath}");
+            Assert.IsTrue(File.Exists(Path.Combine(_logPath, fileName)), $"The file {fileName} was not found in the path {_logPath}");
         }
 
         [TestMethod]
@@ -80,14 +102,15 @@ namespace TestLoggingAndDataFormatter.Tests
             string expectedErrorText = $"The dateTime format {badDateFormat} is not valid. " +
                 $"Please reference the folowing article for valid values https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings";
 
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = true;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = true;//The default is true
 
             try
             {
-                _logger.DateFormatProperty = badDateFormat;
+                _loggerSettings.DateFormat = badDateFormat;
+                _logger = _webAutomation.GetLogger(_loggerSettings);
             }
-            catch(LoggerException ex)
+            catch (LoggerException ex)
             {
                 Assert.AreEqual(expectedErrorText, ex.Message, "Expected exception was not returned");
             }
@@ -97,11 +120,13 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LogFileRetainsAllLinesForCurrentRun()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = true;//The default is true
 
-            int i = 0;            
-            while(i < 6)
+            _logger = _webAutomation.GetLogger(_loggerSettings);
+
+            int i = 0;
+            while (i < 6)
             {
                 _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
                 i++;
@@ -118,11 +143,13 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LinesForCurrentRunAreWrittenInTheCorrectOrder()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = true;//The default is true
 
-            int i = 0;            
-            while(i < 6)
+            _logger = _webAutomation.GetLogger(_loggerSettings);
+
+            int i = 0;
+            while (i < 6)
             {
                 _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
                 i++;
@@ -134,7 +161,7 @@ namespace TestLoggingAndDataFormatter.Tests
             Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
 
             int x = 0;
-            while(x < i+1)
+            while (x < i + 1)
             {
                 var expectedValue = $"Line{x}";
                 var result = lines[x].Contains(expectedValue);
@@ -147,8 +174,10 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LinesForFailedTestAreWrittenInTheFailureLog()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = false;//The default is true
+
+            _logger = _webAutomation.GetLogger(_loggerSettings);
 
             int i = 0;
             while (i < 6)
@@ -179,8 +208,10 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LinesForFailedTestAreWrittenInTheFailureLogWithPreceedingSuccess()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = true;//The default is true
+
+            _logger = _webAutomation.GetLogger(_loggerSettings);
 
             int i = 0;
             while (i < 6)
@@ -219,8 +250,10 @@ namespace TestLoggingAndDataFormatter.Tests
         [TestCategory(_loggerTests)]
         public void LinesForFailedTestAreWrittenInTheFailureLogWithFollowingingSuccess()
         {
-            _logger.PreservePreviousLogFiles = false;//Clear the directory
-            _logger.AppendDateToLogFile = false;//The default is true
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = true;//The default is true
+
+            _logger = _webAutomation.GetLogger(_loggerSettings);
 
             int i = 0;
             while (i < 6)

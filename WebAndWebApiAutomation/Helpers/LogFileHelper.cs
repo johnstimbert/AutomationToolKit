@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace TestLoggingAndDataFormatter.Helpers
+namespace WebAndWebApiAutomation.Helpers
 {
     internal sealed class LogFileHelper
     {

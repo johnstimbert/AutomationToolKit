@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace TestLoggingAndDataFormatter.Tests
+namespace WebAndWebApiAutomation.Tests
 {
     public static class LoggerTestHelpers
     {

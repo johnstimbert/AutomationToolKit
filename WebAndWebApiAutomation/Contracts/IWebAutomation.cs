@@ -89,6 +89,20 @@ namespace WebAndWebApiAutomation
         /// <exception cref="WebAutomationException"></exception>
         IWebDriverManager GetIWebDriverManager();
         /// <summary>
+        /// Creates and returns and instance of the ILogger used to write to a common log file
+        /// </summary>
+        /// <param name="loggerSettings"></param>
+        /// <returns>ILogger</returns>
+        /// <exception cref="LoggerException"></exception>
+        ILogger GetLogger(LoggerSettings loggerSettings);
+        /// <summary>
+        /// Creates and returns and instance of the ITestExecutor used to execute tests and manage the results
+        /// </summary>
+        /// <param name="collectTestData"></param>
+        /// <param name="resultsPath"></param>
+        /// <returns></returns>
+        ITestExecutor GetTestExecutor(bool collectTestData, string resultsPath);
+        /// <summary>
         /// Creates and returns an IJavaScriptExecutor object using the provided IWebDriver
         /// </summary>
         /// <param name="webDriverManager"></param>

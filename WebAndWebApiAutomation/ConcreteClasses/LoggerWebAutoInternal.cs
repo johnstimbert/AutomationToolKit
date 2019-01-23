@@ -3,85 +3,47 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using TestLoggingAndDataFormatter.Exceptions;
-using TestLoggingAndDataFormatter.Helpers;
+using WebAndWebApiAutomation.Exceptions;
+using WebAndWebApiAutomation.Helpers;
+using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace TestLoggingAndDataFormatter
+namespace WebAndWebApiAutomation
 {
-    /// <summary>
-    /// Defines the type of message being logged
-    /// </summary>
-    public enum LogMessageType
-    {
-        #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        TESTINFO,
-        TESTPASSED,
-        TESTFAILED
-        #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-    }
 
     /// <summary>
     /// This class provides a common utility for formatting logging
     /// </summary>
-    public sealed class Logger
+    internal sealed class LoggerWebAutoInternal : ILogger
     {
         private readonly string _logFileName;
         private readonly string _logFilePath;
+        private string _dateFormatProperty;
+        private bool _generateFailureLog;
+        private bool _appendDateToLogFile;
+        private int _numberOfLogFilesToPreserve;
+
         private LogFileHelper _fileHelper;
         private bool _inTest = false;
         private bool _newTestRun = true;
-        private string _dateFormatProperty = "MM_dd_yyyy";
         StringBuilder _testLogHistory = new StringBuilder();
  
-        private Logger() { }
+        private LoggerWebAutoInternal() { }
 
-        /// <summary>
-        /// Only valid constructor
-        /// </summary>
-        /// <param name="LogFileName">The name of the file to log to.  It will be created if it does not exist.</param>
-        /// <param name="LogFilePath">The path in which to wrote the log file. It will be created if it does not exist.</param>
-        public Logger(string LogFileName, string LogFilePath)
+        internal LoggerWebAutoInternal(LoggerSettings loggerSettings)
         {
-            _logFileName = LogFileName;
-            _logFilePath = LogFilePath;
+            _logFileName = loggerSettings.LogFileName ?? throw new LoggerException($"Log File Name Must Be Deinfed");
+            _logFilePath = loggerSettings.LogFilePath ?? throw new LoggerException($"Log File Path Must Be Deinfed");
+
+            _dateFormatProperty = loggerSettings.DateFormat;
+            _generateFailureLog = loggerSettings.GenerateFailureLog;
+            _appendDateToLogFile = loggerSettings.AppendDateToLogFile;
+            _numberOfLogFilesToPreserve = loggerSettings.NumberOfLogFilesToPreserve;
 
             _fileHelper = new LogFileHelper(_logFilePath, _logFileName);
 
             if (!Directory.Exists(_logFilePath))
                 Directory.CreateDirectory(_logFilePath);
         }
-
-        #region Public Properties
-        /// <summary>
-        /// Defines the date format to be used, must be a format that would be accepted by the DateTime.Now.ToString("G") method
-        /// The default is "MM_dd_yyyy".
-        /// </summary>
-        public string DateFormatProperty {
-            get { return _dateFormatProperty; }
-            set { _dateFormatProperty = ValidateDateFormatValueBeingSet(value); }
-        }
-        /// <summary>
-        /// If set to true, a file will be created containing the entries for a failed test
-        /// </summary>
-        public bool GenerateFailureLog = true;
-        /// <summary>
-        /// Appends the current date to the log file being written based on the DateFormatProperty.
-        /// The default value is true.
-        /// </summary>
-        public bool AppendDateToLogFile = true;
-        /// <summary>
-        /// If true, the number of log files preserved are based on the NumberOfLogFilesToPreserve property.
-        /// If false, any existing files will be deleted.
-        /// The default is true.
-        /// </summary>
-        public bool PreservePreviousLogFiles = true;
-        /// <summary>
-        /// Defiens the number of log files to preserve.
-        /// The default is 10.
-        /// </summary>
-        public int NumberOfLogFilesToPreserve = 10;
-
-        #endregion
 
         #region public methods
         /// <summary>
@@ -117,10 +79,10 @@ namespace TestLoggingAndDataFormatter
                 {
                     var logFileName = _logFileName;
 
-                    if (AppendDateToLogFile)
+                    if (_appendDateToLogFile)
                         logFileName = _fileHelper.AppendDateToLogFile(logFileName, _dateFormatProperty);
 
-                    ModifyExistingLogsBasedOnConfigs(NumberOfLogFilesToPreserve, PreservePreviousLogFiles, logFileName);
+                    ModifyExistingLogsBasedOnConfigs(_numberOfLogFilesToPreserve, logFileName);
                     _newTestRun = false;
                 }
                 // Get call stack
@@ -148,7 +110,7 @@ namespace TestLoggingAndDataFormatter
 
                         WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"****** TEST FAILURE ****** {message}", true);
 
-                        if (GenerateFailureLog)
+                        if (_generateFailureLog)
                             WriteEntryToFailureLog(level.ToString(), _testLogHistory.ToString());
 
                         _inTest = false;
@@ -178,7 +140,7 @@ namespace TestLoggingAndDataFormatter
         private void WriteEntryToExecutionLog(string level, string testMethodName, string message, bool addToTestHistory = false)
         {
             string fileName = Path.Combine(_logFilePath, _logFileName);
-            if (AppendDateToLogFile)
+            if (_appendDateToLogFile)
                 fileName = _fileHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
 
             string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} Test Method:{testMethodName} - {message}";
@@ -196,7 +158,7 @@ namespace TestLoggingAndDataFormatter
         private void WriteEntryToFailureLog(string level, string message)
         {
             string fileName = Path.Combine(_logFilePath, $"{_logFileName}_Failures");
-            if (AppendDateToLogFile)
+            if (_appendDateToLogFile)
                 fileName = _fileHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
 
             //Append new text to an existing file 
@@ -217,10 +179,10 @@ namespace TestLoggingAndDataFormatter
                 $"Please reference the folowing article for valid values https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings");
         }
 
-        private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, bool preservePreviousLogFiles, string logFileName)
+        private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, string logFileName)
         {
             var logHelper = new LogFileHelper(_logFilePath, _logFileName);
-            if(preservePreviousLogFiles)
+            if(numberOfLogFilesToPreserve > 0)
             {
                 logHelper.IncrementLogFiles(numberOfLogFilesToPreserve);
             }

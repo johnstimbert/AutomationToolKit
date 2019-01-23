@@ -68,6 +68,11 @@
     <Compile Include="Api\SwaggerUtilities\Models\PathComponents\SwaggerPathResponseSchema.cs" />
     <Compile Include="Api\SwaggerUtilities\Models\Paths.cs" />
     <Compile Include="Api\SwaggerUtilities\SwaggerReader.cs" />
+    <Compile Include="Contracts\ILogger.cs" />
+    <Compile Include="ConcreteClasses\LoggerSettings.cs" />
+    <Compile Include="Contracts\ITestExecutor.cs" />
+    <Compile Include="Exceptions\LoggerException.cs" />
+    <Compile Include="Exceptions\TestExecutorException.cs" />
     <Compile Include="Extensions\DriverExtension.cs" />
     <Compile Include="DriverFactory\ChromeDriverManager.cs" />
     <Compile Include="DriverFactory\EdgeDriverManager.cs" />
@@ -75,19 +80,23 @@
     <Compile Include="DriverFactory\IEDriverManager.cs" />
     <Compile Include="Exceptions\SwaggerAutomatorException.cs" />
     <Compile Include="Exceptions\WebAutomationException.cs" />
-    <Compile Include="PublicClasses\HtmlTree.cs" />
+    <Compile Include="Helpers\LogFileHelper.cs" />
+    <Compile Include="ConcreteClasses\HtmlTree.cs" />
     <Compile Include="Contracts\IWebDriverManager.cs" />
     <Compile Include="Contracts\IWebAutomation.cs" />
+    <Compile Include="ConcreteClasses\LoggerWebAutoInternal.cs" />
+    <Compile Include="ConcreteClasses\TestExecutor.cs" />
+    <Compile Include="TestDataCollection\TestDataCollector.cs" />
     <Compile Include="WebAndApiAutomationObjects\HtmlTag.cs" />
     <Compile Include="WebAndApiAutomationObjects\SelectorData.cs" />
     <Compile Include="WebAndApiAutomationObjects\SelectorDataSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\NavigationValidator.cs" />
-    <Compile Include="PublicClasses\WebAutomation.cs" />
-    <Compile Include="PublicClasses\WebAutomationEnums.cs" />
+    <Compile Include="ConcreteClasses\WebAutomation.cs" />
+    <Compile Include="ConcreteClasses\WebAutomationEnums.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Validators\StructureValidator.cs" />
-    <Compile Include="PublicClasses\WebDriverManager.cs" />
+    <Compile Include="ConcreteClasses\WebDriverManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MicrosoftWebDriver.exe">

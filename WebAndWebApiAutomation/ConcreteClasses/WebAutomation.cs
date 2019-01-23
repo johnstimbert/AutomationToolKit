@@ -21,6 +21,8 @@ namespace WebAndWebApiAutomation
         private readonly string _driverPath;
         private readonly int _timeoutForWait;
         private static WebDriverManager _webDriverManagerInstance;
+        private static LoggerWebAutoInternal _loggerInstance;
+        private static TestExecutor _testExecutorInstance;
 
         /// <summary>
         /// Creates an instance of the WebAutomation class
@@ -69,6 +71,56 @@ namespace WebAndWebApiAutomation
             catch (Exception ex)
             {
                 throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates and returns and instance of the ILogger used to write to a common log file
+        /// </summary>
+        /// <param name="loggerSettings"></param>
+        /// <returns>ILogger</returns>
+        /// <exception cref="LoggerException"></exception>
+        public ILogger GetLogger(LoggerSettings loggerSettings)
+        {
+            try
+            {
+                if (_loggerInstance == null)
+                    _loggerInstance = new LoggerWebAutoInternal(loggerSettings);
+
+                return _loggerInstance;
+            }
+            catch (LoggerException le)
+            {
+                throw le;
+            }
+            catch (Exception ex)
+            {
+                throw new LoggerException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates and returns and instance of the ITestExecutor used to execute tests and manage the results
+        /// </summary>
+        /// <param name="collectTestData"></param>
+        /// <param name="resultsPath"></param>
+        /// <returns></returns>
+        public ITestExecutor GetTestExecutor(bool collectTestData, string resultsPath)
+        {
+            try
+            {                
+                if (_testExecutorInstance == null)
+                    _testExecutorInstance = new TestExecutor(_loggerInstance, collectTestData, resultsPath);
+
+                return _testExecutorInstance;
+            }
+            catch (TestExecutorException te)
+            {
+                throw te;
+            }
+            catch (Exception ex)
+            {
+                throw new LoggerException(ex.ToString());
             }
         }
 

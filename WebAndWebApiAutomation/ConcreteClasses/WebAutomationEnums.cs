@@ -133,7 +133,7 @@ namespace WebAndWebApiAutomation
         {
             Chrome,
             Firefox,
-            Ie,
+            InternetExplorer,
             Edge,
             None
         }
@@ -156,6 +156,16 @@ namespace WebAndWebApiAutomation
             /// No navigation was attempted
             /// </summary>
             NavigationNotAttempted
+        }
+
+        /// <summary>
+        /// Defines the type of message being logged
+        /// </summary>
+        public enum LogMessageType
+        {
+            TESTINFO,
+            TESTPASSED,
+            TESTFAILED
         }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }

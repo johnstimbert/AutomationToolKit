@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestLoggingAndDataFormatter.Exceptions
+namespace WebAndWebApiAutomation.Exceptions
 {
     /// <summary>
     /// Wrapping exception used to clarify exceptions thrown inside the Logger utility.

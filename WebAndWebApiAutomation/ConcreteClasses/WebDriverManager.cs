@@ -405,7 +405,7 @@ namespace WebAndWebApiAutomation
 
                         webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
                         break;
-                    case DriverType.Ie:
+                    case DriverType.InternetExplorer:
                         if (!File.Exists(Path.Combine(_driverPath, _ieDriverName)))
                             throw new WebAutomationException($"The driver {_ieDriverName} was not found in the path {_driverPath}");
 

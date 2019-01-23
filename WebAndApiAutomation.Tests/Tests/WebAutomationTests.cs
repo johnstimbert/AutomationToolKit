@@ -8,7 +8,7 @@ using WebAndWebApiAutomation.Exceptions;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
-namespace WebAndApiAutomation.Tests.Release
+namespace WebAndApiAutomation.Tests
 {
     [TestClass]
     public class WebAutomationTests
@@ -34,8 +34,8 @@ namespace WebAndApiAutomation.Tests.Release
         private const string _firefoxDriverName = "geckodriver.exe";
         private const string _ieDriverName = "IEDriverServer.exe";
         private const string _edgeDriverName = "MicrosoftWebDriver.exe";
-
-        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Release";
+                
+        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 
@@ -57,14 +57,6 @@ namespace WebAndApiAutomation.Tests.Release
             "--ignore-certificate-errors",
             "--start-maximized"
         };
-
-        [AssemblyInitialize()]
-        public static void TestRunSetup(TestContext testContex)
-        {
-            _testContext = testContex;
-            _webAutomation = new WebAutomation(_driverPath, 10);
-            _driverManager = _webAutomation.GetIWebDriverManager();
-        }
 
         [TestInitialize]
         public void BeforeEachTest()
@@ -141,7 +133,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverTestCategory)]
         public void GetIEDriver()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.AreEqual(_navUrlGoogle, _driverManager.GetActiveDriverUrl(), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
         }
@@ -271,7 +263,7 @@ namespace WebAndApiAutomation.Tests.Release
         public void TakeScreenShot_IE()
         {
             string shotName = "IEShot";
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             _webAutomation.TakeScreenShot(_driverManager, _screenShotPath, shotName);
 
@@ -333,7 +325,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverInteractionTestCategory)]
         public void GetJavaScriptExecutor_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             var executor = _webAutomation.GetJavaScriptExecutor(_driverManager);
             Assert.IsNotNull(executor, "JavaScriptExecutor was null");
         }
@@ -403,7 +395,7 @@ namespace WebAndApiAutomation.Tests.Release
             string expectedUrl = "https://www.seleniumhq.org/projects/";
             SelectorData clickTarget = new SelectorData("SeleniumProjects", HtmlTagType.a, HtmlAttributeType.Title, "Selenium Projects");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(startingUrl);
 
@@ -485,7 +477,7 @@ namespace WebAndApiAutomation.Tests.Release
             string text = "ChromeShot";
             SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _webAutomation.SendText(_driverManager, googleSearchInput, text);
@@ -561,7 +553,7 @@ namespace WebAndApiAutomation.Tests.Release
             string text = "ChromeShot";
             SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _webAutomation.SendTextWithDelay(_driverManager, googleSearchInput, text);
@@ -639,7 +631,7 @@ namespace WebAndApiAutomation.Tests.Release
             string text = "ChromeShot";
             SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _webAutomation.SendText(_driverManager, googleSearchInput, text);
@@ -716,7 +708,7 @@ namespace WebAndApiAutomation.Tests.Release
         {
             _webAutomation = new WebAutomation(_driverPath, 30);
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager = _webAutomation.MoveToElement(_driverManager, copyrightDiv);
@@ -783,7 +775,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverInteractionTestCategory)]
         public void DoesUrlContain_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
             Assert.IsNotNull(_driverManager, "Driver was null");
             Assert.IsTrue(_webAutomation.DoesUrlContain(_driverManager, "intersys"));
@@ -844,7 +836,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverInteractionTestCategory)]
         public void DoesUrlContainUsingRegex_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
             Assert.IsNotNull(_driverManager, "Driver was null");
             Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
@@ -919,7 +911,7 @@ namespace WebAndApiAutomation.Tests.Release
         public void TakeScreenShot_IE_HeadlessMode()
         {
             string shotName = "IEShot";
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             _webAutomation.TakeScreenShot(_driverManager, _screenShotPath, shotName);
@@ -968,7 +960,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverInteractionTestCategoryHeadless)]
         public void GetJavaScriptExecutor_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             var executor = _webAutomation.GetJavaScriptExecutor(_driverManager);
             Assert.IsNotNull(executor, "JavaScriptExecutor was null");
@@ -1026,7 +1018,7 @@ namespace WebAndApiAutomation.Tests.Release
             string expectedUrl = "https://www.seleniumhq.org/projects/";
             SelectorData clickTarget = new SelectorData("SeleniumProjects", HtmlTagType.a, HtmlAttributeType.Title, "Selenium Projects");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(startingUrl);
 
@@ -1085,7 +1077,7 @@ namespace WebAndApiAutomation.Tests.Release
             string text = "ChromeShot";
             SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _webAutomation.SendText(_driverManager, googleSearchInput, text);
@@ -1137,7 +1129,7 @@ namespace WebAndApiAutomation.Tests.Release
             string text = "ChromeShot";
             SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _webAutomation.SendTextWithDelay(_driverManager, googleSearchInput, text);
@@ -1191,7 +1183,7 @@ namespace WebAndApiAutomation.Tests.Release
             string text = "ChromeShot";
             SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _webAutomation.SendText(_driverManager, googleSearchInput, text);
@@ -1245,7 +1237,7 @@ namespace WebAndApiAutomation.Tests.Release
         {
             _webAutomation = new WebAutomation(_driverPath, 30);
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager = _webAutomation.MoveToElement(_driverManager, copyrightDiv);
@@ -1290,7 +1282,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverInteractionTestCategoryHeadless)]
         public void DoesUrlContain_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
             Assert.IsNotNull(_driverManager, "Driver was null");
             Assert.IsTrue(_webAutomation.DoesUrlContain(_driverManager, "intersys"));
@@ -1329,7 +1321,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_driverInteractionTestCategoryHeadless)]
         public void DoesUrlContainUsingRegex_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
             Assert.IsNotNull(_driverManager, "Driver was null");
             Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
@@ -1418,7 +1410,7 @@ namespace WebAndApiAutomation.Tests.Release
             SelectorData data = new SelectorData("GoogleForm", HtmlTagType.form, HtmlAttributeType.AttributeText_Contains, "ge");
             string expectedAttributeValue = "get";
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(data, _driverManager);
@@ -1433,7 +1425,7 @@ namespace WebAndApiAutomation.Tests.Release
             string expectedAttributeValue = "get";
             SelectorData data = new SelectorData("GoogleForm", HtmlTagType.form, HtmlAttributeType.AttributeText_ExactMatch, expectedAttributeValue);
 
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(data, _driverManager);
@@ -1520,7 +1512,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategory)]
         public void CheckElementExistsReturnIWebElement_ById_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divById, _driverManager);
@@ -1569,7 +1561,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategory)]
         public void CheckElementExistsReturnIWebElement_ByClass_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divByClass, _driverManager);
@@ -1618,7 +1610,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategory)]
         public void CheckElementExistsReturnCssSelector_ById_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var cssBy = _webAutomation.CheckElementExistsReturnCssSelector(divById, _driverManager);
@@ -1668,7 +1660,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategory)]
         public void CheckElementExistsReturnCssSelector_ByClass_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divByClass, _driverManager);
@@ -1716,7 +1708,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategory)]
         public void CheckElementExistsReturnCssSelector_ByTagTypeOnly_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var cssBy = _webAutomation.CheckElementExistsReturnCssSelector(divTagTypeOnly, _driverManager);
@@ -1760,7 +1752,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategory)]
         public void CheckElementsExist_ById_IE()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie);
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             Assert.IsTrue(_webAutomation.CheckElementsExist(divTags, _driverManager));
@@ -1869,7 +1861,7 @@ namespace WebAndApiAutomation.Tests.Release
             SelectorData data = new SelectorData("GoogleForm", HtmlTagType.form, HtmlAttributeType.AttributeText_Contains, "ge");
             string expectedAttributeValue = "get";
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(data, _driverManager);
@@ -1884,7 +1876,7 @@ namespace WebAndApiAutomation.Tests.Release
             string expectedAttributeValue = "get";
             SelectorData data = new SelectorData("GoogleForm", HtmlTagType.form, HtmlAttributeType.AttributeText_ExactMatch, expectedAttributeValue);
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(data, _driverManager);
@@ -1952,7 +1944,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategoryHeadless)]
         public void CheckElementExistsReturnIWebElement_ById_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divById, _driverManager);
@@ -2001,7 +1993,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategoryHeadless)]
         public void CheckElementExistsReturnIWebElement_ByClass_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divByClass, _driverManager);
@@ -2049,7 +2041,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategoryHeadless)]
         public void CheckElementExistsReturnCssSelector_ById_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divById, _driverManager);
@@ -2098,7 +2090,7 @@ namespace WebAndApiAutomation.Tests.Release
         [TestCategory(_elementLocationMethodsTestCategoryHeadless)]
         public void CheckElementExistsReturnCssSelector_ByClass_IE_HeadlessMode()
         {
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             var element = _webAutomation.CheckElementExistsReturnIWebElement(divByClass, _driverManager);
@@ -2151,7 +2143,7 @@ namespace WebAndApiAutomation.Tests.Release
             divTags.RemoveSelectorDataByName(divByClass.Name);
             divTags.RemoveSelectorDataByName(divTagTypeOnly.Name);
 
-            _driverManager.CreateDriverInstance(DriverType.Ie, new string[] { "--headless" });
+            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             Assert.IsTrue(_webAutomation.CheckElementsExist(divTags, _driverManager));
