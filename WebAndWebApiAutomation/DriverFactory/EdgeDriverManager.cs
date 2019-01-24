@@ -10,7 +10,6 @@ namespace WebAndWebApiAutomation.DriverFactory
 
         internal static EdgeDriver Create_WebDriver_Instance(string driverPath, string[] driverOptions)
         {
-            //var driverLocation = Path.Combine(Path.GetDirectoryName(driverPath));
             var driver = new EdgeDriver(driverPath);
 
             driver.Manage().Window.Maximize();

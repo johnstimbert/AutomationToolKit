@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.5-alpha</version>
+    <title>$title$</title>
+    <authors>John Stimbert</authors>
+    <owners>John Stimbert</owners>
+    <license type="expression">Apache-2.0</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Alpha release</releaseNotes>
+    <copyright>Copyright © 2019</copyright>
+    <tags>QaAutomation SeleniumTools</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\WebAndWebApiAutomation.xml" target="lib\net472"/>
+    <file src="bin\Release\WebAndWebApiAutomation.dll" target="lib\net472"/>
+  </files>
+</package>

@@ -106,7 +106,7 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Selects the driver to mark as active. The active driver is used for execution.
+        /// Selects the driver to mark as active. If the DriverType provided does not have an instance already created, one will be created and marked as the active driver. 
         /// </summary>
         /// <param name="driverType"></param>
         /// <exception cref="WebAutomationException"></exception>
@@ -114,9 +114,8 @@ namespace WebAndWebApiAutomation
         {
             try
             {
-                if(!HasInstance(driverType))
-                    throw new WebAutomationException($"Manager does not contain an instance of DriverType {driverType}. " +
-                        $"Call CreateDriverInstance to create a new driver instance");
+                if (!HasInstance(driverType))
+                    CreateDriverInstance(driverType);
 
                 _activeDriver = driverType;
             }

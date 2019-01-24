@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Helpers\LoggerTestHelpers.cs" />
     <Compile Include="Tests\LoggerTests.cs" />
+    <Compile Include="Tests\TestExecutorTests.cs" />
     <Compile Include="Tests\WebAutomationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
