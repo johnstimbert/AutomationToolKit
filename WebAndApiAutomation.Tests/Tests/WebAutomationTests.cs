@@ -812,66 +812,66 @@ namespace WebAndApiAutomation.Tests
             }
         }
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategory)]
-        public void DoesUrlContainUsingRegex_Chrome()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Chrome);
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategory)]
+        //public void DoesUrlContainUsingRegex_Chrome()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Chrome);
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategory)]
-        public void DoesUrlContainUsingRegex_Firefox()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Firefox);
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategory)]
+        //public void DoesUrlContainUsingRegex_Firefox()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Firefox);
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategory)]
-        public void DoesUrlContainUsingRegex_IE()
-        {
-            _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategory)]
+        //public void DoesUrlContainUsingRegex_IE()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategory)]
-        public void DoesUrlContainUsingRegex_Edge()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Edge);
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategory)]
+        //public void DoesUrlContainUsingRegex_Edge()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Edge);
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategory)]
-        public void DoesUrlContainUsingRegex_DriverTypeNone()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Chrome);
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategory)]
+        //public void DoesUrlContainUsingRegex_DriverTypeNone()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Chrome);
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
 
-            _driverManager.QuitDriverInstance(DriverType.Chrome);
+        //    _driverManager.QuitDriverInstance(DriverType.Chrome);
 
-            try
-            {
-                Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-            }
-            catch (WebAutomationException ex)
-            {
-                string message = ex.Message;
-                Assert.AreEqual(_driverTypeNoneException, message, "The expected null driver exception was not found");
-            }
-        }
+        //    try
+        //    {
+        //        Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //    }
+        //    catch (WebAutomationException ex)
+        //    {
+        //        string message = ex.Message;
+        //        Assert.AreEqual(_driverTypeNoneException, message, "The expected null driver exception was not found");
+        //    }
+        //}
 
         #endregion
 
@@ -1297,45 +1297,46 @@ namespace WebAndApiAutomation.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             Assert.IsTrue(_webAutomation.DoesUrlContain(_driverManager, "intersys"));
         }
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategoryHeadless)]
-        public void DoesUrlContainUsingRegex_Chrome_HeadlessMode()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Chrome, chromeOptions);
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategoryHeadless)]
-        public void DoesUrlContainUsingRegex_Firefox_HeadlessMode()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Firefox, new string[] { "--headless" });
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategoryHeadless)]
+        //public void DoesUrlContainUsingRegex_Chrome_HeadlessMode()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Chrome, chromeOptions);
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategoryHeadless)]
-        public void DoesUrlContainUsingRegex_IE_HeadlessMode()
-        {
-            _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategoryHeadless)]
+        //public void DoesUrlContainUsingRegex_Firefox_HeadlessMode()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Firefox, new string[] { "--headless" });
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategoryHeadless)]
-        public void DoesUrlContainUsingRegex_Edge_HeadlessMode()
-        {
-            _driverManager.CreateDriverInstance(DriverType.Edge, new string[] { "--headless" });
-            _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
-        }
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategoryHeadless)]
+        //public void DoesUrlContainUsingRegex_IE_HeadlessMode()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.InternetExplorer, new string[] { "--headless" });
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
+
+        //[TestMethod]
+        //[TestCategory(_driverInteractionTestCategoryHeadless)]
+        //public void DoesUrlContainUsingRegex_Edge_HeadlessMode()
+        //{
+        //    _driverManager.CreateDriverInstance(DriverType.Edge, new string[] { "--headless" });
+        //    _driverManager.NavigateWithActiveDriver("https://www.intersysconsulting.com/");
+        //    Assert.IsNotNull(_driverManager, "Driver was null");
+        //    Assert.IsTrue(_webAutomation.DoesUrlContainUsingRegex(_driverManager, "intersys"));
+        //}
 
         #endregion
 

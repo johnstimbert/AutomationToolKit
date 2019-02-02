@@ -338,19 +338,19 @@ namespace WebAndWebApiAutomation
         /// <param name="selectorData">Object representing the element to check</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
-        {
-            var manager = Helper.IsDriverNull(webDriverManager);
-            try
-            {
-                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return manager.GetActiveDriver().WaitForElementToBeSelected(cssBy, manager.GetWait());
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
+        //public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
+        //{
+        //    var manager = Helper.IsDriverNull(webDriverManager);
+        //    try
+        //    {
+        //        var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+        //        return manager.GetActiveDriver().WaitForElementToBeSelected(cssBy, manager.GetWait());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new WebAutomationException(ex.ToString());
+        //    }
+        //}
 
         /// <summary>
         /// Checks whether or not the provided element is visible
@@ -400,18 +400,18 @@ namespace WebAndWebApiAutomation
         /// <param name="pattern">Text to look for in the current Url</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)
-        {
-            var manager = Helper.IsDriverNull(webDriverManager);
-            try
-            {
-                return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
+        //public bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)
+        //{
+        //    var manager = Helper.IsDriverNull(webDriverManager);
+        //    try
+        //    {
+        //        return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new WebAutomationException(ex.ToString());
+        //    }
+        //}
 
         /// <summary>
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
