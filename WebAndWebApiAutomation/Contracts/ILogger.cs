@@ -1,4 +1,6 @@
-﻿namespace WebAndWebApiAutomation
+﻿using static WebAndWebApiAutomation.WebAutomationEnums;
+
+namespace WebAndWebApiAutomation
 {
     /// <summary>
     /// Method definition for objects implementing the ILogger interface
@@ -10,7 +12,7 @@
         /// </summary>
         /// <param name="level"></param>
         /// <param name="message"></param>
-        void Log(WebAutomationEnums.LogMessageType level, string message);
+        void Log(LogMessageType level, string message);
         /// <summary>
         /// Returns an xml respresentation of the proivided object
         /// </summary>

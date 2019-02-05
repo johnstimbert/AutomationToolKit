@@ -96,19 +96,19 @@ namespace WebAndWebApiAutomation
                         if (!_inTest)
                         {
                             _testLogHistory.Clear();
-                            WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"**** STARTING TEST ****: {message}", true);
+                            WriteEntryToExecutionLog(level.ToString(), $"**** STARTING TEST ****: {message}", true);
                             _inTest = true;
                         }
                         else
                         {
-                            WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"Test Execution Info: {message}", true);
+                            WriteEntryToExecutionLog(level.ToString(), $"Test Execution Info: {message}", true);
                             _inTest = true;
                         }
 
                         break;
                     case LogMessageType.TESTFAILED:
 
-                        WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"****** TEST FAILURE ****** {message}", true);
+                        WriteEntryToExecutionLog(level.ToString(), $"****** TEST FAILURE ****** {message}", true);
 
                         if (_generateFailureLog)
                             WriteEntryToFailureLog(level.ToString(), _testLogHistory.ToString());
@@ -119,7 +119,7 @@ namespace WebAndWebApiAutomation
                         break;
                     case LogMessageType.TESTPASSED:
 
-                        WriteEntryToExecutionLog(level.ToString(), stackTrace.GetFrame(1).GetMethod().Name, $"****** TEST PASSED ****** {message}");
+                        WriteEntryToExecutionLog(level.ToString(), $"****** TEST PASSED ****** {message}");
 
                         _inTest = false;
                         _testLogHistory.Clear();
@@ -137,13 +137,13 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region private methods
-        private void WriteEntryToExecutionLog(string level, string testMethodName, string message, bool addToTestHistory = false)
+        private void WriteEntryToExecutionLog(string level, string message, bool addToTestHistory = false)
         {
             string fileName = Path.Combine(_logFilePath, _logFileName);
             if (_appendDateToLogFile)
                 fileName = _fileHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
 
-            string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} Test Method:{testMethodName} - {message}";
+            string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} - {message}";
 
             if (addToTestHistory)
                 _testLogHistory.AppendLine(logEntry);

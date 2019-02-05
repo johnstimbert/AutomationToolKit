@@ -26,13 +26,13 @@ namespace WebAndWebApiAutomation
         {
             _logger = logger;
 
-            if (collectTestData)
-            {
-                _testDataCollector = new TestDataCollector();
+            //if (collectTestData)
+            //{
+            //    _testDataCollector = new TestDataCollector();
 
-                if (_testRunId == null)
-                    _testRunId = Guid.NewGuid();
-            }
+            //    if (_testRunId == null)
+            //        _testRunId = Guid.NewGuid();
+            //}
 
             if(resultsPath != null)
             {

@@ -13,7 +13,7 @@ using System.Threading;
 namespace WebAndWebApiAutomation
 {
     /// <summary>
-    /// This class conatins the utility and driver instance creation methods for automating the cross browser testing of a web site
+    /// This class contains the utility and component instance creation methods for automating cross browser testing of a web site
     /// </summary>
     public sealed class WebAutomation : IWebAutomation
     {
@@ -34,10 +34,15 @@ namespace WebAndWebApiAutomation
         {
             driverPath = ValidateDriverPath(driverPath);
 
+            if (timeoutForWaitOverride <= 0)
+                timeoutForWaitOverride = 5;
+
             _timeoutForWait = timeoutForWaitOverride;
             _driverPath = driverPath;
             _structureValidator = new StructureValidator();
         }
+
+        private WebAutomation() { }
 
         private string ValidateDriverPath(string driverPath)
         {
@@ -331,14 +336,14 @@ namespace WebAndWebApiAutomation
             }
         }
 
-        /// <summary>
-        /// Checks whether or not the provided element is selected
-        /// </summary>
-        /// <param name="webDriverManager"></param>
-        /// <param name="selectorData">Object representing the element to check</param>
-        /// <returns>IWebDriver</returns>
-        /// <exception cref="WebAutomationException"></exception>
-        //public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
+        ///// <summary>
+        ///// Checks whether or not the provided element is selected
+        ///// </summary>
+        ///// <param name="webDriverManager"></param>
+        ///// <param name="selectorData">Object representing the element to check</param>
+        ///// <returns>IWebDriver</returns>
+        ///// <exception cref="WebAutomationException"></exception>
+        ////public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
         //{
         //    var manager = Helper.IsDriverNull(webDriverManager);
         //    try
@@ -393,13 +398,13 @@ namespace WebAndWebApiAutomation
             }
         }
 
-        /// <summary>
-        /// Checks whether or not the current url contains the provided pattern using regex
-        /// </summary>
-        /// <param name="webDriverManager"></param>
-        /// <param name="pattern">Text to look for in the current Url</param>
-        /// <returns>IWebDriver</returns>
-        /// <exception cref="WebAutomationException"></exception>
+        ///// <summary>
+        ///// Checks whether or not the current url contains the provided pattern using regex
+        ///// </summary>
+        ///// <param name="webDriverManager"></param>
+        ///// <param name="pattern">Text to look for in the current Url</param>
+        ///// <returns>IWebDriver</returns>
+        ///// <exception cref="WebAutomationException"></exception>
         //public bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)
         //{
         //    var manager = Helper.IsDriverNull(webDriverManager);
