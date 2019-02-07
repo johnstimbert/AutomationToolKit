@@ -81,6 +81,56 @@ namespace WebAndWebApiAutomation.Validators
         }
 
         /// <summary>
+        /// Finds and returns the Nth IWebElement from a set of identical elements using the parameters provided, if none is found an exception is thrown.
+        /// </summary>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="nthElement">The Zero based position of the element to be returned</param>
+        /// <param name="wait"></param>
+        /// <returns></returns>
+        internal IWebElement Check_Nth_ElementExistsReturnIWebElement(SelectorData selectorData, int nthElement, IWebDriver driver, WebDriverWait wait)
+        {
+            IWebElement webElement = null;
+            try
+            {
+                if (selectorData.AttributeType == HtmlAttributeType.InnerText_Contains || selectorData.AttributeType == HtmlAttributeType.InnerText_ExactMatch)
+                {
+                    webElement = CheckElementExistsByTagAndInnerText(selectorData, driver);
+                }
+                else if (selectorData.AttributeType == HtmlAttributeType.AttributeText_Contains || selectorData.AttributeType == HtmlAttributeType.AttributeText_ExactMatch)
+                {
+                    webElement = CheckElementExistsByAttributevalue(selectorData, driver);
+                }
+                else
+                {
+                    var elements = driver.FindElements(BuildCssSelectorBy(selectorData));
+
+                    if (nthElement < 0)
+                        throw new WebAutomationException($"{nthElement} is less than zero, this must be the zero based position of the expected value.");
+
+                    if (elements.Count < nthElement)
+                        throw new WebAutomationException($"{elements.Count} elements were found with a class attribute of '{selectorData.AttributeValue}'. " +
+                            $"An element was not found in the array at the {nthElement} position.");
+
+
+                    webElement = elements[nthElement];
+                }
+
+                return webElement;
+            }
+            catch (WebAutomationException wae)
+            {
+                throw wae;
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            {
+                return webElement;
+            }
+        }
+
+        /// <summary>
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>

@@ -11,14 +11,16 @@ namespace WebAndWebApiAutomation
     public interface IWebAutomation
     {
         /// <summary>
-        /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned
+        /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned.
+        /// If multiple elements match the SelectorData definition utilize the nthParentElement parameter to select the desired parent
         /// </summary>
         /// <param name="parentSelectorData">Data to find the parent element with</param>
         /// <param name="childSelectorData">>Data to find the child element with</param>
         /// <param name="webDriverManager"></param>
+        /// <param name="nthParentElement">The Zero based position of the parent element to search with, this is optional</param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriverManager webDriverManager);
+        IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriverManager webDriverManager, int nthParentElement = -1);
         /// <summary>
         /// Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned
         /// </summary>

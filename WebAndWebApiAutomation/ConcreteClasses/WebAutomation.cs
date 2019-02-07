@@ -479,19 +479,30 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned
+        /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned.
+        /// If multiple elements match the SelectorData definition utilize the nthParentElement parameter to select the desired parent
         /// </summary>
         /// <param name="parentSelectorData">Data to find the parent element with</param>
         /// <param name="childSelectorData">>Data to find the child element with</param>
         /// <param name="webDriverManager"></param>
+        /// <param name="nthParentElement">The Zero based position of the parent element to search with, this is optional</param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriverManager webDriverManager)
+        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriverManager webDriverManager, int nthParentElement = -1)
         {
             var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
-                var parentElement = CheckElementExistsReturnIWebElement(parentSelectorData, webDriverManager);
+                IWebElement parentElement = null;
+                if (nthParentElement > -1)
+                {
+                    parentElement = _structureValidator.Check_Nth_ElementExistsReturnIWebElement(parentSelectorData, nthParentElement, manager.GetActiveDriver(), manager.GetWait());
+                }
+                else
+                {
+                    parentElement = CheckElementExistsReturnIWebElement(parentSelectorData, webDriverManager);
+                }
+
                 if (parentElement == null)
                     return parentElement;
 
