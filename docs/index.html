@@ -6,7 +6,11 @@
     <title>WebAndWebApiAutomation - Docs</title>
 </head>
 <body>
-    <h1>Current Version is 1.0.8-alpha</h1><a href="WebAndWebApiAutomation.pdf">Download PDF</a><a href="ReleaseNote.pdf">Release notes</a>
+    <h1>Current Version is 1.0.9-alpha</h1>
+    <br/>
+    <a href="WebAndWebApiAutomation.pdf">Download PDF</a>
+    <br/>
+    <a href="ReleaseNote.pdf">Release notes</a>
     <div>
         <h2>Package Contents</h2>
         <div>
@@ -101,6 +105,13 @@
                             <ul>
                                 <li>Checks whether or not the current url contains the provided text</li>
                                 <li>text : Text to look for in the current Url</li>
+                            </ul>
+                        </li>
+                        <br />
+                        <li>
+                            <b>bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)</b>
+                            <ul>
+                                <li>Checks whether or not the current url contains the provided pattern using regex IsMatch</li>
                             </ul>
                         </li>
                         <br />
