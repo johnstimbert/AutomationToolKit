@@ -1,4 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.IE;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
 namespace WebAndWebApiAutomation
@@ -8,6 +12,20 @@ namespace WebAndWebApiAutomation
     /// </summary>
     public interface IWebDriverManager
     {
+        /// <summary>
+        /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="chromeOptions"></param>
+        /// <param name="firefoxOptions"></param>
+        /// <param name="internetExplorerOptions"></param>
+        /// <param name="edgeOptions"></param>
+        void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null, 
+            InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null);
+        /// <summary>
+        /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="firefoxProfile"></param>
+        void SetFirefoxProfile(FirefoxProfile firefoxProfile);
         /// <summary>
         /// Creates an instance of IWebDriver that matches the type provided
         /// </summary>

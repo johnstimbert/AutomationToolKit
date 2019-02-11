@@ -1,4 +1,8 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -32,6 +36,13 @@ namespace WebAndWebApiAutomation
         private readonly int _timeoutForWait;
         private string _driverPath;
 
+        private ChromeOptions _chromeOptions;
+        private FirefoxOptions _firefoxOptions;
+        private InternetExplorerOptions _internetExplorerOptions;
+        private EdgeOptions _edgeOptions;
+
+        private FirefoxProfile _firefoxProfile;
+
 
         #region Constructors
         private WebDriverManager() { }
@@ -45,6 +56,35 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region IWebDriverManager Methods
+        // <summary>
+        /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="chromeOptions"></param>
+        /// <param name="firefoxOptions"></param>
+        /// <param name="internetExplorerOptions"></param>
+        /// <param name="edgeOptions"></param>
+        public void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
+            InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null)
+        {
+            _chromeOptions = chromeOptions;
+            _firefoxOptions = firefoxOptions;
+            _internetExplorerOptions = internetExplorerOptions;
+            _edgeOptions = edgeOptions;
+
+            //Check if any of the drivers are active. 
+            //If they are and the options objcts are not null, quit the existing instance and create a new one.
+            //if(HasInstance(DriverType.Chrome) && _chromeOptions != null)
+
+        }
+        /// <summary>
+        /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="firefoxProfile"></param>
+        public void SetFirefoxProfile(FirefoxProfile firefoxProfile)
+        {
+            _firefoxProfile = firefoxProfile;
+
+        }
         /// <summary>
         /// Creates an instance of IWebDriver that matches the type provided 
         /// </summary>
@@ -270,6 +310,10 @@ namespace WebAndWebApiAutomation
             }
         }
 
+        /// <summary>
+        /// Closes the farthest tab to the right in the current browser window
+        /// </summary>
+        /// <param name="mainWindow"></param>
         public void CloseLastTabWithActiveDriver(string mainWindow)
         {
             try
@@ -288,6 +332,11 @@ namespace WebAndWebApiAutomation
             }
         }
 
+        /// <summary>
+        /// Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter
+        /// </summary>
+        /// <param name="tabToClose"></param>
+        /// <param name="targetTab"></param>
         public void CloseTabWithActiveDriver(string windowToClose, string windowToBack)
         {
             try
@@ -306,6 +355,9 @@ namespace WebAndWebApiAutomation
             }
         }
 
+        /// <summary>
+        /// Switches the context to the farthest tab to the right in the current browser window
+        /// </summary>
         public void SwitchToLastTabWithActiveDriver()
         {
             try
@@ -326,6 +378,9 @@ namespace WebAndWebApiAutomation
             }            
         }
 
+        /// <summary>
+        /// Closes all tabs except for the one currently with focus
+        /// </summary>
         public void CloseAllTabsExceptCurrentWithActiveDriver()
         {
             try
