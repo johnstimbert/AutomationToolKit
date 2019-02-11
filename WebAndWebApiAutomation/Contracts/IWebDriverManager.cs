@@ -30,8 +30,7 @@ namespace WebAndWebApiAutomation
         /// Creates an instance of IWebDriver that matches the type provided
         /// </summary>
         /// <param name="driverType">Type of the driver instance to create</param>
-        /// <param name="driverOptions">List of options to be set on the driver being created</param>
-        void CreateDriverInstance(DriverType driverType, string[] driverOptions = null);
+        void CreateDriverInstance(DriverType driverType);
         /// <summary>
         /// Quits an instance of IWebDriver that matches the type provided
         /// </summary>

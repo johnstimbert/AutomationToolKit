@@ -73,9 +73,32 @@ namespace WebAndWebApiAutomation
 
             //Check if any of the drivers are active. 
             //If they are and the options objcts are not null, quit the existing instance and create a new one.
-            //if(HasInstance(DriverType.Chrome) && _chromeOptions != null)
+            if (HasInstance(DriverType.Chrome) && _chromeOptions != null)
+            {
+                _drivers[DriverType.Chrome].Quit();
+                _drivers[DriverType.Chrome] = GetDriver(DriverType.Chrome);
+            }
+
+            if (HasInstance(DriverType.Firefox) && _firefoxOptions != null)
+            {
+                _drivers[DriverType.Firefox].Quit();
+                _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
+            }
+
+            if (HasInstance(DriverType.Edge) && _edgeOptions != null)
+            {
+                _drivers[DriverType.Edge].Quit();
+                _drivers[DriverType.Edge] = GetDriver(DriverType.Edge);
+            }
+
+            if (HasInstance(DriverType.InternetExplorer) && _internetExplorerOptions != null)
+            {
+                _drivers[DriverType.InternetExplorer].Quit();
+                _drivers[DriverType.InternetExplorer] = GetDriver(DriverType.InternetExplorer);
+            }
 
         }
+       
         /// <summary>
         /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
         /// </summary>
@@ -84,14 +107,19 @@ namespace WebAndWebApiAutomation
         {
             _firefoxProfile = firefoxProfile;
 
+            if (HasInstance(DriverType.Firefox) && _firefoxProfile != null)
+            { 
+                _drivers[DriverType.Firefox].Quit();
+                _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
+            }
         }
+       
         /// <summary>
         /// Creates an instance of IWebDriver that matches the type provided 
         /// </summary>
         /// <param name="driverType">Type of the driver instance to create</param>
-        /// <param name="driverOptions">List of options to be set on the driver being created</param>
         /// <exception cref="WebAutomationException"></exception>
-        public void CreateDriverInstance(DriverType driverType, string[] driverOptions = null)
+        public void CreateDriverInstance(DriverType driverType)
         {
             try
             {
@@ -102,7 +130,7 @@ namespace WebAndWebApiAutomation
                     throw new WebAutomationException($"Manager already contains an instance of DriverType {driverType}. " +
                         $"Call QuitDriverInstance then create a new instance or use the existing driver instance");
 
-                _drivers.Add(driverType, GetDriver(driverType, driverOptions));
+                _drivers.Add(driverType, GetDriver(driverType));
                 _activeDriver = driverType;
             }
             catch (WebAutomationException wea)
@@ -337,12 +365,12 @@ namespace WebAndWebApiAutomation
         /// </summary>
         /// <param name="tabToClose"></param>
         /// <param name="targetTab"></param>
-        public void CloseTabWithActiveDriver(string windowToClose, string windowToBack)
+        public void CloseTabWithActiveDriver(string tabToClose, string targetTab)
         {
             try
             {
-                _drivers[_activeDriver].SwitchTo().Window(windowToClose).Close();
-                _drivers[_activeDriver].SwitchTo().Window(windowToBack);
+                _drivers[_activeDriver].SwitchTo().Window(tabToClose).Close();
+                _drivers[_activeDriver].SwitchTo().Window(targetTab);
                 Thread.Sleep(1000);
             }
             catch (WebAutomationException wea)
@@ -439,7 +467,7 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region Private Methods
-        private IWebDriver GetDriver(DriverType driverType, string[] driverOptions = null)
+        private IWebDriver GetDriver(DriverType driverType)
         {
             try
             {
@@ -451,25 +479,25 @@ namespace WebAndWebApiAutomation
                         if (!File.Exists(Path.Combine(_driverPath, _chromeDriverName)))
                             throw new WebAutomationException($"The driver {_chromeDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, _chromeOptions);
                         break;
                     case DriverType.Firefox:
                         if (!File.Exists(Path.Combine(_driverPath, _firefoxDriverName)))
                             throw new WebAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, _firefoxOptions, _firefoxProfile);
                         break;
                     case DriverType.InternetExplorer:
                         if (!File.Exists(Path.Combine(_driverPath, _ieDriverName)))
                             throw new WebAutomationException($"The driver {_ieDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, _internetExplorerOptions);
                         break;
                     case DriverType.Edge:
                         if (!File.Exists(Path.Combine(_driverPath, _edgeDriverName)))
                             throw new WebAutomationException($"The driver {_edgeDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, _edgeOptions);
                         break;
                 }
 
