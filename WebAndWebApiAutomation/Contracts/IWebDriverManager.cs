@@ -1,5 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.IE;
 using static WebAndWebApiAutomation.WebAutomationEnums;
+using OpenQA.Selenium;
+using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 
 namespace WebAndWebApiAutomation
 {
@@ -9,11 +15,30 @@ namespace WebAndWebApiAutomation
     public interface IWebDriverManager
     {
         /// <summary>
+        /// Finds an element using the FindElement Mthod on the active driver. Available for troubleshooting in the Alpha and will be deprecated in the released version
+        /// </summary>
+        /// <param name="selectorData"></param>
+        /// <returns></returns>
+        IWebElement FindElementWithActiveDriver(SelectorData selectorData);
+        /// <summary>
+        /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="chromeOptions"></param>
+        /// <param name="firefoxOptions"></param>
+        /// <param name="internetExplorerOptions"></param>
+        /// <param name="edgeOptions"></param>
+        void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null, 
+            InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null);
+        /// <summary>
+        /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="firefoxProfile"></param>
+        void SetFirefoxProfile(FirefoxProfile firefoxProfile);
+        /// <summary>
         /// Creates an instance of IWebDriver that matches the type provided
         /// </summary>
         /// <param name="driverType">Type of the driver instance to create</param>
-        /// <param name="driverOptions">List of options to be set on the driver being created</param>
-        void CreateDriverInstance(DriverType driverType, string[] driverOptions = null);
+        void CreateDriverInstance(DriverType driverType);
         /// <summary>
         /// Quits an instance of IWebDriver that matches the type provided
         /// </summary>

@@ -70,15 +70,14 @@ namespace WebAndWebApiAutomation
         /// <exception cref="WebAutomationException"></exception>
         bool DoesUrlContain(IWebDriverManager webDriverManager, string text);
 
-        //TODO: Determine if this is needed
-        ///// <summary>
-        ///// Checks whether or not the current url contains the provided pattern using regex
-        ///// </summary>
-        ///// <param name="webDriverManager"></param>
-        ///// <param name="pattern">Text to look for in the current Url</param>
-        ///// <returns>IWebDriver</returns>
-        ///// <exception cref="WebAutomationException"></exception>
-        //bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern);
+        /// <summary>
+        /// Checks whether or not the current url contains the provided pattern using regex
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="pattern">Text to look for in the current Url</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern);
 
         /// <summary>
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements

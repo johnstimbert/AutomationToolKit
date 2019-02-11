@@ -4,16 +4,20 @@ namespace WebAndWebApiAutomation.DriverFactory
 {
     internal static class IEDriverManager
     {
-        internal static InternetExplorerDriver Create_WebDriver_Instance(string driverPath, string[] driverOptions)
+        internal static InternetExplorerDriver Create_WebDriver_Instance(string driverPath, InternetExplorerOptions driverOptions = null)
         {
-            var optionsIE = new InternetExplorerOptions
+            var defaultOptions = new InternetExplorerOptions
             {
                 IntroduceInstabilityByIgnoringProtectedModeSettings = true,
                 EnableNativeEvents = false,
-                IgnoreZoomLevel = true
+                IgnoreZoomLevel = true,
+                UnhandledPromptBehavior = OpenQA.Selenium.UnhandledPromptBehavior.DismissAndNotify
             };
 
-            var driver = new InternetExplorerDriver(driverPath, optionsIE);
+            if (driverOptions == null)
+                driverOptions = defaultOptions;
+
+            var driver = new InternetExplorerDriver(driverPath, driverOptions);
 
             driver.Manage().Window.Maximize();
 

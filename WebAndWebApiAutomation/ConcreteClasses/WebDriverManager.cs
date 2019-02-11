@@ -1,4 +1,8 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -8,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
+using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
 namespace WebAndWebApiAutomation
@@ -32,6 +37,13 @@ namespace WebAndWebApiAutomation
         private readonly int _timeoutForWait;
         private string _driverPath;
 
+        private ChromeOptions _chromeOptions;
+        private FirefoxOptions _firefoxOptions;
+        private InternetExplorerOptions _internetExplorerOptions;
+        private EdgeOptions _edgeOptions;
+
+        private FirefoxProfile _firefoxProfile;
+
 
         #region Constructors
         private WebDriverManager() { }
@@ -45,13 +57,82 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region IWebDriverManager Methods
+        //TODO: Remove after alpha complete
+        /// <summary>
+        /// Finds an element using the FindElement Mthod on the active driver. Available for troubleshooting in the Alpha and will be deprecated in the released version
+        /// </summary>
+        /// <param name="selectorData"></param>
+        /// <returns></returns>
+        public IWebElement FindElementWithActiveDriver(SelectorData selectorData)
+        {
+            var activeDriver = GetActiveDriver();
+            var by = BuildCssSelectorBy(selectorData);
+            return activeDriver.FindElement(by);
+        }
+        // <summary>
+        /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="chromeOptions"></param>
+        /// <param name="firefoxOptions"></param>
+        /// <param name="internetExplorerOptions"></param>
+        /// <param name="edgeOptions"></param>
+        public void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
+            InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null)
+        {
+            _chromeOptions = chromeOptions;
+            _firefoxOptions = firefoxOptions;
+            _internetExplorerOptions = internetExplorerOptions;
+            _edgeOptions = edgeOptions;
+
+            //Check if any of the drivers are active. 
+            //If they are and the options objcts are not null, quit the existing instance and create a new one.
+            if (HasInstance(DriverType.Chrome) && _chromeOptions != null)
+            {
+                _drivers[DriverType.Chrome].Quit();
+                _drivers[DriverType.Chrome] = GetDriver(DriverType.Chrome);
+            }
+
+            if (HasInstance(DriverType.Firefox) && _firefoxOptions != null)
+            {
+                _drivers[DriverType.Firefox].Quit();
+                _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
+            }
+
+            if (HasInstance(DriverType.Edge) && _edgeOptions != null)
+            {
+                _drivers[DriverType.Edge].Quit();
+                _drivers[DriverType.Edge] = GetDriver(DriverType.Edge);
+            }
+
+            if (HasInstance(DriverType.InternetExplorer) && _internetExplorerOptions != null)
+            {
+                _drivers[DriverType.InternetExplorer].Quit();
+                _drivers[DriverType.InternetExplorer] = GetDriver(DriverType.InternetExplorer);
+            }
+
+        }
+       
+        /// <summary>
+        /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
+        /// </summary>
+        /// <param name="firefoxProfile"></param>
+        public void SetFirefoxProfile(FirefoxProfile firefoxProfile)
+        {
+            _firefoxProfile = firefoxProfile;
+
+            if (HasInstance(DriverType.Firefox) && _firefoxProfile != null)
+            { 
+                _drivers[DriverType.Firefox].Quit();
+                _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
+            }
+        }
+       
         /// <summary>
         /// Creates an instance of IWebDriver that matches the type provided 
         /// </summary>
         /// <param name="driverType">Type of the driver instance to create</param>
-        /// <param name="driverOptions">List of options to be set on the driver being created</param>
         /// <exception cref="WebAutomationException"></exception>
-        public void CreateDriverInstance(DriverType driverType, string[] driverOptions = null)
+        public void CreateDriverInstance(DriverType driverType)
         {
             try
             {
@@ -62,7 +143,7 @@ namespace WebAndWebApiAutomation
                     throw new WebAutomationException($"Manager already contains an instance of DriverType {driverType}. " +
                         $"Call QuitDriverInstance then create a new instance or use the existing driver instance");
 
-                _drivers.Add(driverType, GetDriver(driverType, driverOptions));
+                _drivers.Add(driverType, GetDriver(driverType));
                 _activeDriver = driverType;
             }
             catch (WebAutomationException wea)
@@ -270,6 +351,10 @@ namespace WebAndWebApiAutomation
             }
         }
 
+        /// <summary>
+        /// Closes the farthest tab to the right in the current browser window
+        /// </summary>
+        /// <param name="mainWindow"></param>
         public void CloseLastTabWithActiveDriver(string mainWindow)
         {
             try
@@ -288,12 +373,17 @@ namespace WebAndWebApiAutomation
             }
         }
 
-        public void CloseTabWithActiveDriver(string windowToClose, string windowToBack)
+        /// <summary>
+        /// Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter
+        /// </summary>
+        /// <param name="tabToClose"></param>
+        /// <param name="targetTab"></param>
+        public void CloseTabWithActiveDriver(string tabToClose, string targetTab)
         {
             try
             {
-                _drivers[_activeDriver].SwitchTo().Window(windowToClose).Close();
-                _drivers[_activeDriver].SwitchTo().Window(windowToBack);
+                _drivers[_activeDriver].SwitchTo().Window(tabToClose).Close();
+                _drivers[_activeDriver].SwitchTo().Window(targetTab);
                 Thread.Sleep(1000);
             }
             catch (WebAutomationException wea)
@@ -306,6 +396,9 @@ namespace WebAndWebApiAutomation
             }
         }
 
+        /// <summary>
+        /// Switches the context to the farthest tab to the right in the current browser window
+        /// </summary>
         public void SwitchToLastTabWithActiveDriver()
         {
             try
@@ -326,6 +419,9 @@ namespace WebAndWebApiAutomation
             }            
         }
 
+        /// <summary>
+        /// Closes all tabs except for the one currently with focus
+        /// </summary>
         public void CloseAllTabsExceptCurrentWithActiveDriver()
         {
             try
@@ -384,7 +480,7 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region Private Methods
-        private IWebDriver GetDriver(DriverType driverType, string[] driverOptions = null)
+        private IWebDriver GetDriver(DriverType driverType)
         {
             try
             {
@@ -396,25 +492,25 @@ namespace WebAndWebApiAutomation
                         if (!File.Exists(Path.Combine(_driverPath, _chromeDriverName)))
                             throw new WebAutomationException($"The driver {_chromeDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, _chromeOptions);
                         break;
                     case DriverType.Firefox:
                         if (!File.Exists(Path.Combine(_driverPath, _firefoxDriverName)))
                             throw new WebAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, _firefoxOptions, _firefoxProfile);
                         break;
                     case DriverType.InternetExplorer:
                         if (!File.Exists(Path.Combine(_driverPath, _ieDriverName)))
                             throw new WebAutomationException($"The driver {_ieDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, _internetExplorerOptions);
                         break;
                     case DriverType.Edge:
                         if (!File.Exists(Path.Combine(_driverPath, _edgeDriverName)))
                             throw new WebAutomationException($"The driver {_edgeDriverName} was not found in the path {_driverPath}");
 
-                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, driverOptions);
+                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, _edgeOptions);
                         break;
                 }
 
@@ -434,6 +530,44 @@ namespace WebAndWebApiAutomation
                 return false;
 
             return true;
+        }
+
+        //TODO: Remove after alpha complete
+        private By BuildCssSelectorBy(SelectorData selectorData)
+        {
+            By CssSelector = null;
+            var tag = selectorData.TagType.ToLower();
+
+            switch (selectorData.AttributeType)
+            {
+                case HtmlAttributeType.Id:
+                    CssSelector = By.CssSelector($"#{selectorData.AttributeValue}");
+                    break;
+                case HtmlAttributeType.Class:
+                case HtmlAttributeType.Name:
+                case HtmlAttributeType.Type:
+                case HtmlAttributeType.Href:
+                case HtmlAttributeType.Src:
+                case HtmlAttributeType.Title:
+                case HtmlAttributeType.FormControlName:
+                case HtmlAttributeType.PlaceHolder:
+                    CssSelector = By.CssSelector($"{tag}[{selectorData.AttributeType.ToString().ToLower()}='{selectorData.AttributeValue}']");
+                    break;
+                case HtmlAttributeType.None:
+                    CssSelector = By.CssSelector($"{tag}");
+                    break;
+                case HtmlAttributeType.AttributeText_ExactMatch:
+                case HtmlAttributeType.AttributeText_Contains:
+                case HtmlAttributeType.InnerText_ExactMatch:
+                case HtmlAttributeType.InnerText_Contains:
+                    CssSelector = By.CssSelector($"{tag}");
+                    break;
+                default:
+                    //Helper.Logger.Info($"[Structure Test] ==== Attribute type {selectorData.AttributeType} is not supported ====");
+                    break;
+            }
+
+            return CssSelector;
         }
 
         #endregion

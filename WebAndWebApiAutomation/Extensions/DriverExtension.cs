@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WebAndWebApiAutomation.Exceptions;
 
 namespace WebAndWebApiAutomation.Extensions
@@ -131,10 +132,13 @@ namespace WebAndWebApiAutomation.Extensions
             });
         }
 
-        //internal static bool WaitForUrlRegexContains(this IWebDriver _driver, string pattern, WebDriverWait wait)
-        //{
-        //    return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.UrlMatches(pattern));
-        //}
+        internal static bool WaitForUrlRegexContains(this IWebDriver driver, string pattern, WebDriverWait wait)
+        {
+            return wait.Until(condition => {
+
+                return Regex.IsMatch(driver.Url, pattern);
+            });
+        }
 
         internal static IWebElement WaitForElementExists(this IWebDriver driver, By locator, WebDriverWait wait)
         {

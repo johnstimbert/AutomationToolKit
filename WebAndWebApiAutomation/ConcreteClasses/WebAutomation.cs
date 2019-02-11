@@ -398,25 +398,25 @@ namespace WebAndWebApiAutomation
             }
         }
 
-        ///// <summary>
-        ///// Checks whether or not the current url contains the provided pattern using regex
-        ///// </summary>
-        ///// <param name="webDriverManager"></param>
-        ///// <param name="pattern">Text to look for in the current Url</param>
-        ///// <returns>IWebDriver</returns>
-        ///// <exception cref="WebAutomationException"></exception>
-        //public bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)
-        //{
-        //    var manager = Helper.IsDriverNull(webDriverManager);
-        //    try
-        //    {
-        //        return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new WebAutomationException(ex.ToString());
-        //    }
-        //}
+        /// <summary>
+        /// Checks whether or not the current url contains the provided pattern using regex
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="pattern">Text to look for in the current Url</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)
+        {
+            var manager = Helper.IsDriverNull(webDriverManager);
+            try
+            {
+                return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
 
         /// <summary>
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned

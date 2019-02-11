@@ -1,29 +1,42 @@
 ﻿using OpenQA.Selenium.Firefox;
-using System.Linq;
 
 namespace WebAndWebApiAutomation.DriverFactory
 {
     internal static class FirefoxDriverManager
     {
-        internal static FirefoxDriver Create_WebDriver_Instance(string driverPath, string[] driverOptions = null)
+        internal static FirefoxDriver Create_WebDriver_Instance(string driverPath, FirefoxOptions driverOptions = null, FirefoxProfile firefoxProfile = null)
         {
-            FirefoxOptions options = new FirefoxOptions();
             FirefoxDriver driver;
-            if (driverOptions != null)
+
+            if (firefoxProfile == null)
             {
-                foreach (string driverOption in driverOptions)
+                var defaultProfile = new FirefoxProfile
                 {
-                    options.AddArgument(driverOption);
-                }
-                driver = new FirefoxDriver(driverPath, options);
-            }
-            else
-            {
-                driver = new FirefoxDriver(driverPath);
+                    AcceptUntrustedCertificates = true,
+                    DeleteAfterUse = true,
+                    AssumeUntrustedCertificateIssuer = true
+                };
+
+                firefoxProfile = defaultProfile;
             }
 
-            if (driverOptions == null || !driverOptions.ToList().Contains("--headless"))
-                driver.Manage().Window.Maximize();
+            if (driverOptions == null)
+            {
+                var defaultOptions = new FirefoxOptions
+                {
+                    AcceptInsecureCertificates = true,
+                    UnhandledPromptBehavior = OpenQA.Selenium.UnhandledPromptBehavior.DismissAndNotify,
+                    UseLegacyImplementation = false
+                };
+
+                driverOptions = defaultOptions;
+            }
+
+            driverOptions.Profile = firefoxProfile;
+            
+            driver = new FirefoxDriver(driverPath, driverOptions);
+
+            driver.Manage().Window.Maximize();
 
             return driver;
         }

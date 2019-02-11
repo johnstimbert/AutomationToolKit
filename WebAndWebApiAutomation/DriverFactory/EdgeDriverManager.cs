@@ -8,8 +8,17 @@ namespace WebAndWebApiAutomation.DriverFactory
     internal static class EdgeDriverManager
     {
 
-        internal static EdgeDriver Create_WebDriver_Instance(string driverPath, string[] driverOptions)
+        internal static EdgeDriver Create_WebDriver_Instance(string driverPath, EdgeOptions driverOptions= null)
         {
+            var defaultOptions = new EdgeOptions
+            {
+                AcceptInsecureCertificates = true,
+                UnhandledPromptBehavior = OpenQA.Selenium.UnhandledPromptBehavior.DismissAndNotify
+            };
+
+            if (driverOptions == null)
+                driverOptions = defaultOptions;
+
             var driver = new EdgeDriver(driverPath);
 
             driver.Manage().Window.Maximize();
