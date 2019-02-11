@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
+using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 
 namespace WebAndWebApiAutomation
@@ -56,6 +57,18 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region IWebDriverManager Methods
+        //TODO: Remove after alpha complete
+        /// <summary>
+        /// Finds an element using the FindElement Mthod on the active driver. Available for troubleshooting in the Alpha and will be deprecated in the released version
+        /// </summary>
+        /// <param name="selectorData"></param>
+        /// <returns></returns>
+        public IWebElement FindElementWithActiveDriver(SelectorData selectorData)
+        {
+            var activeDriver = GetActiveDriver();
+            var by = BuildCssSelectorBy(selectorData);
+            return activeDriver.FindElement(by);
+        }
         // <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>
@@ -517,6 +530,44 @@ namespace WebAndWebApiAutomation
                 return false;
 
             return true;
+        }
+
+        //TODO: Remove after alpha complete
+        private By BuildCssSelectorBy(SelectorData selectorData)
+        {
+            By CssSelector = null;
+            var tag = selectorData.TagType.ToLower();
+
+            switch (selectorData.AttributeType)
+            {
+                case HtmlAttributeType.Id:
+                    CssSelector = By.CssSelector($"#{selectorData.AttributeValue}");
+                    break;
+                case HtmlAttributeType.Class:
+                case HtmlAttributeType.Name:
+                case HtmlAttributeType.Type:
+                case HtmlAttributeType.Href:
+                case HtmlAttributeType.Src:
+                case HtmlAttributeType.Title:
+                case HtmlAttributeType.FormControlName:
+                case HtmlAttributeType.PlaceHolder:
+                    CssSelector = By.CssSelector($"{tag}[{selectorData.AttributeType.ToString().ToLower()}='{selectorData.AttributeValue}']");
+                    break;
+                case HtmlAttributeType.None:
+                    CssSelector = By.CssSelector($"{tag}");
+                    break;
+                case HtmlAttributeType.AttributeText_ExactMatch:
+                case HtmlAttributeType.AttributeText_Contains:
+                case HtmlAttributeType.InnerText_ExactMatch:
+                case HtmlAttributeType.InnerText_Contains:
+                    CssSelector = By.CssSelector($"{tag}");
+                    break;
+                default:
+                    //Helper.Logger.Info($"[Structure Test] ==== Attribute type {selectorData.AttributeType} is not supported ====");
+                    break;
+            }
+
+            return CssSelector;
         }
 
         #endregion

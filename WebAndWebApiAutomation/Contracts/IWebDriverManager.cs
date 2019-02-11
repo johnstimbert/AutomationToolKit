@@ -4,6 +4,8 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.IE;
 using static WebAndWebApiAutomation.WebAutomationEnums;
+using OpenQA.Selenium;
+using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 
 namespace WebAndWebApiAutomation
 {
@@ -12,6 +14,12 @@ namespace WebAndWebApiAutomation
     /// </summary>
     public interface IWebDriverManager
     {
+        /// <summary>
+        /// Finds an element using the FindElement Mthod on the active driver. Available for troubleshooting in the Alpha and will be deprecated in the released version
+        /// </summary>
+        /// <param name="selectorData"></param>
+        /// <returns></returns>
+        IWebElement FindElementWithActiveDriver(SelectorData selectorData);
         /// <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>

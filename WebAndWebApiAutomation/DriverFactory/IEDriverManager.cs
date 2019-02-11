@@ -11,7 +11,6 @@ namespace WebAndWebApiAutomation.DriverFactory
                 IntroduceInstabilityByIgnoringProtectedModeSettings = true,
                 EnableNativeEvents = false,
                 IgnoreZoomLevel = true,
-                AcceptInsecureCertificates = true,
                 UnhandledPromptBehavior = OpenQA.Selenium.UnhandledPromptBehavior.DismissAndNotify
             };
 
