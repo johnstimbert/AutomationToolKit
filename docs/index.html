@@ -300,7 +300,25 @@
                     <ul>
                         <br />
                         <li>
-                            <b>void CreateDriverInstance(DriverType driverType, string[] driverOptions = null)</b>
+                            <b>void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
+                                InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null)
+                            </b>
+                            <ul>
+                                <li>Sets the options for the associated driver. If the driver is active when this method is called it will be recreated</li>
+                                <li>If no options objects are set the default options defined on the driver will be used</li>
+                            </ul>
+                        </li>
+                        <br />
+                        <li>
+                            <b>void SetFirefoxProfile(FirefoxProfile firefoxProfile)</b>
+                            <ul>
+                                <li>Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated.</li>
+                                <li>If no profile object is set the default profile defined on the browser will be used</li>
+                            </ul>
+                        </li>
+                        <br />
+                        <li>
+                            <b>void CreateDriverInstance(DriverType driverType)</b>
                             <ul>
                                 <li>Creates an instance of IWebDriver that matches the type provided</li>
                             </ul>
@@ -325,7 +343,7 @@
                             <ul>
                                 <li>Returns the DriverType value indicating what driver is currently marked as active. The active driver is used for execution.</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -333,7 +351,7 @@
                             <ul>
                                 <li>Gets the source of the page last loaded by the browser.</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -341,7 +359,7 @@
                             <ul>
                                 <li>Gets the title of the current browser window</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -349,7 +367,7 @@
                             <ul>
                                 <li>Gets or sets the URL the browser is currently displaying.</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -357,7 +375,7 @@
                             <ul>
                                 <li>Gets the current window handle, which is an opaque handle to this window that uniquely identifies it within this driver instance.</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -365,7 +383,7 @@
                             <ul>
                                 <li>Gets the window handles of open browser windows.</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -373,7 +391,7 @@
                             <ul>
                                 <li>Instructs the driver to navigate the browser to another location.</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -381,7 +399,7 @@
                             <ul>
                                 <li>Closes the farthest tab to the right in the current browser window</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -389,7 +407,7 @@
                             <ul>
                                 <li>Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
@@ -397,14 +415,14 @@
                             <ul>
                                 <li>Switches the context to the farthest tab to the right in the current browser window</li>
                             </ul>
-                            
+
                         </li>
                         <br />
                         <li>
                             <b>void CloseAllTabsExceptCurrentWithActiveDriver()</b>
                             <ul>
                                 <li>Closes all tabs except for the one currently with focus</li>
-                            </ul>                            
+                            </ul>
                         </li>
                     </ul>
                 </li>
