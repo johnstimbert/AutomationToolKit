@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80FDBFCE-466C-4EA2-8179-13DF6771E56A}"
 	ProjectSection(SolutionItems) = preProject
 		docs\index.html = docs\index.html
+		docs\POMTemplate.zip = docs\POMTemplate.zip
 		docs\ReleaseNotes.pdf = docs\ReleaseNotes.pdf
 		docs\WebAndWebApiAutomation.pdf = docs\WebAndWebApiAutomation.pdf
 	EndProjectSection
