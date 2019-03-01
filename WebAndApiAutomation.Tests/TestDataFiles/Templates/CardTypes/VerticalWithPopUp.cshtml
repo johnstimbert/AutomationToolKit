@@ -1,0 +1,78 @@
+﻿@using Sitecore.Mvc;
+@using Sitecore.Data.Items;
+@using Sitecore.Mvc.Presentation;
+@using Banner.Foundation.SitecoreExtensions;
+@using Banner.Project.Common.Areas.Cards;
+@using Banner.Project.Common.Areas.Cards.Models;
+
+
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+}
+<!-- Start: Vertical With Pop Up -->
+<div uatid="@FieldExtensions.UATID" class="h-100 justify-content-center align-items-center" align="center">
+    <nav class="d-none d-md-block">
+        <div class="card text-card-circle-icon  text-card-circle-@Model.Item2.IconSize @Model.Item2.BackgroundClass @Model.Item3.TextAlignment @Model.Item2.Padding border-0" >
+            <div class="card-item mb-lg-0 ">
+                @if (!string.IsNullOrEmpty(Model.Item2.AnimationClass))
+                {
+                    @*In experience editor because of Editable LinkText Value, it breaks in experience editor*@
+                    if (Sitecore.Context.PageMode.IsExperienceEditor)
+                    {
+                        <a href="#">
+                            <div class="@Model.Item2.AnimationClass">
+                                <div class="icon-circle text-card-circle-icon--md mb-0">
+                                    @Model.Item1.ImageURL
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="" data-toggle="modal" data-target="#gcnModal">
+                            <div class="@Model.Item2.AnimationClass">
+                                <div class="icon-circle text-card-circle-icon--md mb-0">
+                                    @Model.Item1.ImageURL
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+                else
+                {
+                    if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.ImageURL))
+                    {
+                        <div class="icon-circle text-card-circle-icon--md mb-0">
+                            @Model.Item1.ImageURL
+                        </div>
+                    }
+                }
+
+
+                <div class="card-body p-0">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                    {
+                        <div class="card-title m-0">
+
+                            @Model.Item1.Title
+
+                        </div>
+                    }
+                    <!-- Optional Content -->
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.BodyCopy))
+                    {
+                        <div class="card-text m-0">
+                            @Html.Raw(Model.Item1.BodyCopy)
+                        </div>
+                    }
+                    <div>
+                        @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- End -->

@@ -1,0 +1,53 @@
+﻿@using Banner.Foundation.SitecoreExtensions;
+@using Banner.Project.Common.Areas.Cards.Models
+@model Tuple<FeaturedItemCard<Testimonial>, CommonRenderingParameters, ListStyleRenderingParameters, TestimonialCarouselRenderingParameters>
+@{
+    if (Model == null || Model.Item1 == null)
+    {
+        return;
+    }
+
+    var testimonialCarouselValue = string.IsNullOrEmpty(Model.Item4.TestimonialCarouselValue) ? "" : ", " + Model.Item4.TestimonialCarouselValue;
+
+    <div uatid="@FieldExtensions.UATID" class="testimonial-card page-section @Model.Item2.BackgroundClass @Model.Item3.ListStyle @Model.Item2.Padding">
+        <div class="content-container">
+            @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+            {
+                <h2 class="section-title text-center">
+                    @Model.Item1.Title
+                </h2>
+            }
+            <div class="testimonial-quotes">
+                <div class="row" data-js="carousel" data-json='{"xs":1, "sm":1, "md":1 @testimonialCarouselValue}'>
+                    @if (!string.IsNullOrEmpty(Model.Item4.TestimonialCarouselValue))
+                    {
+                        foreach (var testimonial in Model.Item1.FeaturedCard)
+                        {
+                            <blockquote class="quote  big-quote-xl col-md-12 ">
+                                @testimonial.Quote
+                            </blockquote>
+                        }
+
+                    }
+                    else
+                    {
+                        foreach (var testimonial in Model.Item1.FeaturedCard.Take(1))
+                        {
+                            <blockquote class="quote  big-quote-xl col-md-12 ">
+                                @testimonial.Quote
+                            </blockquote>
+                        }
+
+                        foreach (var testimonial in Model.Item1.FeaturedCard.Skip(1))
+                        {
+                            <blockquote class="quote  col-md-6 ">
+                                @testimonial.Quote
+                            </blockquote>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

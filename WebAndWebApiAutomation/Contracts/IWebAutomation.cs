@@ -10,6 +10,7 @@ namespace WebAndWebApiAutomation
     /// </summary>
     public interface IWebAutomation
     {
+        bool ValidateDomTreeAgainstTemplate(string templatePath);
         /// <summary>
         /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned.
         /// If multiple elements match the SelectorData definition utilize the nthParentElement parameter to select the desired parent
@@ -69,7 +70,6 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
         bool DoesUrlContain(IWebDriverManager webDriverManager, string text);
-
         /// <summary>
         /// Checks whether or not the current url contains the provided pattern using regex
         /// </summary>
@@ -78,7 +78,6 @@ namespace WebAndWebApiAutomation
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
         bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern);
-
         /// <summary>
         /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
         /// /// </summary>
@@ -120,18 +119,6 @@ namespace WebAndWebApiAutomation
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebAutomationException"></exception>
         void HighlightElement(IWebDriverManager webDriverManager, SelectorData selectorData);
-
-        //TODO: Determine if this is valid
-        ///// <summary>
-        ///// Checks whether or not the provided element is selected
-        ///// </summary>
-        ///// <param name="webDriverManager"></param>
-        ///// <param name="selectorData">Object representing the element to check</param>
-        ///// <returns>IWebDriver</returns>
-        ///// <exception cref="WebAutomationException"></exception>
-        //bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData);
-
-
         /// <summary>
         /// Checks whether or not the provided element is visible
         /// </summary>

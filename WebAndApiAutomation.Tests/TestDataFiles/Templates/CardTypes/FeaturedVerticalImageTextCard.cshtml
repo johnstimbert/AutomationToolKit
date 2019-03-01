@@ -1,0 +1,36 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Banner.Project.Common.Areas.Cards;
+@using Banner.Foundation.SitecoreExtensions;
+@using System.Web.Mvc;
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+
+@if (Model == null && Model.Item1 == null && Model.Item2 == null && Model.Item3 == null)
+{
+    return;
+}
+<div uatid="@FieldExtensions.UATID" class="@Model.Item2.Padding">
+    <div class="card feature-card card-border feature-card-md">
+        <div class="feature-card-img">
+            @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.ImageOnly.Fields.ImageOnlyFieldName, Model.Item1.RenderingContextItem, new { @class = "w-100" })
+        </div>
+        <div class="card-body feature-card-body">
+            <div class="feature-card-content">
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                {
+                    <div class="feature-card-title">
+                        @Model.Item1.Title
+                    </div>
+                }
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.BodyCopy))
+                {
+                    <div>
+                        @Model.Item1.BodyCopy
+                    </div>
+                }
+            </div>
+            <div class="feature-card-link">
+                @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, @Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>

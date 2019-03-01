@@ -1,0 +1,173 @@
+﻿@using Banner.Feature.Location.Models;
+@using Banner.Foundation.Dictionary.Extensions;
+@using Sitecore.Mvc;
+@using Banner.Feature.Location;
+@using Banner.Foundation.SitecoreExtensions;
+@model UrgentCareLocation
+
+@if (Model == null)
+{
+	return;
+}
+<div uatid="@FieldExtensions.UATID" class="container-fluid p-0 location">
+	<div class="row no-gutters">
+		<div class="col-12 col-md-6 display-flex-medium">
+			<div class="row no-gutters hidden-medium d-block d-md-none">
+				<div class="col-12">
+					@Html.Sitecore().Field(Template.ImageOnly.Media.ImageFileFieldName, Model.ContextItem, new { @class = "image", @alt = @Model.ImageAltText, @width = "478", @height = "318" })
+				</div>
+			</div>
+			<div class="row no-gutters justify-content-center">
+				<div class="col-12 col-md-10 col-xl-10">
+					<div class="card-location-wrapper">
+						<div class="bg-primary d-md-none d-flex">
+							@if (!string.IsNullOrEmpty(Model.WaitTime))
+							{
+								<p class="card-location-text border-right">
+									@Model.WaitTime &nbsp;
+									@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Minutes Wait", "minutes wait"))
+								</p>
+							}
+							@if (!string.IsNullOrEmpty(Model.Distance))
+							{
+								<p class="card-location-text">
+									@Model.Distance &nbsp;
+									@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Miles Away", "miles away"))
+								</p>
+							}
+						</div>
+						<div class="pl-3 pt-4 pb-5 pl-md-0">
+							@if (!MvcHtmlString.IsNullOrEmpty(Model.LocationName))
+							{
+								<h3 class="content-title">@Model.LocationName</h3>
+							}
+							<div class="d-flex">
+								<div class="col-md-7 pl-0">
+									<p class="card-location-address">@(Model.Address1 + " " + Model.Address2)</p>
+									<p class="card-location-address">
+										@Model.City &#44;&nbsp;
+										@Model.State &nbsp; @Model.ZipCode
+									</p>
+									@if (!string.IsNullOrEmpty(Model.Distance))
+									{
+										<p class="card-location-distance d-none d-md-block">
+											@Model.Distance &nbsp;
+											@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Miles Away", "miles away"))
+										</p>
+									}
+									@if (!string.IsNullOrEmpty(Model.WaitTime))
+									{
+										<p class="card-location-content mt-5 d-none d-md-block">
+											<strong>
+												@Model.WaitTime &nbsp;
+												@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Minutes Wait", "minutes wait"))
+											</strong>
+										</p>
+									}
+									@if (!MvcHtmlString.IsNullOrEmpty(Model.PhoneNumber))
+									{
+										<p class="d-block d-md-none">@Model.PhoneNumber</p>
+									}
+								</div>
+								<div class="col-md-5 pl-0 d-none d-md-block">
+									<div class="content-item d-flex">
+										<div class="icon-svg">
+											<img src="/static/assets/toolkit-redesign/images/icon-directions.svg">
+										</div>
+										@if (!string.IsNullOrEmpty(Model.Directions))
+										{
+
+											<a class="d-none d-md-block card-location-link" href="@Model.Directions">
+												@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Get Directions", "Get Directions"))
+											</a>
+
+										}
+									</div>
+									@if (!MvcHtmlString.IsNullOrEmpty(Model.PhoneNumber))
+									{
+										<div class="content-item d-flex mt-3">
+											<div class="icon-svg">
+												<img src="/static/assets/toolkit-redesign/images/icon-phone.svg">
+											</div>
+
+											@Model.PhoneNumber
+										</div>
+									}
+									@if (Model.Facility != null && @Model.Facility.isOpen)
+									{
+										<div class="content-item d-flex mt-3">
+											<div class="icon-svg icon-convienent">
+												<img src="/static/assets/toolkit-redesign/images/icon-convienent-hours.svg">
+											</div>
+											<p class="m-0">
+												<strong>
+													@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Open Now", "Open Now"))
+												</strong>
+												<br />
+												@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Closing At", "Closing At")) &nbsp;
+												@Model.Facility.timeCloseToday.ToString("hh:mm tt")
+											</p>
+										</div>
+									}
+								</div>
+							</div>
+							@if (!MvcHtmlString.IsNullOrEmpty(Model.ClockWiseID))
+							{
+								<div class="mt-4">
+									<a target="_blank" href="@(Model.UrgentCareIntakeUrl + "/" + Model.ClockWiseID)" class="btn btn-primary">@Html.Sitecore().Dictionary("/Features/Location/Reserve My Spot", "Reserve My Spot")</a>
+								</div>
+							}
+						</div>
+						<div class="card-location-footer border-bottom d-md-none">
+							<div class="card-location-button">
+								@if (!MvcHtmlString.IsNullOrEmpty(Model.PhoneNumber))
+								{
+									<div class="icon-svg fill- card-location-button-icon">
+										<img src="/static/assets/toolkit-redesign/images/icon-phone.svg">
+									</div>
+									<a href="tel:@Model.PhoneNumber" class="d-md-none card-location-link">
+										@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Phone", "Phone"))
+									</a>
+								}
+							</div>
+							@if (Model.Facility != null)
+							{
+								<div class="card-location-button">
+
+									<div class="icon-svg fill-gray card-location-button-icon">
+										<img src="/static/assets/toolkit-redesign/images/icon-convienent-hours.svg">
+									</div>
+									@(Model.Facility.timeOpenToday.ToString("hh:mm tt") + "-" + Model.Facility.timeCloseToday.ToString("hh:mm tt"))
+
+								</div>
+							}
+							<div class="card-location-button">
+								@if (!string.IsNullOrEmpty(Model.Directions))
+								{
+									<div class="icon-svg fill- card-location-button-icon">
+										<img src="/static/assets/toolkit-redesign/images/icon-directions.svg">
+									</div>
+									<a href="@Model.Directions" class="d-md-none card-location-link">@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Get Directions", "Get Directions"))</a>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row no-gutters auto-margin-top hidden-small-only">
+				<div class="col-12">
+					<div class="toast bg-red-100" data-toggle="modal" data-target="#ecModal">
+						<p class="toast-text">
+							@Html.Raw(Html.Sitecore().Dictionary("/Features/Common/Alert/Urgent Alert Text", "Is this an Emergency?"))
+							@Html.Sitecore().Placeholder("TryEmergencyCarePlaceHolder")
+							<span class="toast-icon"><i class="fal fa-angle-right"></i></span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-6 display-flex hidden-small-only">
+			@Html.Sitecore().Field(Template.ImageOnly.Media.ImageFileFieldName, Model.ContextItem, new { @class = "image" })
+		</div>
+	</div>
+</div>

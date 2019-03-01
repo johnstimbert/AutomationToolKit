@@ -9,6 +9,7 @@ using WebAndWebApiAutomation.Validators;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 using System.IO;
 using System.Threading;
+using WebAndWebApiAutomation.Contracts;
 
 namespace WebAndWebApiAutomation
 {
@@ -336,27 +337,6 @@ namespace WebAndWebApiAutomation
             }
         }
 
-        ///// <summary>
-        ///// Checks whether or not the provided element is selected
-        ///// </summary>
-        ///// <param name="webDriverManager"></param>
-        ///// <param name="selectorData">Object representing the element to check</param>
-        ///// <returns>IWebDriver</returns>
-        ///// <exception cref="WebAutomationException"></exception>
-        ////public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
-        //{
-        //    var manager = Helper.IsDriverNull(webDriverManager);
-        //    try
-        //    {
-        //        var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-        //        return manager.GetActiveDriver().WaitForElementToBeSelected(cssBy, manager.GetWait());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new WebAutomationException(ex.ToString());
-        //    }
-        //}
-
         /// <summary>
         /// Checks whether or not the provided element is visible
         /// </summary>
@@ -571,6 +551,15 @@ namespace WebAndWebApiAutomation
             {
                 throw new WebAutomationException(ex.ToString());
             }
+        }
+
+        public bool ValidateDomTreeAgainstTemplate(string templatePath)
+        {
+            RazorViewParser parser = new RazorViewParser();
+
+            parser.Parse(templatePath);
+
+            return true;
         }
 
     }

@@ -1,0 +1,97 @@
+﻿@using Banner.Foundation.SitecoreExtensions;
+@using Banner.Project.Common.Areas.Cards.Models;
+@model Tuple<VideoCard, CommonRenderingParameters, VideoStyleRenderingParameters>
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+
+}
+
+<div uatid="@FieldExtensions.UATID" class="video-card @Model.Item2.BackgroundClass @Model.Item2.Padding">
+    <!--Color would be changed based on video colors default is $light-blue-->
+    <div class="row align-items-center">
+        @if (Model.Item3.Maximize)
+        {
+            if (!string.IsNullOrEmpty(Model.Item1.VideoLink))
+            {
+                <div class="col-12 pr-md-0 @(Model.Item3.VideoJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Left ? "order-last" : string.Empty)" align="center">
+                    @if (Model.Item1.VideoLink.Contains(Banner.Project.Common.Areas.Cards.Constant.VideoType.YouTubeLink))
+                    {
+                        <!--Iframe will be used for YouTube-->
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <iframe class="embed-responsive-item" src="@Model.Item1.VideoLink"></iframe>
+                        </div>
+                    }
+                    else
+                    {
+                        <video autoplay="" muted="" playsinline="">
+                            <source src="@Model.Item1.VideoLink" type="video/mp4">
+                        </video>
+                    }
+                </div>
+
+            }
+            else
+            {
+                <!--If there is no Video then display Image-->
+                if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.ImageURL))
+                {
+                    <div class="background-image-without-text w-100">
+                        @Model.Item1.ImageURL
+                    </div>
+                }
+            }
+
+        }
+        else
+        {
+            <div class="col-sm-8 offset-sm-2 offset-xl-0 col-xl-5 mt-5 @(Model.Item3.VideoJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Left ? "order-2" : string.Empty)">
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                {
+                    <h1 class="video-title">
+                        @Model.Item1.Title
+                    </h1>
+                }
+                <div class="row mt-5">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.LinkText))
+                    {
+                        <div class="col-12 mb-4 mt-2 col-md-6 mt-md-0 mb-md-0">
+                            <center>
+                                @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "btn btn-primary btn-jumbotron", @data_toggle = "modal", @data_target = "#gcnModal" })
+                            </center>
+                        </div>
+                    }
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.SecondaryLinkText))
+                    {
+                        <div class="col-12 col-md-6 mb-4 mb-md-0">
+                            <center>
+                                @Html.Sitecore().Field(@Banner.Project.Common.Areas.Cards.Template.SecondaryLink.Fields.SecondLinkUrlFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.SecondaryLinkText, @class = "btn btn-outline-primary btn-jumbotron" })
+                            </center>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-12 col-xl-7 @(Model.Item3.VideoJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Left ? "order-1" : string.Empty)">
+                <center>
+                    @if (!string.IsNullOrEmpty(Model.Item1.VideoLink))
+                    {
+                        if (Model.Item1.VideoLink.Contains(Banner.Project.Common.Areas.Cards.Constant.VideoType.YouTubeLink))
+                        {
+                            <!--Iframe will be used for YouTube-->
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <iframe class="embed-responsive-item" src="@Model.Item1.VideoLink"></iframe>
+                            </div>
+                        }
+                        else
+                        {
+                            <video autoplay="" muted="" playsinline="">
+                                <source src="@Model.Item1.VideoLink" type="video/mp4">
+
+                            </video>
+                        }
+                    }
+                </center>
+            </div>
+        }
+    </div>
+</div>

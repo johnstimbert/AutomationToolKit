@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>IWebDriverManager - Methods</title>
+</head>
+<body>
+    <a href="index.html"><h3>Home</h3></a>
+    <br />
+    <h2><u><b>IWebDriverManager - Methods</b></u></h2>
+
+    <ul>
+        <br />
+        <li>
+            <b>
+                void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
+                InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null)
+            </b>
+            <ul>
+                <li>Sets the options for the associated driver. If the driver is active when this method is called it will be recreated</li>
+                <li>If no options objects are set the default options defined on the driver will be used</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void SetFirefoxProfile(FirefoxProfile firefoxProfile)</b>
+            <ul>
+                <li>Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated.</li>
+                <li>If no profile object is set the default profile defined on the browser will be used</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void CreateDriverInstance(DriverType driverType)</b>
+            <ul>
+                <li>Creates an instance of IWebDriver that matches the type provided</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void QuitDriverInstance(DriverType driverType)</b>
+            <ul>
+                <li>Quits an instance of IWebDriver that matches the type provided</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void SetActiveDriver(DriverType driverType)</b>
+            <ul>
+                <li>Selects the driver to mark as active. The active driver is used for execution.</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>DriverType GetActiveDriverType()</b>
+            <ul>
+                <li>Returns the DriverType value indicating what driver is currently marked as active. The active driver is used for execution.</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>string GetActiveDriverPageSource()</b>
+            <ul>
+                <li>Gets the source of the page last loaded by the browser.</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>string GetActiveDriverTitle()</b>
+            <ul>
+                <li>Gets the title of the current browser window</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>string GetActiveDriverUrl()</b>
+            <ul>
+                <li>Gets or sets the URL the browser is currently displaying.</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>string GetActiveDriverCurrentWindowHandle()</b>
+            <ul>
+                <li>Gets the current window handle, which is an opaque handle to this window that uniquely identifies it within this driver instance.</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>ReadOnlyCollection&lt;string&gt; GetActiveDriverWindowHandles()</b>
+            <ul>
+                <li>Gets the window handles of open browser windows.</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>void NavigateWithActiveDriver(string url)</b>
+            <ul>
+                <li>Instructs the driver to navigate the browser to another location.</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>void CloseLastTabWithActiveDriver(string mainWindow)</b>
+            <ul>
+                <li>Closes the farthest tab to the right in the current browser window</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>void CloseTabWithActiveDriver(string tabToClose, string targetTab)</b>
+            <ul>
+                <li>Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>void SwitchToLastTabWithActiveDriver()</b>
+            <ul>
+                <li>Switches the context to the farthest tab to the right in the current browser window</li>
+            </ul>
+
+        </li>
+        <br />
+        <li>
+            <b>void CloseAllTabsExceptCurrentWithActiveDriver()</b>
+            <ul>
+                <li>Closes all tabs except for the one currently with focus</li>
+            </ul>
+        </li>
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Sitecore.Data;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+
+@model Tuple<ServiceListCard, CommonRenderingParameters, TextStyleRenderingParameters, ListStyleRenderingParameters>
+
+@if (@Model.Item1 == null)
+{
+    return;
+}
+@*If the rendering paramaters are not set, below value be used as default values*@
+@{
+    var cardJustification = string.IsNullOrEmpty(Model.Item2.CardJustification) ? "center" : Model.Item2.CardJustification;
+    var textAlignment = string.IsNullOrEmpty(Model.Item3.TextAlignment) ? "center" : Model.Item3.TextAlignment;
+    var numOfColumnsCssClass = string.IsNullOrEmpty(Model.Item4.NumberOfColumnsCssClass) ? "col-lg-6" : Model.Item4.NumberOfColumnsCssClass;
+    var iconSize = string.IsNullOrEmpty(Model.Item2.IconSize) ? "icon--xxs" : Model.Item2.IconSize;
+
+}
+
+<div uatid="@FieldExtensions.UATID" class="list-card-icon @Model.Item2.BackgroundClass @Model.Item2.Padding" UATID="@Model.Item1.UATID">
+
+    <div class="text-@cardJustification container">
+        <div class="mb-5">
+            @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.Title))
+            {
+                <div class="heading h1 card-header-justify">
+                    @Model.Item1.Title
+                </div>
+            }
+            @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.BodyCopy))
+            {
+                <div class="sub-heading card-header-justify">@Model.Item1.BodyCopy</div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="row">
+                    @foreach (ServiceTextCard item in Model.Item1.List)
+                    {
+                        <div class="@numOfColumnsCssClass mb-3">
+                            <div class="card text-card-circle-icon border-0" align="@textAlignment">
+                                <div class="card-item mb-lg-0 ">
+                                    @if (!MvcHtmlString.IsNullOrEmpty(@item.ImageURL))
+                                    {
+                                    <div class="icon-circle @iconSize @Model.Item2.IconSkin mb-0" align="@Model.Item3.ImageJustification">
+                                        @item.ImageURL
+                                    </div>
+                                    }
+                                    <div class="card-body p-0">
+                                        @if (!MvcHtmlString.IsNullOrEmpty(@item.Title))
+                                        {
+                                            <div class="card-title p-0 mb-2 bold-title-gray">
+                                                @item.Title
+                                            </div>
+                                        }
+                                        @if (!MvcHtmlString.IsNullOrEmpty(@item.BodyCopy))
+                                        {
+                                            <div class="card-text ">
+                                                @Html.Raw(@item.BodyCopy)
+                                            </div>
+                                        }
+                                        @if (@item.ServiceTags.Count > 0)
+                                        {
+                                            <div class="text-card-circle-icon-links">
+                                                <div class="text-card-circle-icon-links_title">Includes:</div>
+                                                @foreach (Services service in item.ServiceTags)
+                                                {
+                                                    <a href="@service.ItemUrl" class="">@service.RenderingContextItem.Name</a>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @if (@Model.Item1.SecondaryContent != null)
+        {
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                    <div class="card container border-0">
+                        @Html.Raw(@Model.Item1.SecondaryContent)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

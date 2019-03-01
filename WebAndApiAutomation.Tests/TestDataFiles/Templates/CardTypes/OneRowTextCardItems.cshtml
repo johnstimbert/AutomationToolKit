@@ -1,0 +1,94 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Sitecore.Data;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+@model Tuple<ListCard, CommonRenderingParameters, TextStyleRenderingParameters>
+
+@if (Model.Item1 == null)
+{
+    return;
+}
+else
+{
+    <!-- Skins Here -->
+    <div uatid="@FieldExtensions.UATID" class="list-card @Model.Item2.AnimationClass @Model.Item2.Padding" data-js='animate-background'>
+        <div class="container">
+            <div class="list-card-header my-5" align="@(!string.IsNullOrEmpty(Model.Item3.TextAlignment) ? Model.Item3.TextAlignment : "center")">
+                <!-- Heading classes here (ex: h1, h2, h3, etc.)-->
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.ImageURL))
+                {
+                    <div class="icon-circle icon--md bg-primary mb-4" role="presentation">
+                        @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.ImageOnly.Fields.ImageOnlyFieldName, Model.Item1.RenderingContextItem, new { @width = "112", @height = "180" })
+
+                    </div>
+                }
+                <div class="heading h1">
+                    @Model.Item1.Title
+                </div>
+            </div>
+        </div>
+        <div class="content-container p-0">
+            <!-- use variations here for Icon Size -->
+            <div class="card-deck @(!string.IsNullOrEmpty(Model.Item2.AnimationClass) ? Model.Item2.AnimationClass : " ")">
+                @foreach (TextCard item in Model.Item1.List)
+                {
+                    if (item != null)
+                    {
+                        if (!string.IsNullOrEmpty(item.NonEditableLink))
+                        {
+
+                            <!-- Add Variations Here For Card classes/Alignment -->
+                            <div class="card text-card-circle-icon border-0" align="@(!string.IsNullOrEmpty(Model.Item2.CardJustification) ? Model.Item2.CardJustification : "center")">
+                                <!-- Add Card Item Classes -->
+                                <a href="@item.NonEditableLink" class="card-item mb-lg-0 ">
+                                    <div class="card-item mb-lg-0 ">
+                                        <!-- Add Variations Here For Icon Skin/Size -->
+                                        <div class="@(!string.IsNullOrEmpty(Model.Item2.IconShape) ? Model.Item2.IconShape : " ") @(!string.IsNullOrEmpty(Model.Item2.IconSize) ? Model.Item2.IconSize : "icon--md") @(!string.IsNullOrEmpty(Model.Item2.BackgroundClass) ? Model.Item2.BackgroundClass : "" ) @(!string.IsNullOrEmpty(Model.Item2.IconSkin) ? Model.Item2.IconSkin : "" ) mb-5">
+                                            @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.ImageOnly.Fields.ImageOnly, item.RenderingContextItem)
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <!-- Add Card Text Classes | Can also be displayed as link-->
+                                            <div class="card-title ">
+                                                @item.Title
+                                            </div>
+                                            <!-- Optional Content Here -->
+                                            <p class="card-text">
+                                                @Html.Raw(item.BodyCopy)
+                                            </p>
+                                            <!-- Optional Links Here -->
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <!-- Add Variations Here For Card classes/Alignment -->
+                            <div class="card text-card-circle-icon border-0" align="@(!string.IsNullOrEmpty(Model.Item2.CardJustification) ? Model.Item2.CardJustification : "center")">
+                                <!-- Add Card Item Classes -->
+                                <div class="card-item mb-lg-0 ">
+                                    <!-- Add Variations Here For Icon Skin/Size -->
+                                    <div class="@(!string.IsNullOrEmpty(Model.Item2.IconShape) ? Model.Item2.IconShape : " ") @(!string.IsNullOrEmpty(Model.Item2.IconSize) ? Model.Item2.IconSize : "icon--md") @(!string.IsNullOrEmpty(Model.Item2.BackgroundClass) ? Model.Item2.BackgroundClass : "" ) @(!string.IsNullOrEmpty(Model.Item2.IconSkin) ? Model.Item2.IconSkin : "" ) mb-5">
+                                        @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.ImageOnly.Fields.ImageOnly, item.RenderingContextItem)
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <!-- Add Card Text Classes | Can also be displayed as link-->
+                                        <div class="card-title ">
+                                            @item.Title
+                                        </div>
+                                        <!-- Optional Content Here -->
+                                        <p class="card-text ">
+                                            @Html.Raw(item.BodyCopy)
+                                        </p>
+                                        <!-- Optional Links Here -->
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,42 @@
+﻿@using Banner.Foundation.SitecoreExtensions;
+@using Banner.Project.Common.Areas.Cards.Models;
+@using Sitecore.Mvc;
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+}
+
+@if (Model.Item3.ImageJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Maximize)
+{
+    <div uatid="@FieldExtensions.UATID" class="background-image-without-text">
+        @Model.Item1.ImageURL
+    </div>
+}
+else
+{
+    <div uatid="@FieldExtensions.UATID" class="text-card row @Model.Item2.BackgroundClass @Model.Item2.Padding">
+        <div class="col-xl-6 col-md-12 order-12  @(Model.Item3.ImageJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Right ? "order-xl-1" : string.Empty)">
+            <div class="card image-text-card-body border-0">
+                <div class="card-body p-0">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                    {
+                        <div class="card-title h3">@Model.Item1.Title</div>
+                    }
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.BodyCopy))
+                    {
+                        <div class="card-text">@Html.Raw(Model.Item1.BodyCopy)</div>
+                    }
+
+                    @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "btn btn-primary btn-jumbotron" })
+                </div>
+            </div>
+        </div>
+        @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.ImageURL))
+        {
+            <div class="col-xl-6 col-md-12 text-card-image order-1 @(Model.Item3.ImageJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Right ? "order-xl-1" : string.Empty)" style="padding: 0;">
+                @Model.Item1.ImageURL
+            </div>
+        }
+    </div>
+}

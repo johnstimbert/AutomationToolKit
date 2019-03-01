@@ -1,0 +1,35 @@
+﻿@using Banner.Project.Common.Areas.Cards;
+@using Banner.Project.Common.Areas.Cards.Models;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+<script type='text/javascript' src="http://maps.googleapis.com/maps/api/js"></script>
+
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+}
+
+<div uatid="@FieldExtensions.UATID" class="text-card-background-image @Model.Item3.HeroImageSize @Model.Item2.Padding">
+    <div class="image-container">
+        @Model.Item1.ImageURL
+    </div>
+    <div class="content-container">
+        <div class="content-title">
+            @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+            {
+                <div class="section-tag">@Model.Item1.Title</div>
+            }
+            @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.BodyCopy))
+            {
+                <h1 class="section-title">@Html.Raw(Model.Item1.BodyCopy)</h1>
+            }
+            @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.LinkText))
+            {
+                <div class="section-link">
+                    @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "section-link" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

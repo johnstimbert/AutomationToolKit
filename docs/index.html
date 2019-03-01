@@ -28,7 +28,8 @@
     <div>
         <h2>Public Objects</h2>
         <div>
-            <h3>WebAutomation</h3>
+            <h3>WebAutomation</h3> 
+            <a href="WebAutomationMethods.html">Methods</a>
             <p>Contains the utility and component instance creation methods for automating cross browser testing of a web site. This component is the only one that should be directly accessed and be 'newed up'.</p>
 
             <ul style="list-style-type:none;">
@@ -41,190 +42,6 @@
                             <ul>
                                 <li>driverPath : This is the path where that driver service executables for each browser can be accessed from. This path is verified and, if it exists, will be checked for the appropriate executables.</li>
                                 <li>timeoutForWaitOverride : The default for this is 5 seconds and it is and optional parameter. It can be overridden by providing a positive, non-zero integer.</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-
-                <li><b><u>Methods</u></b></li>
-                <li>
-                    <ul>
-                        <br />
-                        <li>
-                            <b>IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, IWebDriverManager webDriverManager, int nthParentElement = -1)</b>
-                            <ul>
-                                <li>Finds and returns the child IWebElement using the parameters provided, if none is found null is returned</li>
-                                <li>parentSelectorData : Data to find the parent element with</li>
-                                <li>childSelectorData : Data to find the child element with</li>
-                                <li>nthParentElement : The Zero based position of the parent element to search with, this is optional</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriverManager webDriverManager)</b>
-                            <ul>
-                                <li>Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned</li>
-                                <li>selectorData : Data to build the CssSelector with</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriverManager webDriverManager)</b>
-                            <ul>
-                                <li>Finds and returns the IWebElement using the parameters provided, if none is found null is returned</li>
-                                <li>selectorData : Data to build the CssSelector with</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>bool CheckElementsExist(SelectorDataSet selectorDataSet, IWebDriverManager webDriverManager)</b>
-                            <ul>
-                                <li>Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data</li>
-                                <li>selectorDataSet : Data to check for in the current DOM instance</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IWebDriverManager Clear(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
-                            <ul>
-                                <li>Clears the text from the provided element after verifiying the element is visible</li>
-                                <li>selectorData : Object representing the element to be cleared</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IWebDriverManager Click(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
-                            <ul>
-                                <li>Clicks the provided element after verifying it exists and is clickable</li>
-                                <li>selectorData : Object representing the element to click</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>bool DoesUrlContain(IWebDriverManager webDriverManager, string text)</b>
-                            <ul>
-                                <li>Checks whether or not the current url contains the provided text</li>
-                                <li>text : Text to look for in the current Url</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern)</b>
-                            <ul>
-                                <li>Checks whether or not the current url contains the provided pattern using regex IsMatch</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>List&lt;By&gt; GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)</b>
-                            <ul>
-                                <li>Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements</li>
-                                <li>selectorData : Data to check for in the current DOM instance</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <b>IWebDriverManager GetIWebDriverManager()</b>
-                            <ul>
-                                <li>Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>ILogger GetLogger(LoggerSettings loggerSettings)</b>
-                            <ul>
-                                <li>Creates and returns and instance of the ILogger used to write to a common log file</li>
-                                <li>loggerSettings : Settings for the logger</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>ITestExecutor GetTestExecutor(bool collectTestData, string resultsPath</b>
-                            <ul>
-                                <li>Creates and returns and instance of the ITestExecutor used to execute tests and manage the results</li>
-                                <li>collectTestData : Currently has no effect, false by default</li>
-                                <li>resultsPath : Desrination path for screenshots and test results, null by default</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IJavaScriptExecutor GetJavaScriptExecutor(IWebDriverManager webDriverManager)</b>
-                            <ul>
-                                <li>Creates and returns an IJavaScriptExecutor object using the provided IWebDriver</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void HighlightElement(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
-                            <ul>
-                                <li>Modifies the style associated with the selector data object provided to highlight the element on the page</li>
-                                <li>selectorData : Object representing the element to highlight</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>bool IsElementVisible(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
-                            <ul>
-                                <li>Checks whether or not the provided element is visible</li>
-                                <li>selectorData : Object representing the element to check</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
-                            <ul>
-                                <li>Clicks the element associated with the selector data object provided using a JavaScript query. This is useful when the element being clicked may be obstructed</li>
-                                <li>selectorData : Object representing the element to highlight</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IWebDriverManager MoveToElement(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
-                            <ul>
-                                <li>Clears the text from the provided element after verifiying the element is visible</li>
-                                <li>selectorData : Object representing the element to move to</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>string ParseInnerText(string htmlText)</b>
-                            <ul>
-                                <li>This method will remove html data from the innerText of a given element and return only text NOT go beyon the first element. This method will not parse the innerText of a child element passed in as part of a larger set</li>
-                                <li>htmlText : Raw htmlText from an IWebElement that contains html to be removed</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IWebDriverManager SendText(IWebDriverManager webDriverManager, SelectorData selectorData, string textToEnter)</b>
-                            <ul>
-                                <li>Enters text into the provided element after verifying it exists and is visible</li>
-                                <li>selectorData : Object representing the element to receive the text</li>
-                                <li>textToEnter : Text that will be entered</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>IWebDriverManager SendTextWithDelay(IWebDriverManager webDriverManager, SelectorData selectorData, string textToEnter, int delay = 500)</b>
-                            <ul>
-                                <li>Enters text into the provided element one character at a time with a delay between each after verifying it exists and is visible. Note: Only use this method to send text to elements that have autocomplete and require a delay on each letter typed.</li>
-                                <li>selectorData : Object representing the element to receive the text</li>
-                                <li>textToEnter : Text that will be entered</li>
-                                <li>delay : Interval before each character is entered</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void TakeScreenShot(IWebDriverManager webDriverManager, string sreenShotPath, string screenShotName)</b>
-                            <ul>
-                                <li>Takes a screenshot and saves it in the provided path. The file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"</li>
-                                <li>sreenShotPath : Path to save the screenshot to</li>
-                                <li>screenShotName : Name of the screenshot file</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>List&lt;KeyValuePair&lt;By, WebAutomationEnums.NavigationResult&gt;&gt; TestLinkNavigationForAllAnchorsFoundInPage(IWebDriverManager webDriverManager)</b>
-                            <ul>
-                                <li>Validates that all the anchor tags found on the page the driver is currently navigated to. It returns the XPath By object and NavigationResult for every link found and tested</li>
                             </ul>
                         </li>
                     </ul>
@@ -291,143 +108,23 @@
         </div>
 
         <div>
-            <h3>IWebDriverManager</h3>
+            <h3>IWebDriverManager</h3> 
+            <a href="WebDriverManagerMethods.html">Methods</a>
             <p>This interface provides access to the methods available on the IWebDriver interface as well as the ability manage multiple driver instances</p>
-
-            <ul style="list-style-type:none;">
-                <li><b><u>Methods</u></b></li>
-                <li>
-                    <ul>
-                        <br />
-                        <li>
-                            <b>void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
-                                InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null)
-                            </b>
-                            <ul>
-                                <li>Sets the options for the associated driver. If the driver is active when this method is called it will be recreated</li>
-                                <li>If no options objects are set the default options defined on the driver will be used</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void SetFirefoxProfile(FirefoxProfile firefoxProfile)</b>
-                            <ul>
-                                <li>Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated.</li>
-                                <li>If no profile object is set the default profile defined on the browser will be used</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void CreateDriverInstance(DriverType driverType)</b>
-                            <ul>
-                                <li>Creates an instance of IWebDriver that matches the type provided</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void QuitDriverInstance(DriverType driverType)</b>
-                            <ul>
-                                <li>Quits an instance of IWebDriver that matches the type provided</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>void SetActiveDriver(DriverType driverType)</b>
-                            <ul>
-                                <li>Selects the driver to mark as active. The active driver is used for execution.</li>
-                            </ul>
-                        </li>
-                        <br />
-                        <li>
-                            <b>DriverType GetActiveDriverType()</b>
-                            <ul>
-                                <li>Returns the DriverType value indicating what driver is currently marked as active. The active driver is used for execution.</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>string GetActiveDriverPageSource()</b>
-                            <ul>
-                                <li>Gets the source of the page last loaded by the browser.</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>string GetActiveDriverTitle()</b>
-                            <ul>
-                                <li>Gets the title of the current browser window</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>string GetActiveDriverUrl()</b>
-                            <ul>
-                                <li>Gets or sets the URL the browser is currently displaying.</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>string GetActiveDriverCurrentWindowHandle()</b>
-                            <ul>
-                                <li>Gets the current window handle, which is an opaque handle to this window that uniquely identifies it within this driver instance.</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>ReadOnlyCollection&lt;string&gt; GetActiveDriverWindowHandles()</b>
-                            <ul>
-                                <li>Gets the window handles of open browser windows.</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>void NavigateWithActiveDriver(string url)</b>
-                            <ul>
-                                <li>Instructs the driver to navigate the browser to another location.</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>void CloseLastTabWithActiveDriver(string mainWindow)</b>
-                            <ul>
-                                <li>Closes the farthest tab to the right in the current browser window</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>void CloseTabWithActiveDriver(string tabToClose, string targetTab)</b>
-                            <ul>
-                                <li>Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>void SwitchToLastTabWithActiveDriver()</b>
-                            <ul>
-                                <li>Switches the context to the farthest tab to the right in the current browser window</li>
-                            </ul>
-
-                        </li>
-                        <br />
-                        <li>
-                            <b>void CloseAllTabsExceptCurrentWithActiveDriver()</b>
-                            <ul>
-                                <li>Closes all tabs except for the one currently with focus</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         </div>
+
+        <div>
+            <h3>IDomTree</h3> 
+            <a href="IDomTreeMethods.html">Methods</a>
+            <p>This interface provides access to the methods available on the IWebDriver interface as well as the ability manage multiple driver instances</p>
+        </div>
+
+        <div>
+            <h3>IDomNode</h3> 
+            <a href="IDomNodeMethods.html">Methods</a>
+            <p>This interface provides access to the methods available for interacting with objects of type IDomNode</p>
+        </div>
+
     </div>
 </body>
 </html>

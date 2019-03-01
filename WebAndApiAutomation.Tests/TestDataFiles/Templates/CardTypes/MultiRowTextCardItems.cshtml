@@ -1,0 +1,69 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Sitecore.Data;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+
+@model Tuple<ListCard, CommonRenderingParameters, TextStyleRenderingParameters, ListStyleRenderingParameters>
+
+@if (@Model.Item1 == null)
+{
+    return;
+}
+@*If the rendering paramaters are not set, below value be used as default values*@
+@{
+    var cardJustification = string.IsNullOrEmpty(Model.Item2.CardJustification) ? "center" : Model.Item2.CardJustification;
+    var textAlignment = string.IsNullOrEmpty(Model.Item3.TextAlignment) ? "center" : Model.Item3.TextAlignment;
+    var numOfColumnsCssClass = string.IsNullOrEmpty(Model.Item4.NumberOfColumnsCssClass) ? "col-lg-6" : Model.Item4.NumberOfColumnsCssClass;
+    var iconSize = string.IsNullOrEmpty(Model.Item2.IconSize) ? "icon--xxs" : Model.Item2.IconSize;
+
+}
+
+<div uatid="@FieldExtensions.UATID" class="list-card-icon @Model.Item2.BackgroundClass @Model.Item2.Padding">
+
+    <div class="text-@cardJustification @Model.Item2.ContainerClass">
+        <div class="col-md-9 offset-md-2 mb-10 text-left text-lg-center">
+            @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.Title))
+            {
+                <div class="heading @Model.Item3.HtmlTag">
+                    @Model.Item1.Title
+                </div>
+            }
+            @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.BodyCopy))
+            {
+                <p class="sub-heading @Model.Item3.BodyAlign">@Model.Item1.BodyCopy</p>
+            }
+
+        </div>
+        <div class="row">
+            @foreach (TextCard item in Model.Item1.List)
+            {
+                <div class="@numOfColumnsCssClass mb-3">
+                    <div class="card text-card-circle-icon  text-card-circle-icon--xs border-0 heavy" align="@textAlignment">
+                        <div class="card-item mb-lg-0 ">
+                            @if (!MvcHtmlString.IsNullOrEmpty(@item.ImageURL))
+                            {
+                                <div class="icon @iconSize @Model.Item2.IconSkin mb-0" align="@Model.Item3.ImageJustification">
+                                    @item.ImageURL
+                                </div>
+                            }
+                            <div class="card-body p-0">
+                                @if (!MvcHtmlString.IsNullOrEmpty(@item.Title))
+                                {
+                                    <div class="card-title p-0 mb-2 bold-title-gray">
+                                        @item.Title
+                                    </div>
+                                }
+                                @if (!MvcHtmlString.IsNullOrEmpty(@item.BodyCopy))
+                                {
+                                    <p class="card-text">
+                                        @Html.Raw(@item.BodyCopy)
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

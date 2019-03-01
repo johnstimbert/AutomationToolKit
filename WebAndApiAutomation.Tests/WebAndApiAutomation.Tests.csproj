@@ -64,6 +64,120 @@
     <Content Include="TestDataFiles\swagger.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="TestDataFiles\Templates\CardTypes\AccordionTextCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\AlertWithTrigger.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\ButtonTextCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\EmailSignUp.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\EmergencyRoomDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\FeaturedArticlesCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\FeaturedVerticalImageTextCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\FullWidthTextCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\GenericLocationDetail.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\HeroImageOverlayTextCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\HeroImageTextCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\HeroWithAnimation.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\HorizontalWithAnimation.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\HorizontalWithImage.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\HospitalLocations.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\LocationSearch.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\MultiRowHorizontalListWithOverflow.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\MultiRowTextCardItems.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\NewsletterSignUp.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\OneRowHorizontalListWithLeftTitle.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\OneRowHorizontalListWithOverflow.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\OneRowModalTextCardItems.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\OneRowTextCardItems.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\OneRowTextCardItemsWithHiddenOverflow.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\PhysicianListCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\PhysicianSearch.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\ProfileCards.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\ProfileDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\RegionsListCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\ServiceListCard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\TemplateContentOnly.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\Testimonials.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\UrgentCareContent.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\UrgentCareDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\UrgentCareSearch.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\VerticalWithAnimation.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\VerticalWithPopUp.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestDataFiles\Templates\CardTypes\ViewAllLocations.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

@@ -69,7 +69,7 @@ namespace WebAndWebApiAutomation
             var by = BuildCssSelectorBy(selectorData);
             return activeDriver.FindElement(by);
         }
-        // <summary>
+        /// <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>
         /// <param name="chromeOptions"></param>

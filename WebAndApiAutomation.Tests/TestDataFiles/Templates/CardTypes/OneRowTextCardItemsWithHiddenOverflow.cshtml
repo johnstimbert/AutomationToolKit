@@ -1,0 +1,87 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Sitecore.Data;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+@using Banner.Project.Common.Areas.Cards;
+@using Banner.Project.Common.Areas.Cards.Repository;
+@using Banner.Foundation.Dictionary.Extensions;
+@model Tuple<ListCard, CommonRenderingParameters, TextStyleRenderingParameters, ListStyleRenderingParameters>
+
+@{
+    int allowedColumnsCount = CommonRepository.GetNoOFColumnAllowed(Model.Item4.NumberOfColumnsCount, (int)Constant.AllowedColumnCount.Three);
+    var ViewAllPhrase =  Html.Sitecore().Dictionary("/Features/Common/Cards/View All Services", "View All Services");
+    var ViewLessPhrase = Html.Sitecore().Dictionary("/Features/Common/Cards/View Less Services", "View Less Services");
+}
+
+    <div uatid="@FieldExtensions.UATID" class="list-card @Model.Item2.Padding @Model.Item2.BackgroundClass">
+        <div class="container">
+            <div class="list-card-header my-5" align="@(!string.IsNullOrEmpty(Model.Item3.TextAlignment) ? Model.Item3.TextAlignment : "center")">
+                <!--Icon Goes Here-->
+                <div class="heading h2">@Model.Item1.Title</div>
+                <div class="sub-heading">@Model.Item1.BodyCopy</div>
+            </div>
+        </div>
+        <div class="content-container p-0">
+            <!-- use variations here -->
+
+            @if (Model.Item1.List != null && Model.Item1.List.Count > 0)
+            {
+                if (Model.Item4.ManageItemOverflow == Constant.CardActionTypes.DrawerWithCards)
+                {                    
+                    <div class="text-card-container">
+                        @if (Model.Item1.List.Count >= allowedColumnsCount)
+                        {
+                        <div class="row">
+                            @GetFeaturedList(Model.Item1.List.Take(allowedColumnsCount).ToList<TextCard>())
+                        </div>
+
+                        <div class="row" data-js="readmore" data-json='{ "contentType": "view-all-content-drawer", "speed": 400, "collapsedHeight": 0, "moreLink": "@ViewAllPhrase", "lessLink": "@ViewLessPhrase"}'>
+                            @GetFeaturedList(Model.Item1.List.Skip(allowedColumnsCount).ToList<TextCard>())
+                        </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                @GetFeaturedList(Model.Item1.List)
+                            </div>
+                        }
+                    </div>
+                }
+                else if (Model.Item4.ManageItemOverflow == Constant.CardActionTypes.WrapItemsToNextRow || string.IsNullOrEmpty(Model.Item4.ManageItemOverflow))
+                {
+                    <div class="row">
+                        @GetFeaturedList(Model.Item1.List)
+                    </div>
+                }
+                else if (Model.Item4.ManageItemOverflow == Constant.CardActionTypes.Ignore)
+                {
+                    <div class="row">
+                        @GetFeaturedList(Model.Item1.List.Take(allowedColumnsCount).ToList<TextCard>())
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @helper GetFeaturedList(List<TextCard> List)
+    {
+        foreach (TextCard textCard in List)
+    {
+            <div class="col-md-6 @(!string.IsNullOrEmpty(Model.Item4.NumberOfColumnsCssClass) ? Model.Item4.NumberOfColumnsCssClass : "col-lg-3") pb-5" align="@(!string.IsNullOrEmpty(Model.Item2.CardJustification) ? Model.Item2.CardJustification : "center")">
+                <div class="card-item mb-lg-0">
+                    <div class="icon-circle @(!string.IsNullOrEmpty(Model.Item2.IconSize) ? Model.Item2.IconSize : "icon--sm") @(!string.IsNullOrEmpty(Model.Item2.IconSkin) ? Model.Item2.IconSkin : "bg-primary") mb-4">
+                        @textCard.ImageURL
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-title ">
+                            @textCard.Title
+                        </div>
+                        <div class="card-text ">
+                            @textCard.BodyCopy
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+}

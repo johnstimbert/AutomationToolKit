@@ -27,6 +27,7 @@ namespace WebAndApiAutomation.Tests
         private const string _driverTestCategoryHeadless = "Driver_Instance_Creation_Tests_Headless";
         private const string _driverInteractionTestCategoryHeadless = "Driver_Interaction_Tests_Headless";
         private const string _elementLocationMethodsTestCategoryHeadless = "Element_Location_Method_Tests_Headless";
+        private const string _validateDomTreeAgainstTemplate = "Validate_DomTree_Against_Template";
 
         private static WebAutomation _webAutomation;
         private static IWebDriverManager _driverManager;
@@ -39,7 +40,8 @@ namespace WebAndApiAutomation.Tests
         private const string _ieDriverName = "IEDriverServer.exe";
         private const string _edgeDriverName = "MicrosoftWebDriver.exe";
                 
-        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Release";
+        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
+        private static readonly string _templatePath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndApiAutomation.Tests\TestDataFiles\Templates\CardTypes\MultiRowHorizontalListWithOverflow.cshtml";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 
@@ -1898,8 +1900,17 @@ namespace WebAndApiAutomation.Tests
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
             Assert.IsTrue(_webAutomation.CheckElementsExist(divTags, _driverManager));
         }
-        
+
         #endregion
 
+        #region ValidateDomTreeAgainstTemplate Tests
+        [TestMethod]
+        [TestCategory(_validateDomTreeAgainstTemplate)]
+        public void ParserTest()
+        {
+            _webAutomation.ValidateDomTreeAgainstTemplate(_templatePath);
+        }
+
+        #endregion
     }
 }

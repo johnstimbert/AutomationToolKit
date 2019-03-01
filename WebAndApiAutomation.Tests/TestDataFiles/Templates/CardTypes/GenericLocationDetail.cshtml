@@ -1,0 +1,117 @@
+﻿@using Banner.Feature.Location.Models;
+@using Banner.Foundation.Dictionary.Extensions;
+@using Banner.Feature.Location;
+@using Banner.Foundation.SitecoreExtensions;
+@model Tuple<GenericLocation, LocationModalSettings>
+	@if (Model == null && Model.Item1 == null && Model.Item2 == null)
+	{
+		return;
+	}
+	<div uatid="@FieldExtensions.UATID" class="location-search pl-lg-4">
+		<a id="main_0_contentpanel_1_lnkBackToSearch" class="link-icon return" href="#">
+			<i class="fal fa-chevron-left"></i>
+			@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Return to Location Search", "Return to Location Search"))
+		</a>
+		<div class="d-flex flex-wrap">
+			<div class="col-md-8 col-sm-8">
+				<div class="typography">
+					<div class="readmore-container" data-js="readmore" data-json='{ "contentType": "read-more-less-content", "speed": 400, "collapsedHeight": 500, "moreLink": "@Html.Sitecore().Dictionary("/Button Text/Read More", "Read More")", "lessLink": "@Html.Sitecore().Dictionary("/Button Text/Read Less", "Read Less")"}'>
+						<article>
+							@if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.LocationName))
+							{
+								<h1>
+									@Model.Item1.LocationName
+								</h1>
+							}
+							@if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.LocationDescription))
+							{
+								<p>
+									@Html.Raw(Model.Item1.LocationDescription)
+								</p>
+							}
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="address">
+										<div class="hours">
+											<p class="item-text">
+												@Html.Raw(Model.Item1.RawFullAddress)
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<p>
+										@* This is to avoid brekaing of href tag in experience editor, query parameter will be visible when the context is in browser or normal mode *@
+
+										@if (Sitecore.Context.PageMode.IsExperienceEditor)
+										{
+											<a class="link-icon location-search-icon d-block" href="http://maps.google.com" target="_blank">
+												<i class="fal fa-map-marker-alt"></i>
+												@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Directions", "Directions"))
+											</a>
+										}
+										else
+										{
+											<a class="link-icon location-search-icon d-block" href="http://maps.google.com?q=@Model.Item1.FullAddress" target="_blank">
+												<i class="fal fa-map-marker-alt"></i>
+												@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Directions", "Directions"))
+											</a>
+										}
+
+										@if (Model.Item1.DisplayPhysicians)
+										{
+											<a class="link-icon location-search-icon d-block" href="#" target="_blank">
+												<i class="fal fa-stethoscope"></i>
+												@Html.Raw(Html.Sitecore().Dictionary("/Features/Location/Providers at this Location", "Providers at this Location"))
+											</a>
+										}
+
+										@if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.MainPhoneNumber))
+										{
+											if (Sitecore.Context.PageMode.IsExperienceEditor)
+											{
+												<a class="link-icon location-search-icon d-block" href="#">
+													<i class="fal fa-phone"></i>
+													@Html.Raw(Model.Item1.MainPhoneNumber)
+												</a>
+											}
+											else
+											{
+												<a class="link-icon location-search-icon d-block" href="tel:@Model.Item1.MainPhoneNumber">
+													<i class="fal fa-phone"></i>
+													@Html.Raw(Model.Item1.MainPhoneNumber)
+												</a>
+											}
+										}
+									</p>
+								</div>
+								<div class="col-sm-6">
+									<div class="address">
+										@if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.OfficeHours))
+										{
+											<p>
+												<b>Hours</b>
+											</p>
+											<div class="hours">
+												<p>
+													@Html.Raw(Model.Item1.OfficeHours)
+												</p>
+											</div>
+										}
+									</div>
+								</div>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 mt-2">
+				<div class="img-wrapper">
+					@if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Image))
+					{
+						@Html.Sitecore().Field(Template.ImageOnly.Media.ImageFileFieldName, Model.Item1.ContextItem, new { @class = "mt-0 pt-4" })
+					}
+				</div>
+			</div>
+		</div>
+	</div>

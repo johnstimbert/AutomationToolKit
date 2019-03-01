@@ -1,0 +1,54 @@
+﻿@using Banner.Foundation.SitecoreExtensions;
+@using Banner.Project.Common.Areas.Cards.Models;
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+    @if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+    {
+    return;
+    }
+    @{
+
+        string isAnimationClass = Model.Item2.AnimationClass;
+        string dataAnimate = "";
+        string bgPattern = "";
+        string imageJustification = Model.Item3.ImageJustification == Banner.Project.Common.Areas.Cards.Constant.Justification.Right ? "order-xl-1" : string.Empty;
+
+        if (isAnimationClass != "")
+        {
+            dataAnimate = "animate-background";
+            bgPattern = "background-pattern-dotted";
+        }
+    }
+
+    <div uatid="@FieldExtensions.UATID" class="text-card-icon @bgPattern @isAnimationClass start @Model.Item2.BackgroundClass @Model.Item2.Padding" data-js="@dataAnimate">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 py-3 px-2 py-md-7 px-md-0 hidden-small-only @imageJustification">
+                    <div class="icon icon--primary @Model.Item2.IconSize">
+                        @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.ImageURL))
+                        {
+                        @Model.Item1.ImageURL
+                        }
+                    </div>
+                </div>
+                <div class="col-md-7 py-3 px-2 py-md-7 px-md-0">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                    {
+                    <h2 class="section-title">
+                        @Model.Item1.Title
+                    </h2>
+                    }
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.BodyCopy))
+                    {
+                    <p class="mt-3 mb-0">
+                        @Html.Raw(Model.Item1.BodyCopy)
+                    </p>
+                    }
+
+                    <!--Buttons: btn-primary, btn-outline-primary -->
+                    @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "btn mt-3 btn-primary" })
+
+                </div>
+
+            </div>
+        </div>
+    </div>

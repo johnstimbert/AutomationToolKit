@@ -1,0 +1,52 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+}
+
+<div uatid="@FieldExtensions.UATID" class="basic-list-card @Model.Item2.BackgroundClass @Model.Item2.Padding @Model.Item2.ContainerClass">
+    <div class="card border-0 rounded-0" align="@Model.Item3.TextAlignment">
+        <div class="card-body">
+            <div class="content-container">
+                <div class="mb-5">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.ImageURL))
+                    {
+                        <div class="icon icon--primary @Model.Item2.IconSize">
+                            @Model.Item1.ImageURL
+                        </div>
+                    }
+                </div>
+                <div class="mb-5">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                    {
+                        <h2 class="card-title mb-5">@Model.Item1.Title</h2>
+                    }
+                </div>
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.BodyCopy))
+                {
+                    <div class="mb-5" align="@Model.Item3.TextAlignment">
+                        @Html.Raw(Model.Item1.BodyCopy)
+                    </div>
+                }
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.LinkText))
+                {
+                    @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "btn btn-primary btn-jumbotron letter-spacing-point4 mb-5" })
+                }
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.SecondaryLinkText))
+                {
+                    @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.SecondaryLink.Fields.SecondLinkUrlFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.SecondaryLinkText, @class = "btn btn-outline-primary btn-jumbotron letter-spacing-point4 mb-5" })
+                }
+                @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.SecondaryContent))
+                {
+                    <div align="@Model.Item3.TextAlignment">
+                        @Html.Raw(Model.Item1.SecondaryContent)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

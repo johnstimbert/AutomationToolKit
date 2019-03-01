@@ -1,0 +1,80 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models
+@using Banner.Foundation.Dictionary.Repositories;
+@using Banner.Foundation.SitecoreExtensions;
+@model Tuple<FeaturedItemCard<Banner.Feature.Blog.Models.BlogEntry>, CommonRenderingParameters>
+
+@if (Model == null || Model.Item1 == null || Model.Item1.FeaturedCard == null || Model.Item2 == null)
+{
+    return;
+}
+
+@{
+    var numOfWords = 12;
+}
+
+<div uatid="@FieldExtensions.UATID" class="related-articles @Model.Item2.Padding @Model.Item2.BackgroundClass">
+    <div class="@Model.Item2.ContainerClass">
+        <div class="row p-20">
+            <div class="col-md-8 ">
+                <div class="content-block text-left">
+                    @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.Title))
+                    {
+                        <h1 class="title ">@Model.Item1.Title</h1>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row cards d-none d-md-flex related-articles-desktop-tablet mt-4">
+            @foreach (var entry in Model.Item1.FeaturedCard)
+            {
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <a class="card text-card-link-image" href="@entry.PageUrl">
+                        <div class="text-card-link-img">
+                            <div class="image">
+                                <img src="@entry.ImageUrl" />
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-content">
+                                <h5>@entry.Title</h5>
+                                <p>@entry.GetContentTeaser(12)&hellip;</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+
+        </div>
+        <div class="row cards d-md-none d-flex related-articles-mobile justify-content-center">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    @for (int i = 0; i < Model.Item1.FeaturedCard.Count; i++)
+                    {
+                        <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0 ? "active" : string.Empty)"></li>
+                    }
+                </ol>
+                <!-- Mobile Carousel - Repeat same cards as above -->
+                <div class="carousel-inner">
+                    @for (int i = 0; i < Model.Item1.FeaturedCard.Count; i++)
+                    {
+                        <div class="p-3 carousel-item @(i == 0 ? "active" : string.Empty)">
+                            <a class="card text-card-link-image" href="#">
+                                <div class="text-card-link-img">
+                                    <div class="image">
+                                        <img src="@Model.Item1.FeaturedCard[i].ImageUrl" />
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-content">
+                                        <h5>@Model.Item1.FeaturedCard[i].Title</h5>
+                                        <p>@Model.Item1.FeaturedCard[i].GetContentTeaser(numOfWords)&hellip;</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

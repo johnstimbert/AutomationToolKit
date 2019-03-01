@@ -1,0 +1,75 @@
+﻿@model Banner.Feature.Social.Email.Models.EmailShellCard
+@using Banner.Foundation.SitecoreExtensions
+@using Banner.Foundation.Dictionary.Extensions
+@using Sitecore.Mvc
+@using Sitecore.Mvc.Presentation
+
+@if (Model == null)
+{
+	return;
+}
+<!-- Padding classes are optional and other classes should be added here-->
+<div class="shell-card email-shell-card px-xl-5 py-5 js-animation-trigger is-animated @Model.BackgroundClass">
+	<div class="px-xl-5 p-0">
+
+		<header class="shell-header">
+			<div class="animation-region graphic-envelope circle-frame transition-in-circle" role="presentation">
+				@Html.Sitecore().RenderSvg(Banner.Feature.Social.Email.Templates.EmailSignUp.Fields.Icon, Model.contextItem, new { @width = "135", @height = "150", @viewBox = "0 0 135 150", @xmlns = "http://www.w3.org/2000/svg" })
+			</div>
+		</header>
+
+		<div class="form-row my-2 mx-2">
+			<!--Image Right: order-12 -->
+			<div class="col-lg-12 col-xl-6 @(Model.ImageJustification == Banner.Feature.Social.Email.Constant.Justification.Right ? "order-12" : string.Empty)">
+				<h2 class="col-12 shell-card-title d-xl-none">@Model.Title</h2>
+				@if (!MvcHtmlString.IsNullOrEmpty(Model.ImageUrl))
+				{
+					<div class="col-12 shell-card-image" align="center">
+						@Model.ImageUrl
+					</div>
+				}
+
+			</div>
+			<!--Image Right: order-1 -->
+			<div class="col-lg-12 col-xl-6 shell-content @(Model.ImageJustification == Banner.Feature.Social.Email.Constant.Justification.Right ? "order-1" : string.Empty)">
+				<div class="col-12">
+					@if (!MvcHtmlString.IsNullOrEmpty(Model.Title))
+					{
+						<h2 class="shell-card-title d-none d-xl-block">@Model.Title</h2>
+					}
+					@if (!MvcHtmlString.IsNullOrEmpty(Model.Description))
+					{
+						<p class="shell-card-text">@Model.Description</p>
+					}
+				</div>
+				<div class="col-12 shell-form-container">
+					<div class="shell-form-wrapper">
+						<form data-js="validate-form-ajax" data-url="/api/sitecore/EmailShellCard/ToEmailSignUp" data-method="post" data-validate-button="#validate-button" data-placement="bottom" data-icon="fal fa-exclamation-triangle" data-hide-messages="focus" novalidate>
+							<div class="input-group input-group-lg">
+								@* In Experience Editor, placeholder is breaking to resolve this default value will be shown in expereience editor *@
+								@if (!Sitecore.Context.PageMode.IsExperienceEditor)
+								{
+									<input type="email" value="" name="email" class="form-control input-lg email-input" data-error="@Html.Sitecore().Dictionary("/Features/Social/Email/Validation Messages/Error", "Enter email to sign up")" data-success="@Html.Sitecore().Dictionary("/Features/Social/Email/Validation Messages/Success","dsdasd")" placeholder="@Html.Sitecore().Dictionary("/Features/Social/Email/Placeholder/Email Subscription Placeholder Text", "Enter email to sign up")" aria-label="Enter email to sign up" required>
+								}
+								else
+								{
+									<input type="email" name="email" class="form-control input-lg" placeholder="@Html.Sitecore().Dictionary("/Features/Social/Email/Placeholder/Email Subscription Placeholder Text", "Enter email to sign up")" pattern="@Model.EmailRegularExpression">
+
+								}
+								<input name="ListId" id="ListId" value="@Model.ListId" hidden="hidden">
+								<div class="input-group-append">
+									<!--Change btn-primary to btn-success-->
+									<button class="btn btn-primary" type="submit" id="validate-button" value="Enter">
+										<!--To be used on succesful submit-->
+										<!--<i class="fa fa-check" aria-hidden="true"></i>-->
+										<i class="fa fa-arrow-right" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</form>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

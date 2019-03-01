@@ -1,0 +1,30 @@
+﻿@using Banner.Feature.Persona.Models
+@using Banner.Foundation.SitecoreExtensions;
+@model ProfileDetails
+
+@{
+	if (Model == null)
+	{
+		return;
+	}
+
+}
+<div class="typography">
+	<div uatid="@FieldExtensions.UATID" class="profile-page bg-light-gray">
+		<h1 class="inner-title">@Model.Name</h1>
+		<hr class="divider-line">
+		<h4 class="job-title">
+			@Model.JobTitle @Model.Location
+		</h4>
+		<h5 class="hide">
+			@*For BH.com it requires 'Company Name' to be display. For BHN it don't requires'Company Name' to be display *@
+			@Model.CompanyName
+		</h5>
+		<div class=img-wrapper>
+			<img class="" height="263" alt="doctor profile" width="175" src="@Model.ProfileImage">
+		</div>
+		<p class="brief-description">
+			@Model.Description
+		</p>
+	</div>
+</div>

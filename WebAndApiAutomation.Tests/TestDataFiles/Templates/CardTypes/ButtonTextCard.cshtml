@@ -1,0 +1,27 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@using Banner.Foundation.SitecoreExtensions;
+@using Sitecore.Mvc;
+@model Tuple<TextCard, CommonRenderingParameters, TextStyleRenderingParameters>
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+}
+
+<div uatid="@FieldExtensions.UATID" class="text-card p-4 @Model.Item2.BackgroundClass @Model.Item2.Padding" align= @Model.Item2.CardJustification >
+    <div class="card-body">
+        @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.Title))
+        {
+            <div class="card-text h3">
+                @Model.Item1.Title
+            </div>
+        }
+        @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.BodyCopy))
+        {
+            <div class="card-text">@Model.Item1.BodyCopy</div>
+        }
+        @if (!MvcHtmlString.IsNullOrEmpty(Model.Item1.LinkText))
+        {
+            @Html.Sitecore().Field(Banner.Project.Common.Areas.Cards.Template.Link.Fields.LinkURLFieldName, Model.Item1.RenderingContextItem, new { text = @Model.Item1.LinkText, @class = "btn btn-jumbotron" })
+        }
+    </div>
+</div>
