@@ -15,7 +15,79 @@ namespace WebAndWebApiAutomation.Extensions
         private const string ElementNotDisplayed = "Target element not displayed";
         private const string ElementNotEnabled = "Target element not enabled";
 
-        private static bool IsDisplayedAndEnabled(IWebDriver driver, By locator, WebDriverWait wait)
+        internal static bool IsEnabled(IWebDriver driver, By locator, WebDriverWait wait)
+        {
+            IWebElement target = null;
+
+            var result = wait.Until(condition =>
+            {
+                try
+                {
+                    target = driver.FindElement(locator);
+
+                    return target.Enabled;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return false;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            });
+
+            if (!result)
+            {
+                target = driver.FindElement(locator);
+
+                if (!target.Displayed)
+                    throw new WebAutomationException(ElementNotDisplayed);
+
+                if (!target.Enabled)
+                    throw new WebAutomationException(ElementNotEnabled);
+            }
+
+            return result;
+        }
+
+        internal static bool IsDisplayed(IWebDriver driver, By locator, WebDriverWait wait)
+        {
+            IWebElement target = null;
+
+            var result = wait.Until(condition =>
+            {
+                try
+                {
+                    target = driver.FindElement(locator);
+
+                    return target.Displayed;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return false;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            });
+
+            if (!result)
+            {
+                target = driver.FindElement(locator);
+
+                if (!target.Displayed)
+                    throw new WebAutomationException(ElementNotDisplayed);
+
+                if (!target.Enabled)
+                    throw new WebAutomationException(ElementNotEnabled);
+            }
+
+            return result;
+        }
+
+        internal static bool IsDisplayedAndEnabled(IWebDriver driver, By locator, WebDriverWait wait)
         {
             IWebElement target = null;
 
@@ -105,11 +177,6 @@ namespace WebAndWebApiAutomation.Extensions
             new Actions(driver).MoveToElement(target)
                 .Build()
                 .Perform();
-        }
-
-        internal static bool WaitForElementToBeVisible(this IWebDriver driver, By locator, WebDriverWait wait)
-        {
-            return IsDisplayedAndEnabled(driver, locator, wait);
         }
 
         internal static bool WaitForUrlContains(this IWebDriver driver, string text, WebDriverWait wait)

@@ -6,7 +6,7 @@ using WebAndWebApiAutomation.Validators;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 
 namespace WebAndWebApiAutomation.ConcreteClasses
-{
+{    
     internal sealed class DomTree : IDomTree
     {
         private readonly StructureValidator _structureValidator;

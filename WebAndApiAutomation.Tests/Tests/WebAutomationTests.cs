@@ -260,30 +260,13 @@ namespace WebAndApiAutomation.Tests
             try
             {
                 var webAutomation = new WebAutomation(badPath);
-                _driverManager.CreateDriverInstance(DriverType.Edge);
+                _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             }
             catch (Exception ex)
             {
                 Assert.AreEqual($"The driver {_ieDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
             }
         }
-
-        [TestMethod]
-        [TestCategory(_driverTestCategory)]
-        public void GetEdgeDriver_GoodPath_NoDriverexe()
-        {
-            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
-            try
-            {
-                var webAutomation = new WebAutomation(badPath);
-                _driverManager.CreateDriverInstance(DriverType.Edge);
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual($"The driver {_edgeDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
-            }
-        }
-
 
         #endregion
 
@@ -1902,15 +1885,6 @@ namespace WebAndApiAutomation.Tests
         }
 
         #endregion
-
-        #region ValidateDomTreeAgainstTemplate Tests
-        [TestMethod]
-        [TestCategory(_validateDomTreeAgainstTemplate)]
-        public void ParserTest()
-        {
-            _webAutomation.ValidateDomTreeAgainstTemplate(_templatePath);
-        }
-
-        #endregion
+                
     }
 }

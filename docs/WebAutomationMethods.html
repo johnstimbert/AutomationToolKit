@@ -77,9 +77,9 @@
         </li>
         <br />
         <li>
-            <b>List&lt;By&gt; GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)</b>
+            <b>ReadOnlyCollection&lt;IWebElement&gt; GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)</b>
             <ul>
-                <li>Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements</li>
+                <li>Finds and returns all elements matching the provided selector data</li>
                 <li>selectorData : Data to check for in the current DOM instance</li>
             </ul>
         </li>
@@ -123,7 +123,23 @@
         </li>
         <br />
         <li>
-            <b>bool IsElementVisible(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
+            <b>bool IsElementDisplayed(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
+            <ul>
+                <li>Checks whether or not the provided element is visible(This requires IWebElement.Displayed evaluate to true)</li>
+                <li>selectorData : Object representing the element to check</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool IsElementEnabled(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
+            <ul>
+                <li>Checks whether or not the provided element is visible(This requires IWebElement.Enabled evaluate to true)</li>
+                <li>selectorData : Object representing the element to check</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool IsElementDisplayedAndEnabled(IWebDriverManager webDriverManager, SelectorData selectorData)</b>
             <ul>
                 <li>Checks whether or not the provided element is visible(This requires IWebElement.Displayed and IWebElement.Enabled to both evaluate to true)</li>
                 <li>selectorData : Object representing the element to check</li>

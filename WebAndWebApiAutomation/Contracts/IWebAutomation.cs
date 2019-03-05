@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 using WebAndWebApiAutomation.Exceptions;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
@@ -10,7 +11,6 @@ namespace WebAndWebApiAutomation
     /// </summary>
     public interface IWebAutomation
     {
-        bool ValidateDomTreeAgainstTemplate(string templatePath);
         /// <summary>
         /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned.
         /// If multiple elements match the SelectorData definition utilize the nthParentElement parameter to select the desired parent
@@ -79,12 +79,12 @@ namespace WebAndWebApiAutomation
         /// <exception cref="WebAutomationException"></exception>
         bool DoesUrlContainUsingRegex(IWebDriverManager webDriverManager, string pattern);
         /// <summary>
-        /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
-        /// /// </summary>
+        /// Finds and returns all elements matching the provided selector data 
+        /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
-        /// <param name="webDriverManager"></param>
-        /// <returns></returns>
-        List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager);
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>ReadOnlyCollection<IWebElement</returns>
+        ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager);
         /// <summary>
         /// Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects
         /// </summary>
@@ -120,13 +120,29 @@ namespace WebAndWebApiAutomation
         /// <exception cref="WebAutomationException"></exception>
         void HighlightElement(IWebDriverManager webDriverManager, SelectorData selectorData);
         /// <summary>
-        /// Checks whether or not the provided element is visible
+        /// Checks whether or not the provided element is displayed
         /// </summary>
         /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to check</param>
         /// <returns>IWebDriver</returns>
         /// <exception cref="WebAutomationException"></exception>
-        bool IsElementVisible(IWebDriverManager webDriverManager, SelectorData selectorData);
+        bool IsElementDisplayed(IWebDriverManager webDriverManager, SelectorData selectorData);
+        /// <summary>
+        /// Checks whether or not the provided element is enabled
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        bool IsElementEnabled(IWebDriverManager webDriverManager, SelectorData selectorData);
+        /// <summary>
+        /// Checks whether or not the provided element is displayed and enabled
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        bool IsElementDisplayedAndEnabled(IWebDriverManager webDriverManager, SelectorData selectorData);
         /// <summary>
         /// Clicks the element associated with the selector data object provided using a JavaScript query.
         /// This is useful when the element being clicked may be obstructed

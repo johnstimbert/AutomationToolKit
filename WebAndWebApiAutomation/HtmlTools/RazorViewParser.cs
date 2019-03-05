@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using OpenQA.Selenium;
 
-namespace WebAndWebApiAutomation.Helpers
+namespace WebAndWebApiAutomation.HtmlTools
 {
     internal class RazorViewParser
     {
         private const string _usingStatementLocator = "@using";
         private const string _modelInsatanceLocator = "@model";
         private const string _modelReferenceLocator = "@Model";
+        private const string _helperLocator = "@helper";
         private const string _conditionalRenderLocator = "@if";
         private const string _attributeStartLocator = "=\"";
         private const string _cleanAttributeLocator = "=\"\"";
@@ -18,34 +18,70 @@ namespace WebAndWebApiAutomation.Helpers
         private const string _optionalTrue = " templateoptional=\"true\"";
         private const string _multipleTrue = " templatemultiple=\"true\"";
 
-        private readonly string[] _multipleRenderLocators = new string[] { "foreach", "while", "for"};
+        private readonly string[] _multipleRenderLocators = new string[] { "foreach", "while", "for", "else"};
         private readonly string[] _razorTerminatorLocators = new string[] { "break;", "continue;", "return;" };
 
         private string[] _linesOfText;
 
-        internal void Parse(string filepath)
+        internal string Parse(string filepath)
         {
             //Get all the lines of text in an array of strings
             _linesOfText = ReadFile(filepath);
             //Remove lines containing only common razor terminators
             ClearRazorTerminators();
+            //Remove anything wrapped in @{}
+            ClearWrappedHtml("@{");
+            //Remove anything wrapped in @helper {}
+            ClearWrappedHtml(_helperLocator);
             //Remove using statements
             ClearLinesThatContain(_usingStatementLocator);
             //Remove model references
             ClearLinesThatContain(_modelInsatanceLocator);
-            //Remove any lines that are only whitespace
-            ClearLinesWhereNullEmptyOrWhiteSpace();
             //Remove attribute values and leave empty attribute definitions
             ClearAttributeValues();
-            //Remove innerText values that are not html elements
-            ClearNonHtmlInnerText();
             //Find elements that render conditionally and add mark them optional for verification
             HandleConditionallyRenderedElements();
+            //Remove innerText values that are not html elements
+            ClearNonHtmlInnerText();
+            ClearLinesWhereNullEmptyOrWhiteSpace();
 
-            if (filepath.Contains(".cshtml"))
-                filepath = filepath.Replace(".cshtml", ".html");
+            #region for Debugging
+            //if (filepath.Contains(".cshtml"))
+            //    filepath = filepath.Replace(".cshtml", ".html");
 
-            File.WriteAllLines($"{filepath}", _linesOfText);           
+            //File.WriteAllLines($"{filepath}", _linesOfText);
+            #endregion
+
+            return string.Join("", _linesOfText);
+        }
+
+        private void ClearWrappedHtml(string locator)
+        {
+            while (_linesOfText.Any(line => line.Contains(locator)))
+            {
+                int enters = -1;
+                //Get the index of the first line where the locator is found
+                var lineIndex = Array.IndexOf(_linesOfText, _linesOfText.First(x => x.Contains(locator)));
+                for(int currentLine = lineIndex; currentLine < _linesOfText.Length; currentLine++)
+                {
+                    if (_linesOfText[currentLine].Contains("}") && enters == 0)
+                    {
+                        _linesOfText[currentLine] = string.Empty;
+                        break;
+                    }
+                    else if(_linesOfText[currentLine].Contains("{"))
+                    {
+                        enters++;
+                    }
+                    else if (_linesOfText[currentLine].Contains("}"))
+                    {
+                        enters--;
+                    }
+
+                    _linesOfText[currentLine] = string.Empty;
+                }                
+            }
+            ClearLinesWhereNullEmptyOrWhiteSpace();
         }
 
         private void ClearRazorTerminators()
@@ -64,73 +100,58 @@ namespace WebAndWebApiAutomation.Helpers
 
         private void HandleConditionallyRenderedElements()
         {
-            if (_linesOfText.Any(x => x.Contains(_conditionalRenderLocator)))
+            while (_linesOfText.Any(line => line.Contains(_conditionalRenderLocator)))
             {
-                //Get the index of the first line where the ConditionalRenderLocator is found
-                int startLine = Array.IndexOf(_linesOfText, _linesOfText.FirstOrDefault(text => text.Contains(_conditionalRenderLocator)));
+                int enters = -1;
                 bool isConditional = false;
                 bool isMultiple = false;
-                for (int line = startLine; line < _linesOfText.Count(); line++)
+                //Get the index of the first line where the ConditionalRenderLocator is found
+                int startLine = Array.IndexOf(_linesOfText, _linesOfText.FirstOrDefault(text => text.Contains(_conditionalRenderLocator)));
+                for (int currentLine = startLine; currentLine < _linesOfText.Length; currentLine++)
                 {
-                    //If the line contains < we assume it is an element and need to:
-                    // 1. Insert the attribute templateoptional="true" if isConditional is true
-                    // 2. Insert the attribute templatemultiple="true" if isMultiple is true
-                    if (_linesOfText[line].Contains("<") && !_linesOfText[line].Contains("<=") && !_linesOfText[line].Contains(">="))
+                    if (_linesOfText[currentLine].Contains("}") && enters == 0)
                     {
-                        _linesOfText[line] = AddConditionalAndMultipleAttributes(_linesOfText[line], isConditional, isMultiple);
+                        _linesOfText[currentLine] = string.Empty;
+                        break;
                     }
-                    else
+                    else if (_linesOfText[currentLine].Contains("else") ||
+                        _linesOfText[currentLine].Contains("else if") ||
+                        _linesOfText[currentLine].Contains("if"))
                     {
-                        //If the line contains _conditionalRenderLocator we assume it is not an element and need to set isConditional to true
-                        if (_linesOfText[line].Contains(_conditionalRenderLocator))
-                        {
-                            isConditional = true;
-
-                            _linesOfText[line] = string.Empty;
-                        }
-                        //If it contains any of the values in _multipleRenderLocators set isMultiple to true
-                        foreach (var locator in _multipleRenderLocators)
-                        {
-                            if (_linesOfText[line].Contains(locator))
-                            {
-                                isMultiple = true;
-                                _linesOfText[line] = string.Empty;
-                                break;
-                            }
-                        }
-
-                        //If we encounter }
-                        // 1. We need to reset the flags
-                        // 2. Replace it with an empty string so it will be removed if it is the only character in that line
-                        if (_linesOfText[line].Contains("}"))
-                        {
-                            isConditional = false;
-                            isMultiple = false;
-
-                            _linesOfText[line] = _linesOfText[line].Replace("}", string.Empty);
-                        }
-
-                        //If we encounter {
-                        // 1. Replace it with an empty string so it will be removed if it is the only character in that line
-                        if (_linesOfText[line].Contains("{"))
-                        {
-                            _linesOfText[line] = _linesOfText[line].Replace("{", string.Empty);
-                        }
-
-                        //If we encounter @ without < or > we need to set it to empty
-                        if (_linesOfText[line].Contains("@")
-                            && (!_linesOfText[line].Contains("<") && !_linesOfText[line].Contains(">")))
-                        {
-                            _linesOfText[line] = string.Empty;
-                        }
+                        isConditional = true;
+                        _linesOfText[currentLine] = string.Empty;
                     }
+                    else if (
+                        _linesOfText[currentLine].Contains("for") ||
+                        _linesOfText[currentLine].Contains("foreach"))
+                    {
+                        isMultiple = true;
+                        _linesOfText[currentLine] = string.Empty;
+                    }
+                    else if (_linesOfText[currentLine].Contains("{"))
+                    {
+                        _linesOfText[currentLine] = string.Empty;
+                        enters++;
+                    }
+                    else if (_linesOfText[currentLine].Contains("}"))
+                    {
+                        isConditional = false;
+                        isMultiple = false;
+                        _linesOfText[currentLine] = string.Empty;
+                        enters--;
+                    }
+
+                    _linesOfText[currentLine] = AddConditionalAndMultipleAttributes(_linesOfText[currentLine], isConditional, isMultiple);
                 }
-                ClearLinesWhereNullEmptyOrWhiteSpace();
             }
+            ClearLinesWhereNullEmptyOrWhiteSpace();
         }
 
         private string AddConditionalAndMultipleAttributes(string lineToAlter, bool isConditional, bool isMultiple)
         {
+            if (!isConditional && !isMultiple)
+                return lineToAlter;
+
             string line = lineToAlter;
             var tagStart = line.IndexOf("<");
             var closingTagStart = line.IndexOf("</");
@@ -161,6 +182,13 @@ namespace WebAndWebApiAutomation.Helpers
             {
                 for (int line = 0; line < _linesOfText.Count(); line++)
                 {
+                    //Handles innertext the contains razor statements
+                    if(_linesOfText[line].Contains("@") && _linesOfText[line].Trim().IndexOf("@") == 0 && _linesOfText[line].IndexOf("</") == -1)
+                    {
+                        _linesOfText[line] = string.Empty;
+                        continue;
+                    }
+
                     //Split the line on > then remove empties
                     var splitLine = _linesOfText[line].Split(new[] { '>' }, StringSplitOptions.RemoveEmptyEntries);
                     //If the array has less than 2 elements it is not handled here
@@ -183,9 +211,9 @@ namespace WebAndWebApiAutomation.Helpers
                      */
                     while (splitLinePosition < splitLine.Length)
                     {
-                        //Get the firs index of <
-                        var potentialEndOfInnerText = splitLine[splitLinePosition].IndexOf('<');
-                        //If the index of < is -1 or 0 there is nothing to remove
+                        //Get the firs index of </
+                        var potentialEndOfInnerText = splitLine[splitLinePosition].IndexOf("</");
+                        //If the index of </ is -1 or 0 there is nothing to remove
                         if (potentialEndOfInnerText > 0)
                         {
                             //Get a substring using the index of the first < and replace it in the array addding the > at the end of each element
@@ -224,6 +252,19 @@ namespace WebAndWebApiAutomation.Helpers
         private string CleanAttributes(string line)
         {
             string lineToMod = line;
+
+            //The data-json attributes are defined with single quotes. These need to be replaced with double quotes
+            var dataJsonIndex = lineToMod.IndexOf("data-json='{");
+            if (dataJsonIndex > -1)
+            {
+                lineToMod = line.Replace("'", "\"");
+                dataJsonIndex = lineToMod.IndexOf("\"{");
+                var indexOfClosingBracket = lineToMod.IndexOf("}");
+                var substringLength = indexOfClosingBracket - dataJsonIndex;
+                var substringToReplace = lineToMod.Substring(dataJsonIndex + 1, substringLength);
+                lineToMod = lineToMod.Replace(substringToReplace, string.Empty);
+            }
+
             int startIndex = 0;
             while (startIndex < lineToMod.Length - 1)
             {

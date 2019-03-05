@@ -84,7 +84,7 @@
     <Compile Include="Contracts\IWebAutomation.cs" />
     <Compile Include="ConcreteClasses\LoggerWebAutoInternal.cs" />
     <Compile Include="ConcreteClasses\TestExecutor.cs" />
-    <Compile Include="Helpers\RazorViewParser.cs" />
+    <Compile Include="HtmlTools\RazorViewParser.cs" />
     <Compile Include="TestDataCollection\TestDataCollector.cs" />
     <Compile Include="ConcreteClasses\DomNode.cs" />
     <Compile Include="Contracts\IDomNode.cs" />
