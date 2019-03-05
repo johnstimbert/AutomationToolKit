@@ -15,7 +15,79 @@ namespace WebAndWebApiAutomation.Extensions
         private const string ElementNotDisplayed = "Target element not displayed";
         private const string ElementNotEnabled = "Target element not enabled";
 
-        private static bool IsDisplayedAndEnabled(IWebDriver driver, By locator, WebDriverWait wait)
+        internal static bool IsEnabled(IWebDriver driver, By locator, WebDriverWait wait)
+        {
+            IWebElement target = null;
+
+            var result = wait.Until(condition =>
+            {
+                try
+                {
+                    target = driver.FindElement(locator);
+
+                    return target.Enabled;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return false;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            });
+
+            if (!result)
+            {
+                target = driver.FindElement(locator);
+
+                if (!target.Displayed)
+                    throw new WebAutomationException(ElementNotDisplayed);
+
+                if (!target.Enabled)
+                    throw new WebAutomationException(ElementNotEnabled);
+            }
+
+            return result;
+        }
+
+        internal static bool IsDisplayed(IWebDriver driver, By locator, WebDriverWait wait)
+        {
+            IWebElement target = null;
+
+            var result = wait.Until(condition =>
+            {
+                try
+                {
+                    target = driver.FindElement(locator);
+
+                    return target.Displayed;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return false;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            });
+
+            if (!result)
+            {
+                target = driver.FindElement(locator);
+
+                if (!target.Displayed)
+                    throw new WebAutomationException(ElementNotDisplayed);
+
+                if (!target.Enabled)
+                    throw new WebAutomationException(ElementNotEnabled);
+            }
+
+            return result;
+        }
+
+        internal static bool IsDisplayedAndEnabled(IWebDriver driver, By locator, WebDriverWait wait)
         {
             IWebElement target = null;
 
@@ -61,12 +133,6 @@ namespace WebAndWebApiAutomation.Extensions
             target.Click();
         }
 
-        //internal static void DoubleClick(this IWebDriver driver, By locator, WebDriverWait wait)
-        //{
-        //    var element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(locator));
-        //    new Actions(driver).DoubleClick(element);
-        //}
-
         internal static void SendText(this IWebDriver driver, By locator, WebDriverWait wait, string text)
         {
             IWebElement target = null;
@@ -111,17 +177,6 @@ namespace WebAndWebApiAutomation.Extensions
             new Actions(driver).MoveToElement(target)
                 .Build()
                 .Perform();
-        }
-
-        //internal static bool WaitForElementToBeSelected(this IWebDriver _driver, By locator, WebDriverWait wait)
-        //{
-        //    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(locator));
-        //    return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeSelected(locator));
-        //}
-
-        internal static bool WaitForElementToBeVisible(this IWebDriver driver, By locator, WebDriverWait wait)
-        {
-            return IsDisplayedAndEnabled(driver, locator, wait);
         }
 
         internal static bool WaitForUrlContains(this IWebDriver driver, string text, WebDriverWait wait)
@@ -187,6 +242,23 @@ namespace WebAndWebApiAutomation.Extensions
             }
 
             return x;
+        }
+
+        public static By ConvertToBy(this IWebElement element, IWebDriver driver)
+        {
+            if (element == null) throw new NullReferenceException();
+
+            var attributes =
+                ((IJavaScriptExecutor)driver).ExecuteScript(
+                    "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
+                    element) as Dictionary<string, object>;
+            if (attributes == null) throw new NullReferenceException();
+
+            var selector = "//" + element.TagName;
+            selector = attributes.Aggregate(selector, (current, attribute) =>
+                 current + "[@" + attribute.Key + "='" + attribute.Value + "']");
+
+            return By.XPath(selector);
         }
 
     }

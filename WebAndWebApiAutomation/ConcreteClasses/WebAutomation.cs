@@ -9,6 +9,7 @@ using WebAndWebApiAutomation.Validators;
 using static WebAndWebApiAutomation.WebAutomationEnums;
 using System.IO;
 using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace WebAndWebApiAutomation
 {
@@ -247,7 +248,7 @@ namespace WebAndWebApiAutomation
             {
                 var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
                 manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
-                manager.GetActiveDriver().WaitForElementToBeVisible(cssBy, manager.GetWait());
+                DriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
                 manager.GetActiveDriver().SendText(cssBy, manager.GetWait(), textToEnter);
                 return manager;
             }
@@ -336,27 +337,6 @@ namespace WebAndWebApiAutomation
             }
         }
 
-        ///// <summary>
-        ///// Checks whether or not the provided element is selected
-        ///// </summary>
-        ///// <param name="webDriverManager"></param>
-        ///// <param name="selectorData">Object representing the element to check</param>
-        ///// <returns>IWebDriver</returns>
-        ///// <exception cref="WebAutomationException"></exception>
-        ////public bool IsElementSelected(IWebDriverManager webDriverManager, SelectorData selectorData)
-        //{
-        //    var manager = Helper.IsDriverNull(webDriverManager);
-        //    try
-        //    {
-        //        var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-        //        return manager.GetActiveDriver().WaitForElementToBeSelected(cssBy, manager.GetWait());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new WebAutomationException(ex.ToString());
-        //    }
-        //}
-
         /// <summary>
         /// Checks whether or not the provided element is visible
         /// </summary>
@@ -370,7 +350,70 @@ namespace WebAndWebApiAutomation
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return manager.GetActiveDriver().WaitForElementToBeVisible(cssBy, manager.GetWait());
+                return DriverExtension.IsDisplayed(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is enabled
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementEnabled(IWebDriverManager webDriverManager, SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(webDriverManager);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return DriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is displayed
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementDisplayed(IWebDriverManager webDriverManager, SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(webDriverManager);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return DriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is displayed and enabled
+        /// </summary>
+        /// <param name="webDriverManager"></param>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementDisplayedAndEnabled(IWebDriverManager webDriverManager, SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(webDriverManager);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return DriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -555,12 +598,12 @@ namespace WebAndWebApiAutomation
         }
 
         /// <summary>
-        /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
-        /// /// </summary>
+        /// Finds and returns all elements matching the provided selector data 
+        /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
-        /// <param name="webDriverManager"></param>
-        /// <returns></returns>
-        public List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)
+        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>ReadOnlyCollection<IWebElement</returns>
+        public ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)
         {
             var manager = Helper.IsDriverNull(webDriverManager);
             try
@@ -572,6 +615,5 @@ namespace WebAndWebApiAutomation
                 throw new WebAutomationException(ex.ToString());
             }
         }
-
     }
 }

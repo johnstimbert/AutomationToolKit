@@ -55,15 +55,15 @@ namespace WebAndApiAutomation.Tests.Tests
             }
         }
 
-        [TestMethod]
-        public void TestMethod1()
-        {
-            _testExecutor.Execute(() => {
+        //[TestMethod]
+        //public void TestMethod1()
+        //{
+        //    _testExecutor.Execute(() => {
 
 
 
 
-            }, _driverManager);
-        }
+        //    }, _driverManager);
+        //}
     }
 }

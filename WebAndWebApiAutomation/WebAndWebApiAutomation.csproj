@@ -65,6 +65,8 @@
     <Compile Include="Api\SwaggerUtilities\Models\PathComponents\SwaggerPathResponseSchema.cs" />
     <Compile Include="Api\SwaggerUtilities\Models\Paths.cs" />
     <Compile Include="Api\SwaggerUtilities\SwaggerReader.cs" />
+    <Compile Include="ConcreteClasses\DomTree.cs" />
+    <Compile Include="Contracts\IDomTree.cs" />
     <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="ConcreteClasses\LoggerSettings.cs" />
     <Compile Include="Contracts\ITestExecutor.cs" />
@@ -78,13 +80,14 @@
     <Compile Include="Exceptions\SwaggerAutomatorException.cs" />
     <Compile Include="Exceptions\WebAutomationException.cs" />
     <Compile Include="Helpers\LogFileHelper.cs" />
-    <Compile Include="ConcreteClasses\HtmlTree.cs" />
     <Compile Include="Contracts\IWebDriverManager.cs" />
     <Compile Include="Contracts\IWebAutomation.cs" />
     <Compile Include="ConcreteClasses\LoggerWebAutoInternal.cs" />
     <Compile Include="ConcreteClasses\TestExecutor.cs" />
+    <Compile Include="HtmlTools\RazorViewParser.cs" />
     <Compile Include="TestDataCollection\TestDataCollector.cs" />
-    <Compile Include="WebAndApiAutomationObjects\HtmlTag.cs" />
+    <Compile Include="ConcreteClasses\DomNode.cs" />
+    <Compile Include="Contracts\IDomNode.cs" />
     <Compile Include="WebAndApiAutomationObjects\SelectorData.cs" />
     <Compile Include="WebAndApiAutomationObjects\SelectorDataSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

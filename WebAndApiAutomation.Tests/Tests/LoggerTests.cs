@@ -22,7 +22,7 @@ namespace WebAndWebApiAutomation.Tests
         private const string _logFileName = "logger.txt";
         private const string _failedTestLogFileName = "logger.txt_Failures";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = @"C:\Users\j_sti\source\repos\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
+        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
 
         private ILogger _logger;
         

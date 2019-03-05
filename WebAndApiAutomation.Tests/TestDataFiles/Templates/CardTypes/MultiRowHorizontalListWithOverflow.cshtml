@@ -1,0 +1,126 @@
+﻿@using Banner.Project.Common.Areas.Cards.Models;
+@model Tuple<FeaturedItemCard<Services>, CommonRenderingParameters, ListStyleRenderingParameters>
+@using Sitecore.Mvc;
+@using Banner.Foundation.Dictionary.Extensions;
+@using Banner.Project.Common.Areas.Cards;
+@using Banner.Project.Common.Areas.Cards.Repository;
+@using Banner.Foundation.SitecoreExtensions;
+@if (Model == null || Model.Item1 == null || Model.Item2 == null || Model.Item3 == null)
+{
+    return;
+}
+@{
+    int allowedColumnsCount = CommonRepository.GetNoOFColumnAllowed(Model.Item3.NumberOfColumnsCount, (int)Constant.AllowedColumnCount.Four);
+    int allowedCardCount = (allowedColumnsCount * (int)Constant.AllowedColumnCount.Two);
+    var ViewAllPhrase = Html.Sitecore().Dictionary("/Features/Common/Cards/View All Services", "View All Services");
+    var ViewLessPhrase = Html.Sitecore().Dictionary("/Features/Common/Cards/View Less Services", "View Less Services");
+
+}
+
+@helper GetSelectedServices(Services Card)
+{
+    /**/
+    <div class="@(!string.IsNullOrEmpty(Model.Item3.NumberOfColumnsCssClass) ? Model.Item3.NumberOfColumnsCssClass : " col-lg-3") pb-3 mt-3">
+        <a href="@Card.ItemUrl" class="text-card-link">
+            <p class="text-card-link-title">@Card.Title</p>
+            <p class="text-card-link-content">@Card.ShortDescription </p>
+        </a>
+    </div>
+}
+
+@helper GetBulletLinkDrawer(List<Services> Cards)
+{
+    /**/
+    <div class="basic-list-card py-xl-4 ">
+        <div class="card text-center border-0 rounded-0">
+            <div class="card-body">
+                <div class="">
+                    <div class="mb-5">
+                        <h2 class="card-title">@Html.Sitecore().Dictionary("/Features/Common/Cards/Other Medical Services", "Other Medical Services")</h2>
+
+                    </div>
+                    <div class="mb-3 text-center">
+                        <ul class="bullet-list needs-section-list ">
+                            @foreach (var Card in Cards)
+                            {
+                                <li class="col-md-6"><a href="@Card.ItemUrl">@Card.Title</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@helper GetSelectedServices(List<Services> Cards)
+{
+    foreach (var Card in Cards)
+    {
+        @GetSelectedServices(Card)
+    }
+}
+
+
+
+<div uatid="@FieldExtensions.UATID" class="@Model.Item2.BackgroundClass @Model.Item2.Padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content-block">
+                    @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.Title))
+                    {
+                        <div class="h1 title reactive-title">
+                            @Model.Item1.Title
+                        </div>
+                    }
+                    @if (!MvcHtmlString.IsNullOrEmpty(@Model.Item1.BodyCopy))
+                    {
+                        <p class="content ">@Model.Item1.BodyCopy</p>
+                    }
+
+                </div>
+            </div>
+        </div>
+        @if (Model.Item1.FeaturedCard != null && Model.Item1.FeaturedCard.Count > 0)
+        {
+            if ((Model.Item1.FeaturedCard.Count <= allowedCardCount) || (Model.Item3.ManageItemOverflow == Constant.CardActionTypes.Ignore))
+            {
+                <div class="row">
+                    @GetSelectedServices(Model.Item1.FeaturedCard.Take(allowedCardCount).ToList<Services>())
+                </div>
+            }
+            else
+            {
+                if ((Model.Item3.ManageItemOverflow == Constant.CardActionTypes.DrawerWithCards))
+                {
+                    <div>
+                        <div class="row">
+                            @GetSelectedServices(Model.Item1.FeaturedCard.Take(allowedCardCount).ToList<Services>())
+                        </div>
+                        <div class="row" data-js="readmore" data-json='{ "contentType": "view-all-content-drawer", "speed": 400, "collapsedHeight": 0, "moreLink": "@ViewAllPhrase", "lessLink": "@ViewLessPhrase", "Classes": "bg-blue-50"}'>
+                            @GetSelectedServices(Model.Item1.FeaturedCard.Skip(allowedCardCount).ToList<Services>())
+                        </div>
+                    </div>
+                }
+                else if ((Model.Item3.ManageItemOverflow == Constant.CardActionTypes.DrawerWithBulletListLink))
+                {
+                    <div>
+                        <div class="row">
+                            @GetSelectedServices(Model.Item1.FeaturedCard.Take(allowedCardCount).ToList<Services>())
+                        </div>
+                        <div class="" data-js="readmore" data-json='{ "contentType": "view-all-content-drawer", "speed": 400, "collapsedHeight": 0, "moreLink": "@ViewAllPhrase", "lessLink": "@ViewLessPhrase" , "Classes": "bg-blue-50"}'>
+                            @GetBulletLinkDrawer(Model.Item1.FeaturedCard.Skip(allowedCardCount).ToList<Services>())
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @GetSelectedServices(Model.Item1.FeaturedCard)
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>
+

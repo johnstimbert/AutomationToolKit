@@ -9,6 +9,7 @@ using WebAndWebApiAutomation.Helpers;
 using WebAndWebApiAutomation.Extensions;
 using WebAndWebApiAutomation.Exceptions;
 using OpenQA.Selenium.Support.UI;
+using System.Collections.ObjectModel;
 
 namespace WebAndWebApiAutomation.Validators
 {
@@ -31,24 +32,14 @@ namespace WebAndWebApiAutomation.Validators
         }
 
         /// <summary>
-        /// Finds all elements matching the provided selector data and returns a list of xpath by objects for each found elements
+        /// Finds and returns all elements matching the provided selector data 
         /// /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        internal List<By> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
+        internal ReadOnlyCollection<IWebElement> GetAllBysUsingMatchingSelectorData(SelectorData selectorData, IWebDriver driver)
         {
-            List<By> xPathBys = new List<By>();
-            var cssBy = BuildCssSelectorBy(selectorData);
-
-            var elements = driver.FindElements(cssBy);
-
-            foreach (var element in elements)
-            {
-                xPathBys.Add(ConvertToXPathBy(element, driver));
-            }
-
-            return xPathBys;
+            return driver.FindElements(BuildCssSelectorBy(selectorData));
         }
 
         /// <summary>

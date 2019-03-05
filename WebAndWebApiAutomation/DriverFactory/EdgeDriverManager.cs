@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.Edge;
-using System.IO;
 
 namespace WebAndWebApiAutomation.DriverFactory
 {
@@ -10,16 +9,8 @@ namespace WebAndWebApiAutomation.DriverFactory
 
         internal static EdgeDriver Create_WebDriver_Instance(string driverPath, EdgeOptions driverOptions= null)
         {
-            var defaultOptions = new EdgeOptions
-            {
-                AcceptInsecureCertificates = true,
-                UnhandledPromptBehavior = OpenQA.Selenium.UnhandledPromptBehavior.DismissAndNotify
-            };
 
-            if (driverOptions == null)
-                driverOptions = defaultOptions;
-
-            var driver = new EdgeDriver(driverPath);
+            var driver = new EdgeDriver("C:\\Windows\\System32\\");
 
             driver.Manage().Window.Maximize();
 
