@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="NugetCommands.txt" />
     <Content Include="TestDataFiles\swagger.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
