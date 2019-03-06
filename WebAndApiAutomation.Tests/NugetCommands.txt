@@ -1,0 +1,4 @@
+﻿cd  C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation
+nuget pack
+
+nuget push WebAndWebApiAutomation.1.0.11-alpha.nupkg oy2ilkyms2oig55gwc4apeylknfqm76edd7bmhs5glzs6e -Source https://api.nuget.org/v3/index.json
