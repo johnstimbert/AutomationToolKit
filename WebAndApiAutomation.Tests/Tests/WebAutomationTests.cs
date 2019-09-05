@@ -193,7 +193,7 @@ namespace WebAndApiAutomation.Tests
         {
             _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
-            Assert.AreEqual(_navUrlGoogle, _driverManager.GetActiveDriverUrl(), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
+            Assert.IsTrue(_driverManager.GetActiveDriverUrl().Contains(_navUrlGoogle), $"Expected url did not contain {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
         }
 
         [TestMethod]
