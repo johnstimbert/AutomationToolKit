@@ -15,12 +15,6 @@ namespace WebAndWebApiAutomation
     public interface IWebDriverManager
     {
         /// <summary>
-        /// Finds an element using the FindElement Mthod on the active driver. Available for troubleshooting in the Alpha and will be deprecated in the released version
-        /// </summary>
-        /// <param name="selectorData"></param>
-        /// <returns></returns>
-        IWebElement FindElementWithActiveDriver(SelectorData selectorData);
-        /// <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>
         /// <param name="chromeOptions"></param>
@@ -103,5 +97,10 @@ namespace WebAndWebApiAutomation
         /// Closes all tabs except for the one currently with focus
         /// </summary>
         void CloseAllTabsExceptCurrentWithActiveDriver();
+        /// <summary>
+        /// Switches the driver context to the frame matching the SelectorData provided
+        /// </summary>
+        /// <param name="selectorData"></param>
+        void SwitchToFrame(SelectorData selectorData);
     }
 }

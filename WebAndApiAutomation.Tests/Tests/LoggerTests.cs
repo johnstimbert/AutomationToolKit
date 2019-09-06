@@ -13,14 +13,12 @@ namespace WebAndWebApiAutomation.Tests
         public TestContext TestContext { get { return _testContext; } set { _testContext = value; } }
 
         private static WebAutomation _webAutomation;
-        private static IWebDriverManager _driverManager;
         LoggerSettings _loggerSettings;
 
         private const string _loggerTests = "Logger_Tests";
 
         private const string _logPath = @"c:\logger";
-        private const string _logFileName = "logger.txt";
-        private const string _failedTestLogFileName = "logger.txt_Failures";
+        private const string _baseLogFileName = "logger.txt";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
         private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
 
@@ -34,7 +32,7 @@ namespace WebAndWebApiAutomation.Tests
 
             _loggerSettings = new LoggerSettings()
             {
-                LogFileName = _logFileName,
+                LogFileName = _baseLogFileName,
                 LogFilePath = _logPath
             };
         }
@@ -50,6 +48,8 @@ namespace WebAndWebApiAutomation.Tests
                     File.Delete(logFile);
                 }
             }
+
+            _webAutomation = null;
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace WebAndWebApiAutomation.Tests
 
             _logger.Log(LogMessageType.TESTINFO, "Test Message");
                         
-            Assert.IsTrue(File.Exists(Path.Combine(_logPath, _logFileName)), $"The file {_logFileName} was not founf in the path {_logPath}");
+            Assert.IsTrue(File.Exists(Path.Combine(_logPath, _baseLogFileName)), $"The file {_baseLogFileName} was not found in the path {_logPath}");
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace WebAndWebApiAutomation.Tests
             _logger = _webAutomation.GetLogger(_loggerSettings);
             _logger.Log(LogMessageType.TESTINFO, "Test Message");
 
-            Assert.IsTrue(File.Exists(Path.Combine(_logPath, _logFileName)), $"The file {_logFileName} was not founf in the path {_logPath}");
+            Assert.IsTrue(File.Exists(Path.Combine(_logPath, _baseLogFileName)), $"The file {_baseLogFileName} was not founf in the path {_logPath}");
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace WebAndWebApiAutomation.Tests
             _logger = _webAutomation.GetLogger(_loggerSettings);
             _logger.Log(LogMessageType.TESTINFO, "Test Message");
 
-            var fileName = LoggerTestHelpers.AppendDateToLogFile(_logFileName, _defaultDateFormatProperty);
+            var fileName = LoggerTestHelpers.AppendDateToLogFile(_baseLogFileName, _defaultDateFormatProperty);
 
             Assert.IsTrue(File.Exists(Path.Combine(_logPath, fileName)), $"The file {fileName} was not found in the path {_logPath}");
         }
@@ -121,6 +121,29 @@ namespace WebAndWebApiAutomation.Tests
         public void LogFileRetainsAllLinesForCurrentRun()
         {
             _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
+            _loggerSettings.AppendDateToLogFile = false;//The default is true
+
+            _logger = _webAutomation.GetLogger(_loggerSettings);
+
+            int i = 0;
+            while (i < 6)
+            {
+                _logger.Log(LogMessageType.TESTINFO, $"Line{i}");
+                i++;
+            }
+            _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentLogFileName()));
+
+            Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
+
+        }
+
+        [TestMethod]
+        [TestCategory(_loggerTests)]
+        public void LogFileRetainsAllLinesForCurrentRunWhenDateIsAppended()
+        {
+            _loggerSettings.NumberOfLogFilesToPreserve = 0;//Clear the directory
             _loggerSettings.AppendDateToLogFile = true;//The default is true
 
             _logger = _webAutomation.GetLogger(_loggerSettings);
@@ -133,7 +156,7 @@ namespace WebAndWebApiAutomation.Tests
             }
             _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _logFileName));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentLogFileName()));
 
             Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
 
@@ -156,7 +179,9 @@ namespace WebAndWebApiAutomation.Tests
             }
             _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _logFileName));
+            var logName = _logger.GetCurrentLogFileName();
+
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentLogFileName()));
 
             Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
 
@@ -187,7 +212,7 @@ namespace WebAndWebApiAutomation.Tests
             }
             _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _failedTestLogFileName));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName()));
 
             Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
 
@@ -229,7 +254,7 @@ namespace WebAndWebApiAutomation.Tests
             }
             _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _failedTestLogFileName));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName()));
 
             Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
 
@@ -271,7 +296,7 @@ namespace WebAndWebApiAutomation.Tests
             }
             _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _failedTestLogFileName));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName()));
 
             Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
 
