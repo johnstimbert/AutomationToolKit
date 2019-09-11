@@ -40,8 +40,7 @@ namespace WebAndApiAutomation.Tests
         private const string _ieDriverName = "IEDriverServer.exe";
         private const string _edgeDriverName = "MicrosoftWebDriver.exe";
                 
-        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
-        private static readonly string _templatePath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndApiAutomation.Tests\TestDataFiles\Templates\CardTypes\MultiRowHorizontalListWithOverflow.cshtml";
+        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\release";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 

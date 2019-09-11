@@ -20,7 +20,7 @@ namespace WebAndWebApiAutomation.Tests
         private const string _logPath = @"c:\logger";
         private const string _baseLogFileName = "logger.txt";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\Debug";
+        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebAndWebApiAutomation\bin\release";
 
         private ILogger _logger;
         
