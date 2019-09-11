@@ -326,7 +326,8 @@ namespace WebAndWebApiAutomation
                 }
                 else
                 {
-                    manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
+                    IJavaScriptExecutor executor = (IJavaScriptExecutor)manager.GetActiveDriver();
+                    executor.ExecuteScript("arguments[0].scrollIntoView()", manager.GetActiveDriver().FindElement(cssBy));
                 }
 
                 return manager;

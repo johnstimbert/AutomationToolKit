@@ -2,19 +2,19 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.11-alpha</version>
+    <version>1.1.0</version>
     <title>$title$</title>
     <authors>John Stimbert</authors>
     <owners>John Stimbert</owners>
     <license type="expression">Apache-2.0</license>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <projectUrl>https://brainstemsolutions.github.io/AutomationToolKit/</projectUrl>
     <copyright>Copyright © 2019</copyright>
     <tags>QaAutomation SeleniumTools</tags>
   </metadata>
-  <files>
+  <!--<files>
     <file src="bin\Release\WebAndWebApiAutomation.xml" target="lib\net472"/>
     <file src="bin\Release\WebAndWebApiAutomation.dll" target="lib\net472"/>
-  </files>
+  </files>-->
 </package>

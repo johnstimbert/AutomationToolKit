@@ -19,5 +19,15 @@ namespace WebAndWebApiAutomation
         /// <param name="obj"></param>
         /// <returns></returns>
         string ToXML(object obj);
+        /// <summary>
+        /// Returns the name of the log file currently in use
+        /// </summary>
+        /// <returns>string </returns>
+        string GetCurrentLogFileName();
+        /// <summary>
+        /// Returns the name of the failure log file currently in use
+        /// </summary>
+        /// <returns>string </returns>
+        string GetCurrentFailureLogFileName();
     }
 }

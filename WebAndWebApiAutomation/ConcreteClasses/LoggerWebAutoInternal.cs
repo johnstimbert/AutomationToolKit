@@ -15,8 +15,9 @@ namespace WebAndWebApiAutomation
     /// </summary>
     internal sealed class LoggerWebAutoInternal : ILogger
     {
-        private readonly string _logFileName;
-        private readonly string _logFilePath;
+        private string _logFileName;
+        private string _failureLogFileName;
+        private string _logFilePath;
         private string _dateFormatProperty;
         private bool _generateFailureLog;
         private bool _appendDateToLogFile;
@@ -77,12 +78,11 @@ namespace WebAndWebApiAutomation
             {
                 if (_newTestRun)
                 {
-                    var logFileName = _logFileName;
-
                     if (_appendDateToLogFile)
-                        logFileName = _fileHelper.AppendDateToLogFile(logFileName, _dateFormatProperty);
+                        _logFileName = _fileHelper.AppendDateToLogFile(_logFileName, _dateFormatProperty);
 
-                    ModifyExistingLogsBasedOnConfigs(_numberOfLogFilesToPreserve, logFileName);
+                    ModifyExistingLogsBasedOnConfigs(_numberOfLogFilesToPreserve, _logFileName);
+
                     _newTestRun = false;
                 }
                 // Get call stack
@@ -133,15 +133,31 @@ namespace WebAndWebApiAutomation
                     $"with level {level}", ex);
             }
         }
-        
+
+        /// <summary>
+        /// Returns the name of the log file currently in use
+        /// </summary>
+        /// <returns>string </returns>
+        public string GetCurrentLogFileName()
+        {
+            return _logFileName;
+        }
+
+        /// <summary>
+        /// Returns the name of the failure log file currently in use
+        /// </summary>
+        /// <returns>string </returns>
+        public string GetCurrentFailureLogFileName()
+        {
+            return _failureLogFileName;
+        }
+
         #endregion
 
         #region private methods
         private void WriteEntryToExecutionLog(string level, string message, bool addToTestHistory = false)
         {
-            string fileName = Path.Combine(_logFilePath, _logFileName);
-            if (_appendDateToLogFile)
-                fileName = _fileHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
+            string fullefileName = Path.Combine(_logFilePath, _logFileName);
 
             string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} - {message}";
 
@@ -149,7 +165,7 @@ namespace WebAndWebApiAutomation
                 _testLogHistory.AppendLine(logEntry);
 
             //Append new text to an existing file 
-            using (StreamWriter file = new StreamWriter(fileName, true))
+            using (StreamWriter file = new StreamWriter(fullefileName, true))
             {
                 file.WriteLine(logEntry);
             }
@@ -157,12 +173,10 @@ namespace WebAndWebApiAutomation
 
         private void WriteEntryToFailureLog(string level, string message)
         {
-            string fileName = Path.Combine(_logFilePath, $"{_logFileName}_Failures");
-            if (_appendDateToLogFile)
-                fileName = _fileHelper.AppendDateToLogFile(fileName, _dateFormatProperty);
+            _failureLogFileName = Path.Combine(_logFilePath, $"{_logFileName}_Failures");
 
             //Append new text to an existing file 
-            using (StreamWriter file = new StreamWriter(fileName, true))
+            using (StreamWriter file = new StreamWriter(_failureLogFileName, true))
             {
                 file.WriteLine(message);
             }
