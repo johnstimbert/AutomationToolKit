@@ -603,7 +603,7 @@ namespace WebAndWebApiAutomation
         /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns>ReadOnlyCollection<IWebElement</returns>
+        /// <returns>ReadOnlyCollectionIWebElement</returns>
         public ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)
         {
             var manager = Helper.IsDriverNull(webDriverManager);
