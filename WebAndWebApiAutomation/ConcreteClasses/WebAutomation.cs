@@ -248,7 +248,7 @@ namespace WebAndWebApiAutomation
             {
                 var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
                 manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
-                DriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
                 manager.GetActiveDriver().SendText(cssBy, manager.GetWait(), textToEnter);
                 return manager;
             }
@@ -351,7 +351,7 @@ namespace WebAndWebApiAutomation
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return DriverExtension.IsDisplayed(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                return WebDriverExtension.IsDisplayed(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -372,7 +372,7 @@ namespace WebAndWebApiAutomation
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return DriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                return WebDriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -393,7 +393,7 @@ namespace WebAndWebApiAutomation
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return DriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                return WebDriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {
@@ -414,7 +414,7 @@ namespace WebAndWebApiAutomation
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return DriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                return WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
             catch (Exception ex)
             {

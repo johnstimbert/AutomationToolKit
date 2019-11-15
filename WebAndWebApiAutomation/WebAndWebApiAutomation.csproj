@@ -56,16 +56,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\SwaggerAutomator.cs" />
-    <Compile Include="Api\SwaggerUtilities\Enums.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\Info.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\ModelsBase.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\PathComponents\SwaggerPath.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\PathComponents\SwaggerPathParameters.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\PathComponents\SwaggerPathResponse.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\PathComponents\SwaggerPathResponseSchema.cs" />
-    <Compile Include="Api\SwaggerUtilities\Models\Paths.cs" />
-    <Compile Include="Api\SwaggerUtilities\SwaggerReader.cs" />
     <Compile Include="ConcreteClasses\DomTree.cs" />
     <Compile Include="Contracts\IDomTree.cs" />
     <Compile Include="Contracts\ILogger.cs" />
@@ -73,19 +63,17 @@
     <Compile Include="Contracts\ITestExecutor.cs" />
     <Compile Include="Exceptions\LoggerException.cs" />
     <Compile Include="Exceptions\TestExecutorException.cs" />
-    <Compile Include="Extensions\DriverExtension.cs" />
+    <Compile Include="Extensions\WebDriverExtension.cs" />
     <Compile Include="DriverFactory\ChromeDriverManager.cs" />
     <Compile Include="DriverFactory\EdgeDriverManager.cs" />
     <Compile Include="DriverFactory\FirefoxDriverManager.cs" />
     <Compile Include="DriverFactory\IEDriverManager.cs" />
-    <Compile Include="Exceptions\SwaggerAutomatorException.cs" />
     <Compile Include="Exceptions\WebAutomationException.cs" />
     <Compile Include="Helpers\LogFileHelper.cs" />
     <Compile Include="Contracts\IWebDriverManager.cs" />
     <Compile Include="Contracts\IWebAutomation.cs" />
     <Compile Include="ConcreteClasses\LoggerWebAutoInternal.cs" />
     <Compile Include="ConcreteClasses\TestExecutor.cs" />
-    <Compile Include="HtmlTools\RazorViewParser.cs" />
     <Compile Include="TestDataCollection\TestDataCollector.cs" />
     <Compile Include="ConcreteClasses\DomNode.cs" />
     <Compile Include="Contracts\IDomNode.cs" />

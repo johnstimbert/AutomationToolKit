@@ -10,7 +10,7 @@ using WebAndWebApiAutomation.Exceptions;
 
 namespace WebAndWebApiAutomation.Extensions
 {
-    internal static class DriverExtension
+    internal static class WebDriverExtension
     {
         private const string ElementNotDisplayed = "Target element not displayed";
         private const string ElementNotEnabled = "Target element not enabled";
