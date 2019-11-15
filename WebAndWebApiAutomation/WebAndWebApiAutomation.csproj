@@ -62,6 +62,7 @@
     <Compile Include="ConcreteClasses\LoggerSettings.cs" />
     <Compile Include="Contracts\ITestExecutor.cs" />
     <Compile Include="Exceptions\LoggerException.cs" />
+    <Compile Include="Exceptions\TestDataCollectorException.cs" />
     <Compile Include="Exceptions\TestExecutorException.cs" />
     <Compile Include="Extensions\WebDriverExtension.cs" />
     <Compile Include="DriverFactory\ChromeDriverManager.cs" />
