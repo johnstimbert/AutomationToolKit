@@ -25,7 +25,7 @@ namespace WebAndWebApiAutomation
         internal TestExecutor(LoggerWebAutoInternal logger = null, bool collectTestData = false, string resultsPath = null)
         {
             _logger = logger;
-
+            //TODO Uncomment when test data collector is ready
             //if (collectTestData)
             //{
             //    _testDataCollector = new TestDataCollector();
@@ -94,8 +94,8 @@ namespace WebAndWebApiAutomation
 
                 if (_logger != null)
                 {
-                    _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
                     _logger.Log(LogMessageType.TESTFAILED, wae.Message);
+                    _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
                 }
 
                 throw wae;
@@ -113,8 +113,8 @@ namespace WebAndWebApiAutomation
 
                 if (_logger != null)
                 {
-                    _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
                     _logger.Log(LogMessageType.TESTFAILED, wae.Message);
+                    _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
                 }
 
                 throw wae;
