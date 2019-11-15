@@ -82,8 +82,8 @@ namespace WebAndWebApiAutomation
         /// Finds and returns all elements matching the provided selector data 
         /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns>ReadOnlyCollection<IWebElement</returns>
+        /// <param name="webDriverManager">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>ReadOnlyCollection<IWebElement></IWebElement></returns>
         ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager);
         /// <summary>
         /// Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects

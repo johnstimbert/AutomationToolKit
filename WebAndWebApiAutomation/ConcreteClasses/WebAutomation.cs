@@ -603,7 +603,7 @@ namespace WebAndWebApiAutomation
         /// Finds and returns all elements matching the provided selector data 
         /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <param name="webDriverManager">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns>ReadOnlyCollectionIWebElement</returns>
         public ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager)
         {
