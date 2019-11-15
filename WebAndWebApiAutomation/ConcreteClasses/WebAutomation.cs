@@ -196,13 +196,14 @@ namespace WebAndWebApiAutomation
         /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebAutomationException"></exception>
-        public void JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData)
+        public IWebDriverManager JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData)
         {
             var manager = Helper.IsDriverNull(webDriverManager);
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 Helper.ClickUsingJavaScript(manager.GetActiveDriver(), cssBy);
+                return webDriverManager;
             }
             catch (Exception ex)
             {

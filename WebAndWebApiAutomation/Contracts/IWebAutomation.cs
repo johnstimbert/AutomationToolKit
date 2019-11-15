@@ -150,7 +150,7 @@ namespace WebAndWebApiAutomation
         /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebAutomationException"></exception>
-        void JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData);
+        IWebDriverManager JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData);
         /// <summary>
         /// Clears the text from the provided element after verifiying the element is visible
         /// </summary>
