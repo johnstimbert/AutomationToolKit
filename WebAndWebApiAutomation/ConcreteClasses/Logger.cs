@@ -13,7 +13,7 @@ namespace WebAndWebApiAutomation
     /// <summary>
     /// This class provides a common utility for formatting logging
     /// </summary>
-    internal sealed class LoggerWebAutoInternal : ILogger
+    internal sealed class Logger : ILogger
     {
         private string _logFileName;
         private string _failureLogFileName;
@@ -28,9 +28,9 @@ namespace WebAndWebApiAutomation
         private bool _newTestRun = true;
         StringBuilder _testLogHistory = new StringBuilder();
  
-        private LoggerWebAutoInternal() { }
+        private Logger() { }
 
-        internal LoggerWebAutoInternal(LoggerSettings loggerSettings)
+        internal Logger(LoggerSettings loggerSettings)
         {
             _logFileName = loggerSettings.LogFileName ?? throw new LoggerException($"Log File Name Must Be Deinfed");
             _logFilePath = loggerSettings.LogFilePath ?? throw new LoggerException($"Log File Path Must Be Deinfed");

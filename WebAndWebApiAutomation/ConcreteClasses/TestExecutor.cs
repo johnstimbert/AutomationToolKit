@@ -12,7 +12,7 @@ namespace WebAndWebApiAutomation
     /// </summary>
     internal sealed class TestExecutor : ITestExecutor
     {
-        private LoggerWebAutoInternal _logger;
+        private Logger _logger;
         private readonly TestDataCollector _testDataCollector;
 
         private string _testId;
@@ -22,7 +22,7 @@ namespace WebAndWebApiAutomation
 
         private TestExecutor() { }
         
-        internal TestExecutor(LoggerWebAutoInternal logger = null, bool collectTestData = false, string resultsPath = null)
+        internal TestExecutor(Logger logger = null, bool collectTestData = false, string resultsPath = null)
         {
             _logger = logger;
             if (collectTestData)

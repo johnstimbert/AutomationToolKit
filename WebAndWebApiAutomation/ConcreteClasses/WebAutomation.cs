@@ -22,7 +22,7 @@ namespace WebAndWebApiAutomation
         private readonly string _driverPath;
         private readonly int _timeoutForWait;
         private static WebDriverManager _webDriverManagerInstance;
-        private static LoggerWebAutoInternal _loggerInstance;
+        private static Logger _loggerInstance;
         private static TestExecutor _testExecutorInstance;
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace WebAndWebApiAutomation
             try
             {
                 if (_loggerInstance == null)
-                    _loggerInstance = new LoggerWebAutoInternal(loggerSettings);
+                    _loggerInstance = new Logger(loggerSettings);
 
                 return _loggerInstance;
             }
