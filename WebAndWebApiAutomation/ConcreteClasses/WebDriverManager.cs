@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading;
 using WebAndWebApiAutomation.DriverFactory;
 using WebAndWebApiAutomation.Exceptions;
+using WebAndWebApiAutomation.Extensions;
+using WebAndWebApiAutomation.Helpers;
 using WebAndWebApiAutomation.Validators;
 using WebAndWebApiAutomation.WebAndApiAutomationObjects;
 using static WebAndWebApiAutomation.WebAutomationEnums;
@@ -21,7 +23,7 @@ namespace WebAndWebApiAutomation
     /// <summary>
     /// Concrete implementation of IWebDriverManager interface to manage web drivers
     /// </summary>
-    internal sealed class WebDriverManager : IWebDriverManager
+    internal sealed class WebDriverManager : IWebDriverManager, IJavaScriptExecutor
     {
         #region Constants
         private const string _chromeDriverName = "chromedriver.exe";
@@ -45,6 +47,8 @@ namespace WebAndWebApiAutomation
 
         private FirefoxProfile _firefoxProfile;
 
+        private StructureValidator _structureValidator;
+
 
         #region Constructors
         private WebDriverManager() { }
@@ -53,6 +57,7 @@ namespace WebAndWebApiAutomation
         {
             _driverPath = driverPath;
             _timeoutForWait = timeoutForWaitOverride;
+            _structureValidator = new StructureValidator();
         }
 
         #endregion
@@ -454,7 +459,463 @@ namespace WebAndWebApiAutomation
                 throw new WebAutomationException(ex.ToString());
             }
         }
+        /// <summary>
+        /// Executes JavaScript asynchronously in the context of the currently selected frame or window.
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
+        public object ExecuteScript(string script, params object[] args)
+        {
+            try
+            {
+                return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteScript(script, args);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+        /// <summary>
+        /// Executes JavaScript in the context of the currently selected frame or window.
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
+        /// <remarks>
+        /// The OpenQA.Selenium.IJavaScriptExecutor.ExecuteScript(System.String,System.Object[])method
+        ///    executes JavaScript in the context of the currently selected frame or window.
+        ///    This means that "document" will refer to the current document. If the script
+        ///    has a return value, then the following steps will be taken:
+        ///    • For an HTML element, this method returns a OpenQA.Selenium.IWebElement
+        ///    • For a number, a System.Int64 is returned
+        ///    • For a boolean, a System.Boolean is returned
+        ///    • For all other cases a System.String is returned.
+        ///    • For an array,we check the first element, and attempt to return a System.Collections.Generic.List`1
+        ///    of that type, following the rules above. Nested lists are not supported.
+        ///    • If the value is null or there is no return value, null is returned.
+        ///    Arguments must be a number (which will be converted to a System.Int64), a System.Boolean,
+        ///    a System.String or a OpenQA.Selenium.IWebElement. An exception will be thrown
+        ///    if the arguments do not meet these criteria. The arguments will be made available
+        ///    to the JavaScript via the "arguments" magic variable, as if the function were
+        ///    called via "Function.apply"</remarks>
+        public object ExecuteAsyncScript(string script, params object[] args)
+        {
+            try
+            {
+                return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteAsyncScript(script, args);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
 
+        /// <summary>
+        /// Takes a screenshot and saves it in the provided path. THe file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"
+        /// </summary>
+        /// <param name="sreenShotPath">Path to save the screenshot to</param>
+        /// <param name="screenShotName">Name of the screenshot file</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void TakeScreenShot(string sreenShotPath, string screenShotName)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                Helper.TakeScreenShot(manager.GetActiveDriver(), sreenShotPath, screenShotName);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Modifies the style associated with the selector data object provided to highlight the element on the page
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to highlight</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void HighlightElement(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                Helper.HighlightElement(manager.GetActiveDriver(), cssBy);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clicks the element associated with the selector data object provided using a JavaScript query.
+        /// This is useful when the element being clicked may be obstructed
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to highlight</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void JavaScriptClick(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                Helper.ClickUsingJavaScript(manager.GetActiveDriver(), cssBy);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clicks the provided element after verifying it exists and is clickable
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to click</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void Click(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                clickTarget.Click();
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Enters text into the provided element after verifying it exists and is visible
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to receive the text</param>
+        /// <param name="textToEnter">Text that will be entered</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void SendText(SelectorData selectorData, string textToEnter)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
+                WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                manager.GetActiveDriver().SendText(cssBy, manager.GetWait(), textToEnter);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Enters text into the provided element one character at a time with a delay between each after verifying it exists and is visible.
+        /// Note: Only use this method to send text to elements that have autocomplete and require a delay on each letter typed.
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to receive the text</param>
+        /// <param name="textToEnter">Text that will be entered</param>
+        /// <param name="delay">Interval before each character is entered</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void SendTextWithDelay(SelectorData selectorData, string textToEnter, int delay = 500)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                manager.GetActiveDriver().SendTextWithDelay(cssBy, manager.GetWait(), textToEnter, delay);
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clears the text from the provided element after verifiying the element is visible
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to be cleared</param>
+        /// <returns>IWebDriver</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public void ClearText(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                manager.GetActiveDriver().Clear(cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clears the text from the provided element after verifiying the element is visible
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to move to</param>
+        /// <exception cref="WebAutomationException"></exception>
+        public void MoveToElement(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                //Needed as a workaround for a bug in the geckodriver(firefox)
+                if (manager.GetActiveDriverType() == DriverType.Firefox)
+                {
+                    manager.GetActiveDriver().WaitForElementExists(cssBy, manager.GetWait());
+                    manager.GetActiveDriver().FindElement(cssBy);
+                }
+                else
+                {
+                    IJavaScriptExecutor executor = (IJavaScriptExecutor)manager.GetActiveDriver();
+                    executor.ExecuteScript("arguments[0].scrollIntoView()", manager.GetActiveDriver().FindElement(cssBy));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is visible
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns></returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementVisible(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return WebDriverExtension.IsDisplayed(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is enabled
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns></returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementEnabled(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return WebDriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is displayed
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns></returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementDisplayed(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return WebDriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the provided element is displayed and enabled
+        /// </summary>
+        /// <param name="selectorData">Object representing the element to check</param>
+        /// <returns></returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool IsElementDisplayedAndEnabled(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                return WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the current url contains the provided text
+        /// </summary>
+        /// <param name="text">Text to look for in the current Url</param>
+        /// <returns></returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool DoesUrlContain(string text)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                return manager.GetActiveDriver().WaitForUrlContains(text, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the current url contains the provided pattern using regex
+        /// </summary>
+        /// <param name="pattern">Text to look for in the current Url</param>
+        /// <returns></returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool DoesUrlContainUsingRegex(string pattern)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
+        /// </summary>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
+        /// <returns>IWebElement</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                return _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned
+        /// </summary>
+        /// <param name="selectorData">Data to build the CssSelector with</param>
+        /// <returns>By.CssSelector</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public By CheckElementExistsReturnCssSelector(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                return _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data
+        /// </summary>
+        /// <param name="selectorDataSet">Data to check for in the current DOM instance</param>
+        /// <returns>bool</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public bool CheckElementsExist(SelectorDataSet selectorDataSet)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                return _structureValidator.CheckElementsExist(selectorDataSet, manager.GetActiveDriver(), manager.GetWait());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned.
+        /// If multiple elements match the SelectorData definition utilize the nthParentElement parameter to select the desired parent
+        /// </summary>
+        /// <param name="parentSelectorData">Data to find the parent element with</param>
+        /// <param name="childSelectorData">>Data to find the child element with</param>
+        /// <param name="nthParentElement">The Zero based position of the parent element to search with, this is optional</param>
+        /// <returns>IWebElement</returns>
+        /// <exception cref="WebAutomationException"></exception>
+        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, int nthParentElement = -1)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                IWebElement parentElement = null;
+                if (nthParentElement > -1)
+                {
+                    parentElement = _structureValidator.Check_Nth_ElementExistsReturnIWebElement(parentSelectorData, nthParentElement, manager.GetActiveDriver(), manager.GetWait());
+                }
+                else
+                {
+                    parentElement = CheckElementExistsReturnIWebElement(parentSelectorData);
+                }
+
+                if (parentElement == null)
+                    return parentElement;
+
+                return _structureValidator.CheckChildElementExists(parentElement, childSelectorData, manager.GetActiveDriver());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Finds and returns all elements matching the provided selector data 
+        /// </summary>
+        /// <param name="selectorData">Data to check for in the current DOM instance</param>
+        /// <returns>ReadOnlyCollectionIWebElement</returns>
+        public ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                return _structureValidator.GetAllBysUsingMatchingSelectorData(selectorData, manager.GetActiveDriver());
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
         #endregion
 
         #region Internal Methods
