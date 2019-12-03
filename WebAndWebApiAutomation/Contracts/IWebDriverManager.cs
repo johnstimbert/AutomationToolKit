@@ -54,8 +54,16 @@ namespace WebAndWebApiAutomation
         /// <returns></returns>
         string GetActiveDriverPageSource();
         /// <summary>
-        /// Gets the title of the current browser window.
+        /// Gets the source of the page last loaded by the browser.
         /// </summary>
+        /// <remarks>
+        ///     If the page has been modified after loading (for example, by JavaScript) there
+        ///     is no guarantee that the returned text is that of the modified page. Please consult
+        ///     the documentation of the particular driver being used to determine whether the
+        ///     returned text reflects the current state of the page or the text last sent by
+        ///     the web server. The page source returned is a representation of the underlying
+        ///     DOM: do not expect it to be formatted or escaped in the same way as the response
+        ///     sent from the web server.</remarks>
         /// <returns></returns>
         string GetActiveDriverTitle();
         /// <summary>
