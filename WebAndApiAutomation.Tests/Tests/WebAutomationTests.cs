@@ -49,6 +49,8 @@ namespace WebAndApiAutomation.Tests
         private static readonly SelectorData divByClass = new SelectorData("divByClass", HtmlTagType.div, HtmlAttributeType.Class, "header-description");
         private static readonly SelectorData divTagTypeOnly = new SelectorData("divTagTypeOnly", HtmlTagType.div, HtmlAttributeType.None,
                                                                null);
+        private static readonly SelectorData headerTagTypeOnly = new SelectorData("headerTagTypeOnly", "header", HtmlAttributeType.None,
+                                                               null);
 
         private static SelectorDataSet divTags = new SelectorDataSet(HtmlTagType.div);
         
@@ -1448,9 +1450,9 @@ namespace WebAndApiAutomation.Tests
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
-            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(divTagTypeOnly);
+            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(headerTagTypeOnly);
             var element = _driverManager.CheckElementExistsReturnIWebElement(headerById);
-            Assert.AreEqual(divTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {divTagTypeOnly.TagType}, found {element.TagName}");
+            Assert.AreEqual(headerTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {headerTagTypeOnly.TagType}, found {element.TagName}");
         }
 
         [TestMethod]
@@ -1460,9 +1462,9 @@ namespace WebAndApiAutomation.Tests
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
-            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(divTagTypeOnly);
+            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(headerTagTypeOnly);
             var element = _driverManager.CheckElementExistsReturnIWebElement(headerById);
-            Assert.AreEqual(divTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {divTagTypeOnly.TagType}, found {element.TagName}");
+            Assert.AreEqual(headerTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {headerTagTypeOnly.TagType}, found {element.TagName}");
         }
 
         [TestMethod]
@@ -1472,9 +1474,9 @@ namespace WebAndApiAutomation.Tests
             _driverManager.CreateDriverInstance(DriverType.InternetExplorer);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
-            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(divTagTypeOnly);
+            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(headerTagTypeOnly);
             var element = _driverManager.CheckElementExistsReturnIWebElement(headerById);
-            Assert.AreEqual(divTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {divTagTypeOnly.TagType}, found {element.TagName}");
+            Assert.AreEqual(headerTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {headerTagTypeOnly.TagType}, found {element.TagName}");
         }
 
         [TestMethod]
@@ -1484,9 +1486,9 @@ namespace WebAndApiAutomation.Tests
             _driverManager.CreateDriverInstance(DriverType.Edge);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumHq);
-            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(divTagTypeOnly);
+            var cssBy = _driverManager.CheckElementExistsReturnCssSelector(headerTagTypeOnly);
             var element = _driverManager.CheckElementExistsReturnIWebElement(headerById);
-            Assert.AreEqual(divTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {divTagTypeOnly.TagType}, found {element.TagName}");
+            Assert.AreEqual(headerTagTypeOnly.TagType.ToString().ToLower(), element.TagName.ToString().ToLower(), $"Expected attribute value was {headerTagTypeOnly.TagType}, found {element.TagName}");
         }
 
         [TestMethod]
