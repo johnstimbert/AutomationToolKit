@@ -56,18 +56,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AngularSupport\AngularElement.cs" />
-    <Compile Include="AngularSupport\AngularNavigation.cs" />
-    <Compile Include="AngularSupport\AngularWebDriver.cs" />
-    <Compile Include="AngularSupport\Bys\Base\AngularBaseBy.cs" />
-    <Compile Include="AngularSupport\Bys\ByExactBinding.cs" />
-    <Compile Include="AngularSupport\Bys\ByExactRepeater.cs" />
-    <Compile Include="AngularSupport\Bys\ByModel.cs" />
-    <Compile Include="AngularSupport\Bys\ByRepeater.cs" />
-    <Compile Include="AngularSupport\Bys\BySelectedOption.cs" />
-    <Compile Include="AngularSupport\Modules\Angular1Module.cs" />
-    <Compile Include="AngularSupport\Modules\Module.cs" />
-    <Compile Include="AngularSupport\Scripts\BackingScripts.cs" />
     <Compile Include="ConcreteClasses\DomTree.cs" />
     <Compile Include="Contracts\IDomTree.cs" />
     <Compile Include="Contracts\ILogger.cs" />
