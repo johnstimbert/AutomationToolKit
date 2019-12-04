@@ -50,7 +50,6 @@ namespace WebAndWebApiAutomation
 
         private StructureValidator _structureValidator;
 
-        public IWebDriver WrappedDriver => GetActiveDriver();
 
         #region Constructors
         private WebDriverManager() { }
@@ -65,6 +64,13 @@ namespace WebAndWebApiAutomation
         #endregion
 
         #region IWebDriverManager Methods
+        /// <summary>
+        /// Returns the currently active IWebDriver object
+        /// </summary>
+        /// <remarks>
+        /// This should not be utilized for testing and is provided for troubleshooting any issues found while using this package.
+        /// </remarks>
+        public IWebDriver WrappedDriver => GetActiveDriver();
         /// <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>
