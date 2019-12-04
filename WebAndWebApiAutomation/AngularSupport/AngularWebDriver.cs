@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebAndWebApiAutomation.AngularSupport.Bys.Base;
 using WebAndWebApiAutomation.AngularSupport.Modules;
 using WebAndWebApiAutomation.AngularSupport.Scripts;
@@ -19,13 +17,13 @@ namespace WebAndWebApiAutomation.AngularSupport
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
-        private IWebDriver _dwebDiver;
-        private IJavaScriptExecutor jsExecutor;
-        private string rootElement;
-        private IList<Module> mockModules;
+        private IWebDriver _webDiver;
+        private IJavaScriptExecutor _jsExecutor;
+        private string _rootElement;
+        private IList<Module> _mockModules;
 
         /// <summary>
-        /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
+        /// Creates a new instance of <see cref="AngularWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
         /// </summary>
         /// <param name="driver">The configured webdriver instance.</param>
         /// <param name="mockModules">
@@ -37,7 +35,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
+        /// Creates a new instance of <see cref="AngularWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
         /// </summary>
         /// <param name="driver">The configured webdriver instance.</param>
         /// <param name="rootElement">
@@ -54,10 +52,10 @@ namespace WebAndWebApiAutomation.AngularSupport
             {
                 throw new NotSupportedException("The WebDriver instance must implement the IJavaScriptExecutor interface.");
             }
-            this._dwebDiver = driver;
-            this.jsExecutor = (IJavaScriptExecutor)driver;
-            this.rootElement = rootElement;
-            this.mockModules = new List<Module>(mockModules);
+            _webDiver = driver;
+            _jsExecutor = (IJavaScriptExecutor)driver;
+            _rootElement = rootElement;
+            _mockModules = new List<Module>(mockModules);
         }
 
         #region IWrapsDriver Members
@@ -69,7 +67,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public IWebDriver WrappedDriver
         {
-            get { return this._dwebDiver; }
+            get { return _webDiver; }
         }
 
         #endregion
@@ -81,7 +79,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public string RootElement
         {
-            get { return this.rootElement; }
+            get { return _rootElement; }
         }
 
         /// <summary>
@@ -100,7 +98,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public string CurrentWindowHandle
         {
-            get { return this._dwebDiver.CurrentWindowHandle; }
+            get { return _webDiver.CurrentWindowHandle; }
         }
 
         /// <summary>
@@ -110,8 +108,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.WaitForAngular();
-                return this._dwebDiver.PageSource;
+                WaitForAngular();
+                return _webDiver.PageSource;
             }
         }
 
@@ -122,8 +120,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.WaitForAngular();
-                return this._dwebDiver.Title;
+                WaitForAngular();
+                return _webDiver.Title;
             }
         }
 
@@ -134,16 +132,16 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.WaitForAngular();
-                return this._dwebDiver.Url;
+                WaitForAngular();
+                return _webDiver.Url;
             }
             set
             {
                 // Reset URL
-                this._dwebDiver.Url = "about:blank";
+                _webDiver.Url = "about:blank";
 
                 // TODO: test Android
-                IHasCapabilities hcDriver = this._dwebDiver as IHasCapabilities;
+                IHasCapabilities hcDriver = _webDiver as IHasCapabilities;
                 string browserName = null;
                 if (hcDriver != null && hcDriver.Capabilities.HasCapability("browserName"))
                 {
@@ -156,20 +154,20 @@ namespace WebAndWebApiAutomation.AngularSupport
                      browserName == "firefox" ||
                      browserName.ToLower() == "safari"))
                 {
-                    this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
-                    this._dwebDiver.Url = value;
+                    ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
+                    _webDiver.Url = value;
                 }
                 else
                 {
-                    this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
+                    ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
                 }
 
-                if (!this.IgnoreSynchronization)
+                if (!IgnoreSynchronization)
                 {
                     try
                     {
                         // Make sure the page is an Angular page.
-                        long? angularVersion = this.ExecuteAsyncScript(BackingScripts.TestForAngular) as long?;
+                        long? angularVersion = ExecuteAsyncScript(BackingScripts.TestForAngular) as long?;
                         if (angularVersion.HasValue)
                         {
                             if (angularVersion.Value == 1)
@@ -177,20 +175,20 @@ namespace WebAndWebApiAutomation.AngularSupport
                                 // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
 
                                 // Add default module for Angular v1
-                                this.mockModules.Add(new Angular1Module());
+                                _mockModules.Add(new Angular1Module());
 
                                 // Register extra modules
-                                foreach (Module ngModule in this.mockModules)
+                                foreach (Module ngModule in _mockModules)
                                 {
-                                    this.ExecuteScript(ngModule.Script);
+                                    ExecuteScript(ngModule.Script);
                                 }
                                 // Resume Angular bootstrap
-                                this.ExecuteScript(BackingScripts.ResumeAngularBootstrap,
-                                    String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
+                                ExecuteScript(BackingScripts.ResumeAngularBootstrap,
+                                    String.Join(",", _mockModules.Select(m => m.Name).ToArray()));
                             }
                             else if (angularVersion.Value == 2)
                             {
-                                if (this.mockModules.Count > 0)
+                                if (_mockModules.Count > 0)
                                 {
                                     throw new NotSupportedException("Mock modules are not supported in Angular 2");
                                 }
@@ -211,7 +209,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public ReadOnlyCollection<string> WindowHandles
         {
-            get { return this._dwebDiver.WindowHandles; }
+            get { return _webDiver.WindowHandles; }
         }
 
         /// <summary>
@@ -219,7 +217,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void Close()
         {
-            this._dwebDiver.Close();
+            _webDiver.Close();
         }
 
         /// <summary>
@@ -230,12 +228,12 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </returns>
         public IOptions Manage()
         {
-            return this._dwebDiver.Manage();
+            return _webDiver.Manage();
         }
 
         INavigation OpenQA.Selenium.IWebDriver.Navigate()
         {
-            return this.Navigate();
+            return Navigate();
         }
 
         /// <summary>
@@ -247,7 +245,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </returns>
         public AngularNavigation Navigate()
         {
-            return new AngularNavigation(this, _dwebDiver.Navigate());
+            return new AngularNavigation(this, _webDiver.Navigate());
         }
 
         /// <summary>
@@ -255,7 +253,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void Quit()
         {
-            this._dwebDiver.Quit();
+            _webDiver.Quit();
         }
 
         /// <summary>
@@ -266,7 +264,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </returns>
         public ITargetLocator SwitchTo()
         {
-            return this._dwebDiver.SwitchTo();
+            return _webDiver.SwitchTo();
         }
 
         /// <summary>
@@ -279,10 +277,10 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             if (by is AngularBaseBy)
             {
-                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { RootElement };
             }
-            this.WaitForAngular();
-            return new AngularElement(this, this._dwebDiver.FindElement(by));
+            WaitForAngular();
+            return new AngularElement(this, _webDiver.FindElement(by));
         }
 
         /// <summary>
@@ -298,25 +296,25 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             if (by is AngularBaseBy)
             {
-                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { RootElement };
             }
-            this.WaitForAngular();
-            return new ReadOnlyCollection<AngularElement>(this._dwebDiver.FindElements(by).Select(e => new AngularElement(this, e)).ToList());
+            WaitForAngular();
+            return new ReadOnlyCollection<AngularElement>(_webDiver.FindElements(by).Select(e => new AngularElement(this, e)).ToList());
         }
 
         IWebElement ISearchContext.FindElement(By by)
         {
-            return this.FindElement(by);
+            return FindElement(by);
         }
 
         ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
         {
             if (by is AngularBaseBy)
             {
-                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { RootElement };
             }
-            this.WaitForAngular();
-            return new ReadOnlyCollection<IWebElement>(this._dwebDiver.FindElements(by).Select(e => (IWebElement)new AngularElement(this, e)).ToList());
+            WaitForAngular();
+            return new ReadOnlyCollection<IWebElement>(_webDiver.FindElements(by).Select(e => (IWebElement)new AngularElement(this, e)).ToList());
         }
 
         /// <summary>
@@ -325,7 +323,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void Dispose()
         {
-            this._dwebDiver.Dispose();
+            _webDiver.Dispose();
         }
 
         #endregion
@@ -337,13 +335,13 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.WaitForAngular();
-                return this.ExecuteScript(BackingScripts.GetLocation, this.rootElement) as string;
+                WaitForAngular();
+                return ExecuteScript(BackingScripts.GetLocation, _rootElement) as string;
             }
             set
             {
-                this.WaitForAngular();
-                this.ExecuteScript(BackingScripts.SetLocation, this.rootElement, value);
+                WaitForAngular();
+                ExecuteScript(BackingScripts.SetLocation, _rootElement, value);
             }
         }
 
@@ -358,9 +356,9 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// <exception cref="WebDriverTimeoutException">If the driver times out while waiting for Angular.</exception>
         public void WaitForAngular()
         {
-            if (!this.IgnoreSynchronization)
+            if (!IgnoreSynchronization)
             {
-                this.ExecuteAsyncScript(BackingScripts.WaitForAngular, this.rootElement);
+                ExecuteAsyncScript(BackingScripts.WaitForAngular, this._rootElement);
             }
         }
 
@@ -415,7 +413,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </remarks>
         public object ExecuteScript(string script, params object[] args)
         {
-            return jsExecutor.ExecuteScript(script, args);
+            return _jsExecutor.ExecuteScript(script, args);
         }
 
         /// <summary>
@@ -426,7 +424,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// <returns>The value returned by the script.</returns>
         public object ExecuteAsyncScript(string script, params object[] args)
         {
-            return jsExecutor.ExecuteAsyncScript(script, args);
+            return _jsExecutor.ExecuteAsyncScript(script, args);
         }
 
         #endregion

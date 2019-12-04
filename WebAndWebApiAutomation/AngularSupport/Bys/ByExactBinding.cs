@@ -12,7 +12,7 @@ namespace WebAndWebApiAutomation.AngularSupport.Bys
         public ByExactBinding(string binding)
             : base(BackingScripts.FindBindings, binding, true)
         {
-            _description = "NgBy.ExactBinding: " + binding;
+            _description = "By.ExactBinding: " + binding;
         }
     }
 }

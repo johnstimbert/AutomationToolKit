@@ -13,8 +13,8 @@ namespace WebAndWebApiAutomation.AngularSupport
     /// </summary>
     public class AngularElement : IWebElement, IWrapsElement
     {
-        private AngularWebDriver angularWebDriver;
-        private IWebElement element;
+        private AngularWebDriver _angularWebDriver;
+        private IWebElement _element;
 
         /// <summary>
         /// Creates a new instance of <see cref="AngularElement"/> by wrapping a <see cref="IWebElement"/> instance.
@@ -23,8 +23,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// <param name="element">The existing <see cref="IWebElement"/> instance.</param>
         public AngularElement(AngularWebDriver angularDriver, IWebElement element)
         {
-            this.angularWebDriver = angularDriver;
-            this.element = element;
+            _angularWebDriver = angularDriver;
+            _element = element;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public AngularWebDriver AngularDriver
         {
-            get { return this.angularWebDriver; }
+            get { return _angularWebDriver; }
         }
 
         #region IWrapsElement Members
@@ -42,7 +42,7 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public IWebElement WrappedElement
         {
-            get { return this.element; }
+            get { return _element; }
         }
 
         #endregion
@@ -56,8 +56,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.Displayed;
+                _angularWebDriver.WaitForAngular();
+                return _element.Displayed;
             }
         }
 
@@ -68,8 +68,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.Enabled;
+                _angularWebDriver.WaitForAngular();
+                return _element.Enabled;
             }
         }
 
@@ -81,8 +81,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.Location;
+                _angularWebDriver.WaitForAngular();
+                return _element.Location;
             }
         }
 
@@ -93,8 +93,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.Selected;
+                _angularWebDriver.WaitForAngular();
+                return _element.Selected;
             }
         }
 
@@ -105,8 +105,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.Size;
+                _angularWebDriver.WaitForAngular();
+                return _element.Size;
             }
         }
 
@@ -117,8 +117,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.TagName;
+                _angularWebDriver.WaitForAngular();
+                return _element.TagName;
             }
         }
 
@@ -130,8 +130,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             get
             {
-                this.angularWebDriver.WaitForAngular();
-                return this.element.Text;
+                _angularWebDriver.WaitForAngular();
+                return _element.Text;
             }
         }
 
@@ -140,8 +140,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void Clear()
         {
-            this.angularWebDriver.WaitForAngular();
-            this.element.Clear();
+            _angularWebDriver.WaitForAngular();
+            _element.Clear();
         }
 
         /// <summary>
@@ -149,8 +149,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void Click()
         {
-            this.angularWebDriver.WaitForAngular();
-            this.element.Click();
+            _angularWebDriver.WaitForAngular();
+            _element.Click();
         }
 
         /// <summary>
@@ -158,8 +158,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public string GetAttribute(string attributeName)
         {
-            this.angularWebDriver.WaitForAngular();
-            return this.element.GetAttribute(attributeName);
+            _angularWebDriver.WaitForAngular();
+            return _element.GetAttribute(attributeName);
         }
 
         /// <summary>
@@ -167,8 +167,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public string GetProperty(string propertyName)
         {
-            this.angularWebDriver.WaitForAngular();
-            return this.element.GetProperty(propertyName);
+            _angularWebDriver.WaitForAngular();
+            return _element.GetProperty(propertyName);
         }
 
         /// <summary>
@@ -176,8 +176,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public string GetCssValue(string propertyName)
         {
-            this.angularWebDriver.WaitForAngular();
-            return this.element.GetCssValue(propertyName);
+            _angularWebDriver.WaitForAngular();
+            return _element.GetCssValue(propertyName);
         }
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void SendKeys(string text)
         {
-            this.angularWebDriver.WaitForAngular();
-            this.element.SendKeys(text);
+            _angularWebDriver.WaitForAngular();
+            _element.SendKeys(text);
         }
 
         /// <summary>
@@ -194,8 +194,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// </summary>
         public void Submit()
         {
-            this.angularWebDriver.WaitForAngular();
-            this.element.Submit();
+            _angularWebDriver.WaitForAngular();
+            _element.Submit();
         }
 
         /// <summary>
@@ -208,10 +208,10 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             if (by is AngularBaseBy)
             {
-                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { this.angularWebDriver.RootElement, this.element };
+                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { _angularWebDriver.RootElement, _element };
             }
-            this.angularWebDriver.WaitForAngular();
-            return new AngularElement(this.angularWebDriver, this.element.FindElement(by));
+            _angularWebDriver.WaitForAngular();
+            return new AngularElement(_angularWebDriver, _element.FindElement(by));
         }
 
         /// <summary>
@@ -227,25 +227,25 @@ namespace WebAndWebApiAutomation.AngularSupport
         {
             if (by is AngularBaseBy)
             {
-                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { this.angularWebDriver.RootElement, this.element };
+                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { _angularWebDriver.RootElement, _element };
             }
-            this.angularWebDriver.WaitForAngular();
-            return new ReadOnlyCollection<AngularElement>(this.element.FindElements(by).Select(e => new AngularElement(this.angularWebDriver, e)).ToList());
+            _angularWebDriver.WaitForAngular();
+            return new ReadOnlyCollection<AngularElement>(_element.FindElements(by).Select(e => new AngularElement(_angularWebDriver, e)).ToList());
         }
 
         IWebElement ISearchContext.FindElement(By by)
         {
-            return this.FindElement(by);
+            return FindElement(by);
         }
 
         ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
         {
             if (by is AngularBaseBy)
             {
-                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { this.angularWebDriver.RootElement, this.element };
+                ((AngularBaseBy)by).AdditionalScriptArguments = new object[] { _angularWebDriver.RootElement, _element };
             }
-            this.angularWebDriver.WaitForAngular();
-            return new ReadOnlyCollection<IWebElement>(this.element.FindElements(by).Select(e => (IWebElement)new AngularElement(this.angularWebDriver, e)).ToList());
+            _angularWebDriver.WaitForAngular();
+            return new ReadOnlyCollection<IWebElement>(_element.FindElements(by).Select(e => (IWebElement)new AngularElement(_angularWebDriver, e)).ToList());
         }
 
         #endregion
@@ -257,8 +257,8 @@ namespace WebAndWebApiAutomation.AngularSupport
         /// <returns>The expression evaluated by Angular.</returns>
         public object Evaluate(string expression)
         {
-            this.angularWebDriver.WaitForAngular();
-            return this.angularWebDriver.ExecuteScript(BackingScripts.Evaluate, this.element, expression);
+            _angularWebDriver.WaitForAngular();
+            return _angularWebDriver.ExecuteScript(BackingScripts.Evaluate, _element, expression);
         }
     }
 }
