@@ -468,27 +468,6 @@ namespace WebAndWebApiAutomation
             }
         }
         /// <summary>
-        /// Executes JavaScript asynchronously in the context of the currently selected frame or window.
-        /// </summary>
-        /// <param name="script">The JavaScript code to execute.</param>
-        /// <param name="args">The arguments to the script.</param>
-        /// <returns>The value returned by the script.</returns>
-        public object ExecuteScript(string script, params object[] args)
-        {
-            try
-            {
-                return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteScript(script, args);
-            }
-            catch (WebAutomationException wea)
-            {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-        /// <summary>
         /// Executes JavaScript in the context of the currently selected frame or window.
         /// </summary>
         /// <param name="script">The JavaScript code to execute.</param>
@@ -511,6 +490,27 @@ namespace WebAndWebApiAutomation
         ///    if the arguments do not meet these criteria. The arguments will be made available
         ///    to the JavaScript via the "arguments" magic variable, as if the function were
         ///    called via "Function.apply"</remarks>
+        public object ExecuteScript(string script, params object[] args)
+        {
+            try
+            {
+                return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteScript(script, args);
+            }
+            catch (WebAutomationException wea)
+            {
+                throw wea;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.ToString());
+            }
+        }
+        /// <summary>
+        /// Executes JavaScript asynchronously in the context of the currently selected frame or window.
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
         public object ExecuteAsyncScript(string script, params object[] args)
         {
             try
