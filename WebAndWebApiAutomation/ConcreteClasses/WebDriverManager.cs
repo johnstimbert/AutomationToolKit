@@ -3,6 +3,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace WebAndWebApiAutomation
     /// <summary>
     /// Concrete implementation of IWebDriverManager interface to manage web drivers
     /// </summary>
-    internal sealed class WebDriverManager : IWebDriverManager, IJavaScriptExecutor
+    internal sealed class WebDriverManager : IWebDriverManager, IJavaScriptExecutor, IWrapsDriver
     {
         #region Constants
         private const string _chromeDriverName = "chromedriver.exe";
@@ -49,6 +50,7 @@ namespace WebAndWebApiAutomation
 
         private StructureValidator _structureValidator;
 
+        public IWebDriver WrappedDriver => GetActiveDriver();
 
         #region Constructors
         private WebDriverManager() { }
