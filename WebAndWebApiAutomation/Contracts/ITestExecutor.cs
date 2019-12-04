@@ -13,5 +13,10 @@ namespace WebAndWebApiAutomation
         /// <param name="testMethod"></param>
         /// <param name="webDriverManager"></param>
         void Execute(Action testMethod, IWebDriverManager webDriverManager);
+        /// <summary>
+        /// Returns formatted test results that can be written to a log file or elsewhere
+        /// </summary>
+        /// <returns>Formatted test results</returns>
+        string GetTestRunSummary();
     }
 }

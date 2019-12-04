@@ -82,8 +82,8 @@ namespace WebAndWebApiAutomation
         /// Finds and returns all elements matching the provided selector data 
         /// </summary>
         /// <param name="selectorData">Data to check for in the current DOM instance</param>
-        /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
-        /// <returns>ReadOnlyCollection<IWebElement</returns>
+        /// <param name="webDriverManager">This must be an initialized IWebDriver object navigated to the page being tested</param>
+        /// <returns>ReadOnlyCollection<IWebElement></IWebElement></returns>
         ReadOnlyCollection<IWebElement> GetAllElementsUsingMatchingSelectorData(SelectorData selectorData, IWebDriverManager webDriverManager);
         /// <summary>
         /// Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects
@@ -150,7 +150,7 @@ namespace WebAndWebApiAutomation
         /// <param name="webDriverManager"></param>
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebAutomationException"></exception>
-        void JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData);
+        IWebDriverManager JavaScriptClick(IWebDriverManager webDriverManager, SelectorData selectorData);
         /// <summary>
         /// Clears the text from the provided element after verifiying the element is visible
         /// </summary>

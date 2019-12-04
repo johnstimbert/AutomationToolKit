@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebAndWebApiAutomation.Exceptions;
 using static WebAndWebApiAutomation.WebAutomationEnums;
@@ -50,6 +51,7 @@ namespace WebAndWebApiAutomation.Tests
             }
 
             _webAutomation = null;
+            Thread.Sleep(2000);
         }
 
         [TestMethod]
