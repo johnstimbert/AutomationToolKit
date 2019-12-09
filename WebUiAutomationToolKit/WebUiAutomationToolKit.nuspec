@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>    
+    <authors>John Stimbert</authors>
+    <owners>John Stimbert</owners>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://brainstemsolutions.github.io/AutomationToolKit/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>https://brainstemsolutions.github.io/AutomationToolKit/ReleaseNotes.pdf.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>QaAutomation SleniumTools</tags>
+  </metadata>
+</package>

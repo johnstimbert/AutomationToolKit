@@ -146,6 +146,155 @@
                 <li>selectorData -> Object representing the frame to check</li>
             </ul>
         </li>
+        <br />
+        <li>
+            <b>IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, int nthParentElement = -1)</b>
+            <ul>
+                <li>Finds and returns the child IWebElement using the parameters provided, if none is found null is returned</li>
+                <li>parentSelectorData : Data to find the parent element with</li>
+                <li>childSelectorData : Data to find the child element with</li>
+                <li>nthParentElement : The Zero based position of the parent element to search with, this is optional</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>By CheckElementExistsReturnCssSelector(SelectorData selectorData)</b>
+            <ul>
+                <li>Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned</li>
+                <li>selectorData : Data to build the CssSelector with</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData)</b>
+            <ul>
+                <li>Finds and returns the IWebElement using the parameters provided, if none is found null is returned</li>
+                <li>selectorData : Data to build the CssSelector with</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool CheckElementsExist(SelectorDataSet selectorDataSet)</b>
+            <ul>
+                <li>Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data</li>
+                <li>selectorDataSet : Data to check for in the current DOM instance</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void Clear(SelectorData selectorData)</b>
+            <ul>
+                <li>Clears the text from the provided element after verifiying the element is visible</li>
+                <li>selectorData : Object representing the element to be cleared</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void Click(SelectorData selectorData)</b>
+            <ul>
+                <li>Clicks the provided element after verifying it exists and is clickable</li>
+                <li>selectorData : Object representing the element to click</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool DoesUrlContain(string text)</b>
+            <ul>
+                <li>Checks whether or not the current url contains the provided text</li>
+                <li>text : Text to look for in the current Url</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool DoesUrlContainUsingRegex(string pattern)</b>
+            <ul>
+                <li>Checks whether or not the current url contains the provided pattern using regex IsMatch</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>ReadOnlyCollection&lt;IWebElement&gt; GetAllElementsUsingMatchingSelectorData(SelectorData selectorData)</b>
+            <ul>
+                <li>Finds and returns all elements matching the provided selector data</li>
+                <li>selectorData : Data to check for in the current DOM instance</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void HighlightElement(SelectorData selectorData)</b>
+            <ul>
+                <li>Modifies the style associated with the selector data object provided to highlight the element on the page</li>
+                <li>selectorData : Object representing the element to highlight</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool IsElementDisplayed(SelectorData selectorData)</b>
+            <ul>
+                <li>Checks whether or not the provided element is visible(This requires IWebElement.Displayed evaluate to true)</li>
+                <li>selectorData : Object representing the element to check</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool IsElementEnabled(SelectorData selectorData)</b>
+            <ul>
+                <li>Checks whether or not the provided element is visible(This requires IWebElement.Enabled evaluate to true)</li>
+                <li>selectorData : Object representing the element to check</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>bool IsElementDisplayedAndEnabled(SelectorData selectorData)</b>
+            <ul>
+                <li>Checks whether or not the provided element is visible(This requires IWebElement.Displayed and IWebElement.Enabled to both evaluate to true)</li>
+                <li>selectorData : Object representing the element to check</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void JavaScriptClick(SelectorData selectorData)</b>
+            <ul>
+                <li>Clicks the element associated with the selector data object provided using a JavaScript query. This is useful when the element being clicked may be obstructed</li>
+                <li>selectorData : Object representing the element to highlight</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void MoveToElement(SelectorData selectorData)</b>
+            <ul>
+                <li>Clears the text from the provided element after verifiying the element is visible</li>
+                <li>selectorData : Object representing the element to move to</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void SendText(SelectorData selectorData, string textToEnter)</b>
+            <ul>
+                <li>Enters text into the provided element after verifying it exists and is visible</li>
+                <li>selectorData : Object representing the element to receive the text</li>
+                <li>textToEnter : Text that will be entered</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void SendTextWithDelay(SelectorData selectorData, string textToEnter, int delay = 500)</b>
+            <ul>
+                <li>Enters text into the provided element one character at a time with a delay between each after verifying it exists and is visible. Note: Only use this method to send text to elements that have autocomplete and require a delay on each letter typed.</li>
+                <li>selectorData : Object representing the element to receive the text</li>
+                <li>textToEnter : Text that will be entered</li>
+                <li>delay : Interval before each character is entered</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>void TakeScreenShot(string sreenShotPath, string screenShotName)</b>
+            <ul>
+                <li>Takes a screenshot and saves it in the provided path. The file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"</li>
+                <li>sreenShotPath : Path to save the screenshot to</li>
+                <li>screenShotName : Name of the screenshot file</li>
+            </ul>
+        </li>
     </ul>
 
 </body>
