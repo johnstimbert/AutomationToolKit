@@ -3,23 +3,23 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>WebAndWebApiAutomation - Docs</title>
+    <title>WebUiAutomationToolKit - Docs</title>
 </head>
 <body>
     <h1>Current Version is 1.1.1</h1>
     <br/>
-    <a href="WebAndWebApiAutomation.pdf">Download PDF</a>
+    <a href="WebUiAutomation.pdf">Download PDF</a>
     <br/>
-    <a href="ReleaseNote.pdf">Release notes</a>
+    <a href="ReleaseNotes.pdf">Release notes</a>
     <div>
         <h2>Package Contents</h2>
         <div>
-            <h3>WebAndWebApiAutomation.dll</h3>
+            <h3>WebUiAutomationToolKit.dll</h3>
             <p>The assembly that contains all class and interface definitions for this utility.</p>
         </div>
 
         <div>
-            <h3>WebAndWebApiAutomation.xml</h3>
+            <h3>WebUiAutomationToolKit.xml</h3>
             <p>Xml documentation file that contains all the summary method documentation for Visual Studio intellisense</p>
         </div>
     </div>
@@ -28,9 +28,9 @@
     <div>
         <h2>Public Objects</h2>
         <div>
-            <h3>WebAutomation</h3> 
-            <a href="WebAutomationMethods.html">Methods</a>
-            <p>Contains the utility and component instance creation methods for automating cross browser testing of a web site. This component is the only one that should be directly accessed and be 'newed up'.</p>
+            <h3>WebUiAutomation</h3> 
+            <a href="WebUiAutomationMethods.html">Methods</a>
+            <p>Contains the component instance creation methods for automating cross browser testing of a web site. This component is the only one that should be directly instantiated.</p>
 
             <ul style="list-style-type:none;">
                 <li><b><u>Constructors</u></b></li>
@@ -38,7 +38,7 @@
                 <li>
                     <ul>
                         <li>
-                            WebAutomation(string driverPath, int timeoutForWaitOverride)
+                            WebUiAutomation(string driverPath, int timeoutForWaitOverride)
                             <ul>
                                 <li>driverPath : This is the path where that driver service executables for each browser can be accessed from. This path is verified and, if it exists, will be checked for the appropriate executables.</li>
                                 <li>timeoutForWaitOverride : The default for this is 5 seconds and it is and optional parameter. It can be overridden by providing a positive, non-zero integer.</li>

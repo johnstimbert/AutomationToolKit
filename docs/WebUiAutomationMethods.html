@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>WebAutomation - Methods</title>
+</head>
+<body>
+    <a href="index.html"><h3>Home</h3></a>
+    <br />
+    <h3>WebAutomation - Methods</h3>
+    <ul>        
+        <br />
+        <li>
+            <b>IWebDriverManager GetIWebDriverManager()</b>
+            <ul>
+                <li>Creates and returns and instance of the IWebDriverManager used to create and manage IWebDriver objects</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>ILogger GetLogger(LoggerSettings loggerSettings)</b>
+            <ul>
+                <li>Creates and returns and instance of the ILogger used to write to a common log file</li>
+                <li>loggerSettings : Settings for the logger</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>ITestExecutor GetTestExecutor(bool collectTestData, string resultsPath</b>
+            <ul>
+                <li>Creates and returns and instance of the ITestExecutor used to execute tests and manage the results</li>
+                <li>collectTestData : Currently has no effect, false by default</li>
+                <li>resultsPath : Desrination path for screenshots and test results, null by default</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>string ParseInnerText(string htmlText)</b>
+            <ul>
+                <li>This method will remove html data from the innerText of a given element and return only text NOT go beyon the first element. This method will not parse the innerText of a child element passed in as part of a larger set</li>
+                <li>htmlText : Raw htmlText from an IWebElement that contains html to be removed</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b>List&lt;KeyValuePair&lt;By, WebAutomationEnums.NavigationResult&gt;&gt; TestLinkNavigationForAllAnchorsFoundInPage(IWebDriverManager webDriverManager)</b>
+            <ul>
+                <li>Validates that all the anchor tags found on the page the driver is currently navigated to. It returns the XPath By object and NavigationResult for every link found and tested</li>
+            </ul>
+        </li>
+    </ul>
+</body>
+</html>
