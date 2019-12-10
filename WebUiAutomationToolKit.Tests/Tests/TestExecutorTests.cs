@@ -39,7 +39,7 @@ namespace WebAndApiAutomation.Tests.Tests
 
             _driverManager = _webAutomation.GetIWebDriverManager();
             _logger = _webAutomation.GetLogger(_loggerSettings);
-            _testExecutor = _webAutomation.GetTestExecutor(false, _logPath);
+            _testExecutor = _webAutomation.GetTestExecutor(_logPath, false);
         }
 
         [TestCleanup]
