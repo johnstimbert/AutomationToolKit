@@ -16,6 +16,7 @@ namespace WebUiAutomationToolKit
             Class,
             Name,
             Type,
+            For,
             Href,
             Src,
             Title,
