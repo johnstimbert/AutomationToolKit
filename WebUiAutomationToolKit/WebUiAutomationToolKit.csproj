@@ -72,7 +72,6 @@
     <Compile Include="Exceptions\WebUiAutomationException.cs" />
     <Compile Include="Helpers\LogFileHelper.cs" />
     <Compile Include="Contracts\IWebDriverManager.cs" />
-    <Compile Include="Contracts\IWebUiAutomation.cs" />
     <Compile Include="ConcreteClasses\Logger.cs" />
     <Compile Include="ConcreteClasses\TestExecutor.cs" />
     <Compile Include="TestDataCollection\TestDataCollector.cs" />

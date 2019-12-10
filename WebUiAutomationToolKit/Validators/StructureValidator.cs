@@ -392,6 +392,7 @@ namespace WebUiAutomationToolKit.Validators
                 case HtmlAttributeType.Class:
                 case HtmlAttributeType.Name:
                 case HtmlAttributeType.Type:
+                case HtmlAttributeType.For:
                 case HtmlAttributeType.Href:
                 case HtmlAttributeType.Src:
                 case HtmlAttributeType.Title:
@@ -409,8 +410,7 @@ namespace WebUiAutomationToolKit.Validators
                     CssSelector = By.CssSelector($"{tag}");
                     break;
                 default:
-                    //Helper.Logger.Info($"[Structure Test] ==== Attribute type {selectorData.AttributeType} is not supported ====");
-                    break;
+                    throw new  WebUiAutomationException($"Attribute type {selectorData.AttributeType} is not supported");
             }
             
             return CssSelector;

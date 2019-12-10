@@ -4,4 +4,4 @@ nuget spec WebUiAutomationToolKit.csproj
 
 nuget pack WebUiAutomationToolKit.csproj -Prop Configuration=Release
 
-nuget push WebUiAutomationToolKit.2.0.0.nupkg oy2ilkyms2oig55gwc4apeylknfqm76edd7bmhs5glzs6e -Source https://api.nuget.org/v3/index.json
+nuget push WebUiAutomationToolKit.2.1.0.nupkg oy2ilkyms2oig55gwc4apeylknfqm76edd7bmhs5glzs6e -Source https://api.nuget.org/v3/index.json
