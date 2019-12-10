@@ -14,4 +14,8 @@
     <copyright>Copyright 2020</copyright>
     <tags>QaAutomation SleniumTools</tags>
   </metadata>
+  <!--<files>
+    <file src="bin\Release\WebAndWebApiAutomation.xml" target="lib\net49"/>
+    <file src="bin\Release\WebAndWebApiAutomation.dll" target="lib\net48"/>
+  </files>-->
 </package>

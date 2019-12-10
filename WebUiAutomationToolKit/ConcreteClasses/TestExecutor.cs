@@ -22,7 +22,7 @@ namespace WebUiAutomationToolKit
 
         private TestExecutor() { }
         
-        internal TestExecutor(Logger logger = null, bool collectTestData = false)
+        internal TestExecutor(string resultsPath, Logger logger = null, bool collectTestData = false)
         {
             _logger = logger;
             if (collectTestData)
@@ -31,7 +31,12 @@ namespace WebUiAutomationToolKit
 
                 if (_testRunId == null)
                     _testRunId = Guid.NewGuid();
-            }            
+            }
+
+            if (string.IsNullOrEmpty(resultsPath) || string.IsNullOrWhiteSpace(resultsPath))
+                throw new TestExecutorException("The resultsPath parameter cannot be null, empty or constain only whitespace");
+
+            _resultsPath = Path.Combine(resultsPath, DateTime.Now.ToString("MM.dd.yyyy_h:mm"));
         }
 
         #region Events and Event Delegates

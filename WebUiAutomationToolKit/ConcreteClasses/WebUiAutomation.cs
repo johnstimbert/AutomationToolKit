@@ -12,7 +12,7 @@ namespace WebUiAutomationToolKit
     /// <summary>
     /// This class contains the utility and component instance creation methods for automating cross browser testing of a web site
     /// </summary>
-    public sealed class WebUiAutomation : IWebUiAutomation
+    public sealed class WebUiAutomation
     {
         private readonly string _driverPath;
         private readonly int _timeoutForWait;
@@ -103,13 +103,14 @@ namespace WebUiAutomationToolKit
         /// Creates and returns and instance of the ITestExecutor used to execute tests and manage the results
         /// </summary>
         /// <param name="collectTestData">Enables the detailed collection of test data</param>
+        /// <param name="resultsPath"></param>
         /// <returns></returns>
-        public ITestExecutor GetTestExecutor(bool collectTestData = false)
+        public ITestExecutor GetTestExecutor(string resultsPath, bool collectTestData = false)
         {
             try
             {                
                 if (_testExecutorInstance == null)
-                    _testExecutorInstance = new TestExecutor(_loggerInstance, collectTestData);
+                    _testExecutorInstance = new TestExecutor(resultsPath, _loggerInstance, collectTestData);
 
                 return _testExecutorInstance;
             }
