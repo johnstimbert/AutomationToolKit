@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
-using OpenQA.Selenium.Interactions;
 using System;
 using System.ComponentModel;
 using System.IO;
