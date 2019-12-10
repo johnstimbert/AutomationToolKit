@@ -410,8 +410,7 @@ namespace WebUiAutomationToolKit.Validators
                     CssSelector = By.CssSelector($"{tag}");
                     break;
                 default:
-                    Helper.Logger.Info($"[Structure Test] ==== Attribute type {selectorData.AttributeType} is not supported ====");
-                    break;
+                    throw new  WebUiAutomationException($"Attribute type {selectorData.AttributeType} is not supported");
             }
             
             return CssSelector;

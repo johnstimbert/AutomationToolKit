@@ -36,6 +36,17 @@ namespace WebUiAutomationToolKit.WebAndApiAutomationObjects
         }
 
         /// <summary>
+        /// Use this contructor when creating a stand alone SelectorData object and the HtmlTagType enum does not contain your tag type
+        /// </summary>
+        public SelectorData(string name, string tag, HtmlAttributeType attType, string attValue)
+        {
+            Name = name;
+            TagType = tag;
+            AttributeType = attType;
+            AttributeValue = attValue;
+        }
+
+        /// <summary>
         /// Use this contructor when creating a SelectorData object that will be included as part of a SelectorDataSet
         /// </summary>
         public SelectorData(string name, HtmlAttributeType attType, string attValue)
