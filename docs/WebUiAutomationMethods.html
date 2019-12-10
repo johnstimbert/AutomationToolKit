@@ -27,10 +27,11 @@
         </li>
         <br />
         <li>
-            <b>ITestExecutor GetTestExecutor(bool collectTestData)</b>
+            <b>ITestExecutor GetTestExecutor(string resultsPath, bool collectTestData = false)</b>
             <ul>
                 <li>Creates and returns and instance of the ITestExecutor used to execute tests and manage the results</li>
                 <li>collectTestData : Passing true will enbale the built in test data collection module, false by default</li>
+                <li>resultsPath : This is where screenshots taken during failures will be saved</li>
                 <li>Calling ITestExecutor.GetTestSummary() at the end of a test run will return a detailed summary of the current run</li>
             </ul>
         </li>
