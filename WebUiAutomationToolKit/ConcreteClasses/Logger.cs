@@ -35,7 +35,7 @@ namespace WebUiAutomationToolKit
             _logFileName = loggerSettings.LogFileName ?? throw new LoggerException($"Log File Name Must Be Deinfed");
             _logFilePath = loggerSettings.LogFilePath ?? throw new LoggerException($"Log File Path Must Be Deinfed");
 
-            _dateFormatProperty = ValidateDateFormatValueBeingSet(loggerSettings.DateFormat);
+            _dateFormatProperty = loggerSettings.DateFormat;
             _generateFailureLog = loggerSettings.GenerateFailureLog;
             _appendDateToLogFile = loggerSettings.AppendDateToLogFile;
             _numberOfLogFilesToPreserve = loggerSettings.NumberOfLogFilesToPreserve;

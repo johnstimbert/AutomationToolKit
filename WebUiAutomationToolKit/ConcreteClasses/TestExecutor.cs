@@ -22,7 +22,7 @@ namespace WebUiAutomationToolKit
 
         private TestExecutor() { }
         
-        internal TestExecutor(Logger logger = null, bool collectTestData = false, string resultsPath = null)
+        internal TestExecutor(Logger logger = null, bool collectTestData = false)
         {
             _logger = logger;
             if (collectTestData)
@@ -31,13 +31,7 @@ namespace WebUiAutomationToolKit
 
                 if (_testRunId == null)
                     _testRunId = Guid.NewGuid();
-            }
-
-            if (resultsPath != null)
-            {
-                _resultsPath = Path.Combine(resultsPath, DateTime.Now.ToString("MM.dd.yyyy_h:mm"));
-            }
-            
+            }            
         }
 
         #region Events and Event Delegates
@@ -121,7 +115,7 @@ namespace WebUiAutomationToolKit
         }
 
         /// <summary>
-        /// Returns formatted test results that can be written to a log file or elsewhere
+        /// Returns formatted string of test results that can be written to a log file or elsewhere
         /// </summary>
         /// <returns>Formatted test results</returns>
         public string GetTestRunSummary()

@@ -102,15 +102,14 @@ namespace WebUiAutomationToolKit
         /// <summary>
         /// Creates and returns and instance of the ITestExecutor used to execute tests and manage the results
         /// </summary>
-        /// <param name="collectTestData"></param>
-        /// <param name="resultsPath"></param>
+        /// <param name="collectTestData">Enables the detailed collection of test data</param>
         /// <returns></returns>
-        public ITestExecutor GetTestExecutor(bool collectTestData, string resultsPath)
+        public ITestExecutor GetTestExecutor(bool collectTestData = false)
         {
             try
             {                
                 if (_testExecutorInstance == null)
-                    _testExecutorInstance = new TestExecutor(_loggerInstance, collectTestData, resultsPath);
+                    _testExecutorInstance = new TestExecutor(_loggerInstance, collectTestData);
 
                 return _testExecutorInstance;
             }

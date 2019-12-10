@@ -192,7 +192,8 @@
         <li>
             <b>void Click(SelectorData selectorData)</b>
             <ul>
-                <li>Clicks the provided element after verifying it exists and is clickable</li>
+                <li>Clicks the provided element after verifying it exists and is clickable</li
+                <li>This method will retry the click once after waiting 2 seconds after the first ElementClickInterceptedException is thrown</li>
                 <li>selectorData : Object representing the element to click</li>
             </ul>
         </li>

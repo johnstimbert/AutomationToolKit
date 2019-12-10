@@ -28,7 +28,7 @@ namespace WebUiAutomationToolKit
         /// <param name="collectTestData"></param>
         /// <param name="resultsPath"></param>
         /// <returns></returns>
-        ITestExecutor GetTestExecutor(bool collectTestData, string resultsPath);        
+        ITestExecutor GetTestExecutor(bool collectTestData);        
         /// <summary>
         /// This method will remove html data from the innerText of a given element and return only text NOT go beyon the first element. 
         /// This method will not parse the innerText of a child element passed in as part of a larger set
