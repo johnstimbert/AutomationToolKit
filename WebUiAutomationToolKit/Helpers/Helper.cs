@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Interactions;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -10,6 +11,7 @@ namespace WebUiAutomationToolKit.Helpers
 {
     internal static class Helper
     {
+        #region INTERNAL ONLY DO NOT EXPOSE
         internal static void TakeScreenShot(IWebDriver driver, string screenShotPath, string screenShotName)
         {
             if (!Directory.Exists(screenShotPath))
@@ -60,11 +62,7 @@ namespace WebUiAutomationToolKit.Helpers
 
             return m;
         }
-
-        #region INTERNAL ONLY DO NOT EXPOSE
-        /*
-         * Both of these methods are used by the structure validator class and should not be exposed outside of the assembly
-         */
+                
         internal static string GetEnumDescription(Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
