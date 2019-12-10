@@ -589,14 +589,24 @@ namespace WebUiAutomationToolKit
         /// Clicks the provided element after verifying it exists and is clickable
         /// </summary>
         /// <param name="selectorData">Object representing the element to click</param>
+        /// <remarks>This method will retry the click once after waiting 2 seconds after the first ElementClickInterceptedException is thrown</remarks>
         /// <exception cref="WebUiAutomationException"></exception>
         public void Click(SelectorData selectorData)
         {
             var manager = Helper.IsDriverNull(this);
             try
             {
-                var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
-                clickTarget.Click();
+                try
+                {
+                    var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                    clickTarget.Click();
+                }
+                catch (ElementClickInterceptedException)
+                {
+                    Thread.Sleep(2000);
+                    var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                    clickTarget.Click();
+                }
             }
             catch (Exception ex)
             {
