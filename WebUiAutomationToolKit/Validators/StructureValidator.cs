@@ -405,6 +405,8 @@ namespace WebUiAutomationToolKit.Validators
                     break;
                 case HtmlAttributeType.AttributeText_ExactMatch:
                 case HtmlAttributeType.AttributeText_Contains:
+                    CssSelector = By.CssSelector($"{tag}[{selectorData.AttributeType.ToString().ToLower()}='{selectorData.AttributeValue}']");
+                        break;
                 case HtmlAttributeType.InnerText_ExactMatch:
                 case HtmlAttributeType.InnerText_Contains:
                     CssSelector = By.CssSelector($"{tag}");
