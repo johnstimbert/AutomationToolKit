@@ -67,12 +67,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="NugetCommands.txt" />
-    <Content Include="TestDataFiles\swagger.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="TestDataFiles\Templates\CardTypes\MultiRowHorizontalListWithOverflow.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

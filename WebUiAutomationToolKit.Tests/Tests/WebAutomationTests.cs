@@ -32,13 +32,13 @@ namespace WebAndApiAutomation.Tests
         private static IWebDriverManager _driverManager;
         private readonly string _navUrlGoogle = "https://www.google.com/";
         private readonly string _navUrlSeleniumHq = "https://www.seleniumhq.org/";
-        private readonly string _screenShotPath = @"C:\ScreenShots";
+        private readonly string _screenShotPath = @"e:\ScreenShots";
 
         private const string _chromeDriverName = "chromedriver.exe";
         private const string _firefoxDriverName = "geckodriver.exe";
         private const string _ieDriverName = "IEDriverServer.exe";
                 
-        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebUiAutomationToolKit\bin\release";
+        private static readonly string _driverPath = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 
@@ -344,7 +344,7 @@ namespace WebAndApiAutomation.Tests
         }
 
         private string startingUrl = "https://www.seleniumhq.org/";
-        private string expectedUrl = "https://selenium.dev/projects/";
+        private string expectedUrl = "https://www.selenium.dev/projects/";
         private SelectorData _clickTarget = new SelectorData("SeleniumProjects", HtmlTagType.a, HtmlAttributeType.InnerText_ExactMatch, "Projects");
 
         [TestMethod]
