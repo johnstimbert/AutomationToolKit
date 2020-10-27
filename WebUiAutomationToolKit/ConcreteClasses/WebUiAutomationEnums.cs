@@ -135,8 +135,6 @@ namespace WebUiAutomationToolKit
         {
             Chrome,
             Firefox,
-            InternetExplorer,
-            Edge,
             None
         }
         

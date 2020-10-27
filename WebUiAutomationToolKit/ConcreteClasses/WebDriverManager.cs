@@ -99,19 +99,6 @@ namespace WebUiAutomationToolKit
                 _drivers[DriverType.Firefox].Quit();
                 _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
             }
-
-            if (HasInstance(DriverType.Edge) && _edgeOptions != null)
-            {
-                _drivers[DriverType.Edge].Quit();
-                _drivers[DriverType.Edge] = GetDriver(DriverType.Edge);
-            }
-
-            if (HasInstance(DriverType.InternetExplorer) && _internetExplorerOptions != null)
-            {
-                _drivers[DriverType.InternetExplorer].Quit();
-                _drivers[DriverType.InternetExplorer] = GetDriver(DriverType.InternetExplorer);
-            }
-
         }
        
         /// <summary>
@@ -991,18 +978,6 @@ namespace WebUiAutomationToolKit
                             throw new WebUiAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
 
                         webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, _firefoxOptions, _firefoxProfile);
-                        break;
-                    case DriverType.InternetExplorer:
-                        if (!File.Exists(Path.Combine(_driverPath, _ieDriverName)))
-                            throw new WebUiAutomationException($"The driver {_ieDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = IEDriverManager.Create_WebDriver_Instance(_driverPath, _internetExplorerOptions);
-                        break;
-                    case DriverType.Edge:
-                        if (!File.Exists(Path.Combine(_driverPath, _edgeDriverName)))
-                            throw new WebUiAutomationException($"The driver {_edgeDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, _edgeOptions);
                         break;
                 }
 
