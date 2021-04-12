@@ -32,7 +32,7 @@ namespace WebAndApiAutomation.Tests
         private static IWebDriverManager _driverManager;
         private readonly string _navUrlGoogle = "https://www.google.com/";
         private readonly string _navUrlSeleniumHq = "https://www.seleniumhq.org/";
-        private readonly string _interactionTestUrl = "https://www.verramobility.com/";
+        private readonly string _interactionTestUrl = "https://www.seleniumhq.org/";
         private readonly string _screenShotPath = @"e:\ScreenShots";
 
         private const string _chromeDriverName = "chromedriver.exe";
@@ -42,7 +42,7 @@ namespace WebAndApiAutomation.Tests
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 
-        private readonly SelectorData copyrightDiv = new SelectorData("CopyrightDiv", HtmlTagType.div, HtmlAttributeType.Class, "copyright");
+        private readonly SelectorData donatetDiv = new SelectorData("DonateDiv", HtmlTagType.div, HtmlAttributeType.Class, "donate-selenium-container");
 
         private static readonly SelectorData headerById = new SelectorData("headerById", HtmlTagType.div, HtmlAttributeType.Id,
                                                                 "header");
@@ -579,8 +579,8 @@ namespace WebAndApiAutomation.Tests
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_interactionTestUrl);
             Assert.IsNotNull(_driverManager, "Driver was null");
-            _driverManager.MoveToElement(copyrightDiv);
-            var element = _driverManager.CheckElementExistsReturnIWebElement(copyrightDiv);
+            _driverManager.MoveToElement(donatetDiv);
+            var element = _driverManager.CheckElementExistsReturnIWebElement(donatetDiv);
             Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
         }
 
@@ -610,7 +610,7 @@ namespace WebAndApiAutomation.Tests
 
             try
             {
-                _driverManager.MoveToElement(copyrightDiv);
+                _driverManager.MoveToElement(donatetDiv);
             }
             catch (WebUiAutomationException ex)
             {
@@ -917,8 +917,8 @@ namespace WebAndApiAutomation.Tests
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_interactionTestUrl);
             Assert.IsNotNull(_driverManager, "Driver was null");
-            _driverManager.MoveToElement(copyrightDiv);
-            var element = _driverManager.CheckElementExistsReturnIWebElement(copyrightDiv);
+            _driverManager.MoveToElement(donatetDiv);
+            var element = _driverManager.CheckElementExistsReturnIWebElement(donatetDiv);
             Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
         }
 
