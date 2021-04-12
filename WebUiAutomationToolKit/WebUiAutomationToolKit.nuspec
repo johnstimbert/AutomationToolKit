@@ -1,21 +1,17 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
     <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>    
+    <version>2.1.4</version>
+    <title>WebUiAutomationToolKit</title>
     <authors>John Stimbert</authors>
     <owners>John Stimbert</owners>
-    <license type="expression">Apache-2.0</license>
-    <projectUrl>https://brainstemsolutions.github.io/AutomationToolKit/</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>$description$</description>
+    <license type="expression">MIT</license>
+    <projectUrl>https://brainstemsolutions.github.io/AutomationToolKit/</projectUrl>
+    <description>Wraps the Selenium WebDriver and provides extended functionality to provide rapid development of web and web api automation test solutions</description>
     <releaseNotes>https://brainstemsolutions.github.io/AutomationToolKit/ReleaseNotes.pdf.</releaseNotes>
     <copyright>Copyright 2020</copyright>
-    <tags>QaAutomation SleniumTools</tags>
+    <tags>WebAutomation SeleniumTools</tags>
   </metadata>
-  <!--<files>
-    <file src="bin\Release\WebUiAutomationToolKit.xml" target="lib\net48"/>
-    <file src="bin\Release\WebUiAutomationToolKit.dll" target="lib\net48"/>
-  </files>-->
 </package>

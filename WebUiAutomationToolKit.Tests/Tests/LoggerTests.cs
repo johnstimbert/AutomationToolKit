@@ -17,10 +17,10 @@ namespace WebUiAutomationToolKit.Tests
 
         private const string _loggerTests = "Logger_Tests";
 
-        private const string _logPath = @"c:\logger";
+        private const string _logPath = @"e:\logger";
         private const string _baseLogFileName = "logger.txt";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = @"C:\Users\j_sti\Source\Repos\BrainStemSolutions\AutomationToolKit\WebUiAutomationToolKit\bin\release";
+        private static readonly string _driverPath = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         private ILogger _logger;
         
