@@ -16,6 +16,11 @@ namespace WebUiAutomationToolKit
     public interface IWebDriverManager
     {
         /// <summary>
+        /// Enables or disables DemoMode. If enabled each action will be preceded by a 2 second delay
+        /// </summary>
+        /// <param name="setting">true = on/false = off</param>
+        void DemoMode(bool setting);
+        /// <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>
         /// <param name="chromeOptions"></param>
