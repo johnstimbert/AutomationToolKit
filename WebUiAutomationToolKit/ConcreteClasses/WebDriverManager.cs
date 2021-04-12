@@ -70,7 +70,7 @@ namespace WebUiAutomationToolKit
         /// Enables or disables DemoMode. If enabled each action will be preceded by a 2 second delay
         /// </summary>
         /// <param name="setting">true = on/false = off</param>
-        public void DemoMode(bool setting)
+        public void EnableDemoMode(bool setting)
         {
             _demoMode = setting;
         }
