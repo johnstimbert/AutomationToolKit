@@ -558,6 +558,28 @@ namespace WebUiAutomationToolKit
         }
 
         /// <summary>
+        /// Takes a screenshot of an element in the current browsing context and saves it in the provided path. 
+        /// The file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"
+        /// </summary>
+        /// <param name="sreenShotPath">Path to save the screenshot to</param>
+        /// <param name="screenShotName">Name of the screenshot file</param>
+        /// <param name="selectorData">Element selector data to find screenshot target</param>
+        /// <exception cref="WebUiAutomationException"></exception>
+        public void TakeElementScreenShot(string sreenShotPath, string screenShotName, SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var element = CheckElementExistsReturnIWebElement(selectorData);
+                Helper.TakeElementScreenShot(sreenShotPath, screenShotName, element);
+            }
+            catch (Exception ex)
+            {
+                throw new WebUiAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
         /// Modifies the style associated with the selector data object provided to highlight the element on the page
         /// </summary>
         /// <param name="selectorData">Object representing the element to highlight</param>

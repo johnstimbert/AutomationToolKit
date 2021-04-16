@@ -271,5 +271,14 @@ namespace WebUiAutomationToolKit
         /// <param name="screenShotName">Name of the screenshot file</param>
         /// <exception cref="WebUiAutomationException"></exception>
         void TakeScreenShot(string sreenShotPath, string screenShotName);
+        /// <summary>
+        /// Takes a screenshot of an element in the current browsing context and saves it in the provided path. 
+        /// The file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"
+        /// </summary>
+        /// <param name="sreenShotPath">Path to save the screenshot to</param>
+        /// <param name="screenShotName">Name of the screenshot file</param>
+        /// <param name="selectorData">Element selector data to find screenshot target</param>
+        /// <exception cref="WebUiAutomationException"></exception>
+        void TakeElementScreenShot(string sreenShotPath, string screenShotName, SelectorData selectorData);
     }
 }

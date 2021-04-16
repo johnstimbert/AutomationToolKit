@@ -192,7 +192,7 @@
         <li>
             <b>void Click(SelectorData selectorData)</b>
             <ul>
-                <li>Clicks the provided element after verifying it exists and is clickable</li
+                <li>Clicks the provided element after verifying it exists and is clickable</li>
                 <li>This method will retry the click once after waiting 2 seconds after the first ElementClickInterceptedException is thrown</li>
                 <li>selectorData : Object representing the element to click</li>
             </ul>
@@ -302,6 +302,17 @@
             <ul>
                 <li>Enables or disables DemoMode. If enabled each action will be preceded by a 2 second delay</li>
                 <li>true = on/false = off</li>
+            </ul>
+        </li>
+        <br />
+        <li>
+            <b> void TakeElementScreenShot(string sreenShotPath, string screenShotName, SelectorData selectorData)</b>
+            <ul>
+                <li>Takes a screenshot of an element in the current browsing context and saves it in the provided path.</li>
+                <li>The file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"</li>
+                <li>sreenShotPath : Path to save the screenshot to</li>
+                <li>screenShotName : Name of the screenshot file</li>
+                <li>selectorData : Element selector data to find screenshot target</li>
             </ul>
         </li>
     </ul>
