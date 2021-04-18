@@ -21,6 +21,16 @@ namespace WebUiAutomationToolKit.Helpers
             ss.SaveAsFile(SSName, ScreenshotImageFormat.Jpeg);
         }
 
+        internal static void TakeElementScreenShot(string screenShotPath, string screenShotName, IWebElement element)
+        {
+            if (!Directory.Exists(screenShotPath))
+                Directory.CreateDirectory(screenShotPath);
+
+            var SSName = Path.Combine(screenShotPath, $"{screenShotName}_{DateTime.Now.ToFileTime()}.jpeg");
+            Screenshot ss = ((ITakesScreenshot)element).GetScreenshot();
+            ss.SaveAsFile(SSName, ScreenshotImageFormat.Jpeg);
+        }
+
         internal static IJavaScriptExecutor JavaScriptExecutor(IWebDriver driver)
         {
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;

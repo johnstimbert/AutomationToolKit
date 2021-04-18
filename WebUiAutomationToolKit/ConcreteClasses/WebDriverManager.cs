@@ -40,6 +40,7 @@ namespace WebUiAutomationToolKit
 
         private readonly int _timeoutForWait;
         private string _driverPath;
+        private bool _demoMode = false;
 
         private ChromeOptions _chromeOptions;
         private FirefoxOptions _firefoxOptions;
@@ -64,6 +65,15 @@ namespace WebUiAutomationToolKit
         #endregion
 
         #region IWebDriverManager Methods
+
+        /// <summary>
+        /// Enables or disables DemoMode. If enabled each action will be preceded by a 2 second delay
+        /// </summary>
+        /// <param name="setting">true = on/false = off</param>
+        public void EnableDemoMode(bool setting)
+        {
+            _demoMode = setting;
+        }
         /// <summary>
         /// Returns the currently active IWebDriver object
         /// </summary>
@@ -325,6 +335,8 @@ namespace WebUiAutomationToolKit
         /// <param name="url"></param>
         public void NavigateWithActiveDriver(string url)
         {
+            if(_demoMode)
+                Thread.Sleep(2000);
             try
             {
                 _drivers[_activeDriver].Navigate().GoToUrl(url);
@@ -346,6 +358,8 @@ namespace WebUiAutomationToolKit
         /// <param name="mainWindow"></param>
         public void CloseLastTabWithActiveDriver(string mainWindow)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             try
             {
                 _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last()).Close();
@@ -369,6 +383,8 @@ namespace WebUiAutomationToolKit
         /// <param name="targetTab"></param>
         public void CloseTabWithActiveDriver(string tabToClose, string targetTab)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             try
             {
                 _drivers[_activeDriver].SwitchTo().Window(tabToClose).Close();
@@ -390,6 +406,8 @@ namespace WebUiAutomationToolKit
         /// </summary>
         public void SwitchToLastTabWithActiveDriver()
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             try
             {
                 _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last());
@@ -413,6 +431,8 @@ namespace WebUiAutomationToolKit
         /// </summary>
         public void CloseAllTabsExceptCurrentWithActiveDriver()
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             try
             {
                 var currentWindow = _drivers[_activeDriver].CurrentWindowHandle;
@@ -481,6 +501,8 @@ namespace WebUiAutomationToolKit
         {
             try
             {
+                if (_demoMode)
+                    Thread.Sleep(2000);
                 return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteScript(script, args);
             }
             catch (WebUiAutomationException wea)
@@ -502,6 +524,8 @@ namespace WebUiAutomationToolKit
         {
             try
             {
+                if (_demoMode)
+                    Thread.Sleep(2000);
                 return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteAsyncScript(script, args);
             }
             catch (WebUiAutomationException wea)
@@ -534,12 +558,36 @@ namespace WebUiAutomationToolKit
         }
 
         /// <summary>
+        /// Takes a screenshot of an element in the current browsing context and saves it in the provided path. 
+        /// The file name is in the form of "{testMethodName}_{DateTime.Now}.jpeg"
+        /// </summary>
+        /// <param name="sreenShotPath">Path to save the screenshot to</param>
+        /// <param name="screenShotName">Name of the screenshot file</param>
+        /// <param name="selectorData">Element selector data to find screenshot target</param>
+        /// <exception cref="WebUiAutomationException"></exception>
+        public void TakeElementScreenShot(string sreenShotPath, string screenShotName, SelectorData selectorData)
+        {
+            var manager = Helper.IsDriverNull(this);
+            try
+            {
+                var element = CheckElementExistsReturnIWebElement(selectorData);
+                Helper.TakeElementScreenShot(sreenShotPath, screenShotName, element);
+            }
+            catch (Exception ex)
+            {
+                throw new WebUiAutomationException(ex.ToString());
+            }
+        }
+
+        /// <summary>
         /// Modifies the style associated with the selector data object provided to highlight the element on the page
         /// </summary>
         /// <param name="selectorData">Object representing the element to highlight</param>
         /// <exception cref="WebUiAutomationException"></exception>
         public void HighlightElement(SelectorData selectorData)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -560,6 +608,8 @@ namespace WebUiAutomationToolKit
         /// <exception cref="WebUiAutomationException"></exception>
         public void JavaScriptClick(SelectorData selectorData)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -580,6 +630,8 @@ namespace WebUiAutomationToolKit
         /// <exception cref="WebUiAutomationException"></exception>
         public void Click(SelectorData selectorData)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -609,6 +661,8 @@ namespace WebUiAutomationToolKit
         /// <exception cref="WebUiAutomationException"></exception>
         public void SendText(SelectorData selectorData, string textToEnter)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -653,6 +707,8 @@ namespace WebUiAutomationToolKit
         /// <exception cref="WebUiAutomationException"></exception>
         public void ClearText(SelectorData selectorData)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -672,6 +728,8 @@ namespace WebUiAutomationToolKit
         /// <exception cref="WebUiAutomationException"></exception>
         public void MoveToElement(SelectorData selectorData)
         {
+            if (_demoMode)
+                Thread.Sleep(2000);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -998,7 +1056,6 @@ namespace WebUiAutomationToolKit
 
             return true;
         }
-
         #endregion
     }
 }
