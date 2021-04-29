@@ -20,7 +20,7 @@ namespace WebAndApiAutomation.Tests.Tests
         private const string _logFileName = "logger.txt";
         private const string _failedTestLogFileName = "logger.txt_Failures";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+        private static readonly string _driverPath = null;// @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         [TestInitialize]
         public void BeforeEachTest()

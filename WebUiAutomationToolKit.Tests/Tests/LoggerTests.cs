@@ -20,7 +20,7 @@ namespace WebUiAutomationToolKit.Tests
         private const string _logPath = @"e:\logger";
         private const string _baseLogFileName = "logger.txt";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+        private static readonly string _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         private ILogger _logger;
         
@@ -77,7 +77,7 @@ namespace WebUiAutomationToolKit.Tests
             _logger = _webAutomation.GetLogger(_loggerSettings);
             _logger.Log(LogMessageType.TESTINFO, "Test Message");
 
-            Assert.IsTrue(File.Exists(Path.Combine(_logPath, _baseLogFileName)), $"The file {_baseLogFileName} was not founf in the path {_logPath}");
+            Assert.IsTrue(File.Exists(Path.Combine(_logPath, _baseLogFileName)), $"The file {_baseLogFileName} was not found in the path {_logPath}");
         }
 
         [TestMethod]
