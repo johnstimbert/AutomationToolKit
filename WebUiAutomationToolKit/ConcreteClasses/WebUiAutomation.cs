@@ -26,9 +26,10 @@ namespace WebUiAutomationToolKit
         /// <param name="driverPath">The path to the driver service executables</param>
         /// <param name="timeoutForWaitOverride">THis can be set to override the defauslt five (5) second timeout in the webdriver</param>
         /// <exception cref="WebUiAutomationException"></exception>
-        public WebUiAutomation(string driverPath, int timeoutForWaitOverride = 5)
+        public WebUiAutomation(string driverPath = null, int timeoutForWaitOverride = 5)
         {
-            driverPath = ValidateDriverPath(driverPath);
+            if(driverPath != null)
+                driverPath = ValidateDriverPath(driverPath);
 
             if (timeoutForWaitOverride <= 0)
                 timeoutForWaitOverride = 5;
@@ -60,7 +61,7 @@ namespace WebUiAutomationToolKit
             try
             {
                 if(_webDriverManagerInstance == null)
-                    _webDriverManagerInstance = new WebDriverManager(_driverPath, _timeoutForWait);
+                    _webDriverManagerInstance = new WebDriverManager(_timeoutForWait);
 
                 return _webDriverManagerInstance;
             }

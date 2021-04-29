@@ -55,9 +55,17 @@ namespace WebUiAutomationToolKit
         #region Constructors
         private WebDriverManager() { }
 
-        internal WebDriverManager(string driverPath, int timeoutForWaitOverride)
+        internal WebDriverManager(int timeoutForWaitOverride, string driverPath = null)
         {
-            _driverPath = driverPath;
+            if (driverPath != null)
+            {
+                _driverPath = driverPath;
+            }
+            else
+            {
+                _driverPath = $"{Directory.GetCurrentDirectory()}\\";
+            }
+
             _timeoutForWait = timeoutForWaitOverride;
             _structureValidator = new StructureValidator();
         }

@@ -37,8 +37,8 @@ namespace WebAndApiAutomation.Tests
 
         private const string _chromeDriverName = "chromedriver.exe";
         private const string _firefoxDriverName = "geckodriver.exe";
-                
-        private static readonly string _driverPath = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+
+        private static readonly string _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 
@@ -112,7 +112,7 @@ namespace WebAndApiAutomation.Tests
         public void BeforeEachTest()
         {
             if(_webAutomation == null)
-                _webAutomation = new WebUiAutomation(_driverPath, 10);
+               _webAutomation = new WebUiAutomation(_driverPath, 10);
 
             if(_driverManager == null)
                 _driverManager = _webAutomation.GetIWebDriverManager();
@@ -214,7 +214,8 @@ namespace WebAndApiAutomation.Tests
         [TestCategory(_driverTestCategory)]
         public void GetChromeDriver_GoodPath_NoDriverexe()
         {
-            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
+            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+            string badPath = path.Substring(0, path.IndexOf("bin"));
             try
             {
                 var webAutomation = new WebUiAutomation(badPath);
@@ -230,7 +231,8 @@ namespace WebAndApiAutomation.Tests
         [TestCategory(_driverTestCategory)]
         public void GetFirefoxDriver_GoodPath_NoDriverexe()
         {
-            string badPath = _driverPath.Substring(0, _driverPath.IndexOf("bin"));
+            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+            string badPath = path.Substring(0, path.IndexOf("bin"));
             try
             {
                 var webAutomation = new WebUiAutomation(badPath);
@@ -239,6 +241,40 @@ namespace WebAndApiAutomation.Tests
             catch (Exception ex)
             {
                 Assert.AreEqual($"The driver {_firefoxDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
+
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetChromeDriver_GoodPath_Driverexe()
+        {
+            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release\";
+            try
+            {
+                var webAutomation = new WebUiAutomation(path);
+                _driverManager.CreateDriverInstance(DriverType.Chrome);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual($"The driver {_chromeDriverName} was not found in the path {path}", ex.Message, $"Expected exception was not returned");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(_driverTestCategory)]
+        public void GetFirefoxDriver_GoodPath_Driverexe()
+        {
+            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release\";
+            try
+            {
+                var webAutomation = new WebUiAutomation(path);
+                _driverManager.CreateDriverInstance(DriverType.Firefox);
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual($"The driver {_firefoxDriverName} was not found in the path {path}", ex.Message, $"Expected exception was not returned");
             }
         }
 
@@ -305,7 +341,7 @@ namespace WebAndApiAutomation.Tests
         }
 
         private string startingUrl = "http://www.seleniumhq.org/";
-        private string expectedUrl = "http://www.selenium.dev/projects/";
+        private string expectedUrl = "https://www.selenium.dev/projects/";
         private SelectorData _clickTarget = new SelectorData("SeleniumProjects", HtmlTagType.a, HtmlAttributeType.InnerText_ExactMatch, "Projects");
 
         [TestMethod]
@@ -318,19 +354,21 @@ namespace WebAndApiAutomation.Tests
             _driverManager.Click(_clickTarget);
             Thread.Sleep(3000);
             Assert.AreEqual(expectedUrl, _driverManager.GetActiveDriverUrl(), $"Expected url was {expectedUrl}, found {_driverManager.GetActiveDriverUrl()}");
+
         }
 
         [TestMethod]
         [TestCategory(_driverInteractionTestCategory)]
         public void Click_Firefox()
         {
+            var ffexpectedUrl = "http://www.selenium.dev/projects/";//FF does not force https
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(startingUrl);
 
             _driverManager.Click(_clickTarget);
             Thread.Sleep(3000);
-            Assert.AreEqual(expectedUrl, _driverManager.GetActiveDriverUrl(), $"Expected url was {expectedUrl}, found {_driverManager.GetActiveDriverUrl()}");
+            Assert.AreEqual(ffexpectedUrl, _driverManager.GetActiveDriverUrl(), $"Expected url was {ffexpectedUrl}, found {_driverManager.GetActiveDriverUrl()}");
         }
 
         //[TestMethod]
@@ -778,6 +816,7 @@ namespace WebAndApiAutomation.Tests
         [TestCategory(_driverInteractionTestCategoryHeadless)]
         public void Click_Firefox_HeadlessMode()
         {
+            var ffexpectedUrl = "http://www.selenium.dev/projects/";//FF does not force https
             var options = GetFirefoxOptions();
             options.AddArgument("--headless");
             _driverManager.SetDriverOptions(null, options);
@@ -787,7 +826,7 @@ namespace WebAndApiAutomation.Tests
 
             _driverManager.Click(_clickTarget);
             Thread.Sleep(3000);
-            Assert.AreEqual(expectedUrl, _driverManager.GetActiveDriverUrl(), $"Expected url was {expectedUrl}, found {_driverManager.GetActiveDriverUrl()}");
+            Assert.AreEqual(ffexpectedUrl, _driverManager.GetActiveDriverUrl(), $"Expected url was {ffexpectedUrl}, found {_driverManager.GetActiveDriverUrl()}");
         }
 
         [TestMethod]
