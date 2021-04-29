@@ -138,11 +138,9 @@ namespace WebUiAutomationToolKit
                 if (_drivers == null)
                     _drivers = new Dictionary<DriverType, IWebDriver>();
 
-                if (HasInstance(driverType))
-                    throw new WebUiAutomationException($"Manager already contains an instance of DriverType {driverType}. " +
-                        $"Call QuitDriverInstance then create a new instance or use the existing driver instance");
+                if (!HasInstance(driverType))
+                    _drivers.Add(driverType, GetDriver(driverType));
 
-                _drivers.Add(driverType, GetDriver(driverType));
                 _activeDriver = driverType;
             }
             catch (WebUiAutomationException wea)
