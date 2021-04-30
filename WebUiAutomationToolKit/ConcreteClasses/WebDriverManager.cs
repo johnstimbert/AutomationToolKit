@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using WebUiAutomationToolKit.DriverFactory;
 using WebUiAutomationToolKit.Exceptions;
@@ -63,7 +64,7 @@ namespace WebUiAutomationToolKit
             }
             else
             {
-                _driverPath = $"{Directory.GetCurrentDirectory()}\\";
+                _driverPath = $"{Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)}";
             }
 
             _timeoutForWait = timeoutForWaitOverride;
