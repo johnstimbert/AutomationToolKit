@@ -97,12 +97,12 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Selenium.WebDriver.GeckoDriver.0.29.1\build\Selenium.WebDriver.GeckoDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.GeckoDriver.0.29.1\build\Selenium.WebDriver.GeckoDriver.targets'))" />
-    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.90.0.4430.2400\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.90.0.4430.2400\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.92.0.4515.10700\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.92.0.4515.10700\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
   <Import Project="..\packages\Selenium.WebDriver.GeckoDriver.0.29.1\build\Selenium.WebDriver.GeckoDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.GeckoDriver.0.29.1\build\Selenium.WebDriver.GeckoDriver.targets')" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(TargetDir)*" "E:\source\AutomationToolKit\WebUiAutomationToolKit.Tests\bin\Release\" /S /Y
 XCOPY "$(TargetDir)*" "E:\source\AutomationToolKit\WebUiAutomationToolKit.Tests\bin\Debug\" /S /Y</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.90.0.4430.2400\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.90.0.4430.2400\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.92.0.4515.10700\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.92.0.4515.10700\build\Selenium.WebDriver.ChromeDriver.targets')" />
 </Project>
