@@ -2,15 +2,15 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>2.2.0</version>
+    <version>2.2.2</version>
     <title>WebUiAutomationToolKit</title>
     <authors>John Stimbert</authors>
     <owners>John Stimbert</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <projectUrl>https://brainstemsolutions.github.io/AutomationToolKit/</projectUrl>
+    <projectUrl>https://johnstimbert.github.io/AutomationToolKit/</projectUrl>
     <description>Wraps the Selenium WebDriver and provides extended functionality to provide rapid development of web and web api automation test solutions</description>
-    <releaseNotes>https://brainstemsolutions.github.io/AutomationToolKit/ReleaseNotes.pdf.</releaseNotes>
+    <releaseNotes>https://johnstimbert.github.io/AutomationToolKit/ReleaseNotes.pdf</releaseNotes>
     <copyright>Copyright 2020</copyright>
     <tags>WebAutomation SeleniumTools</tags>
   </metadata>
