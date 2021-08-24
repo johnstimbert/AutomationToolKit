@@ -644,6 +644,7 @@ namespace WebUiAutomationToolKit
             {
                 try
                 {
+                    GetActiveDriver().WaitForElementExists(_structureValidator.BuildCssSelectorBy(selectorData), manager.GetWait());
                     var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
                     clickTarget.Click();
                 }
