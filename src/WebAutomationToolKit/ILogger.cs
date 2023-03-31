@@ -1,7 +1,7 @@
 ﻿
-using static WebUiAutomationToolKit.WebUiAutomationEnums;
+using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebUiAutomationToolKit
+namespace WebAutomationToolKit
 {
     /// <summary>
     /// Method definition for objects implementing the ILogger interface

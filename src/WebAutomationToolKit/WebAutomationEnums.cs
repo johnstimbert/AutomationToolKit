@@ -1,9 +1,9 @@
-﻿namespace WebUiAutomationToolKit
+﻿namespace WebAutomationToolKit
 {
     /// <summary>
     /// Enum definitions used for method interaction
     /// </summary>
-    public class WebUiAutomationEnums
+    public class WebAutomationEnums
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public enum HtmlAttributeType
