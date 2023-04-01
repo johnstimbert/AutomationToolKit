@@ -1,8 +1,19 @@
 name: CI Workflow
 
 on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
   check_run:
-    types: [rerequested, completed]
+    types: [requested_action, rerequested, completed, created]
 
 jobs:
   build:
