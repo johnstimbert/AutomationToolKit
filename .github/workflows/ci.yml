@@ -12,8 +12,10 @@ on:
         - info
         - warning
         - debug
-  check_run:
-    types: [requested_action, rerequested, completed, created]
+  push:
+    branches:
+      - 'master'
+      - 'feature/**'
 
 jobs:
   build:
