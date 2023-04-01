@@ -1,6 +1,4 @@
 ﻿using OpenQA.Selenium.Firefox;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
 
 namespace WebAutomationToolKit.DriverManagers
 {
