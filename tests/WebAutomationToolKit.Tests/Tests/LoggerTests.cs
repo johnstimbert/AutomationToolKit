@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WebAutomationToolKit;
 using WebAutomationToolKit.Exceptions;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebUiAutomationToolKit.Tests
+namespace WebAutomationToolKit.Tests
 {
     [TestClass]
     public class LoggerTests

@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace WebUiAutomationToolKit.Tests
+﻿namespace WebAutomationToolKit.Tests
 {
     public static class LoggerTestHelpers
     {

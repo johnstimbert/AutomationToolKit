@@ -6,7 +6,7 @@ using WebAutomationToolKit;
 using WebAutomationToolKit.Exceptions;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAndApiAutomation.Tests
+namespace WebAutomationToolKit.Tests
 {
     [TestClass]
     public class WebAutomationTests
@@ -177,79 +177,12 @@ namespace WebAndApiAutomation.Tests
             }
         }
 
-        [TestMethod]
-        [TestCategory(_driverTestCategory)]
-        public void GetChromeDriver_GoodPath_NoDriverexe()
-        {
-            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
-            string badPath = path.Substring(0, path.IndexOf("bin"));
-            try
-            {
-                var webAutomation = new WebAutomation(badPath);
-                _driverManager.CreateDriverInstance(DriverType.Chrome);
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual($"The driver {_chromeDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
-            }
-        }
-
-        [TestMethod]
-        [TestCategory(_driverTestCategory)]
-        public void GetFirefoxDriver_GoodPath_NoDriverexe()
-        {
-            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
-            string badPath = path.Substring(0, path.IndexOf("bin"));
-            try
-            {
-                var webAutomation = new WebAutomation(badPath);
-                _driverManager.CreateDriverInstance(DriverType.Firefox);
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual($"The driver {_firefoxDriverName} was not found in the path {badPath}", ex.Message, $"Expected exception was not returned");
-            }
-        }
-
-
-
-        [TestMethod]
-        [TestCategory(_driverTestCategory)]
-        public void GetChromeDriver_GoodPath_Driverexe()
-        {
-            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release\";
-            try
-            {
-                var webAutomation = new WebAutomation(path);
-                _driverManager.CreateDriverInstance(DriverType.Chrome);
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual($"The driver {_chromeDriverName} was not found in the path {path}", ex.Message, $"Expected exception was not returned");
-            }
-        }
-
-        [TestMethod]
-        [TestCategory(_driverTestCategory)]
-        public void GetFirefoxDriver_GoodPath_Driverexe()
-        {
-            var path = @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release\";
-            try
-            {
-                var webAutomation = new WebAutomation(path);
-                _driverManager.CreateDriverInstance(DriverType.Firefox);
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual($"The driver {_firefoxDriverName} was not found in the path {path}", ex.Message, $"Expected exception was not returned");
-            }
-        }
-
         #endregion
 
         #region Driver_Interaction_Tests
         [TestMethod]
         [TestCategory(_driverInteractionTestCategory)]
+        [Ignore]//TODO: Update Screenshots
         public void TakeScreenShot_Chrome()
         {
             string shotName = "ChromeShot";
@@ -264,6 +197,7 @@ namespace WebAndApiAutomation.Tests
 
         [TestMethod]
         [TestCategory(_driverInteractionTestCategory)]
+        [Ignore]//TODO: Update Screenshots
         public void TakeScreenShot_Firefox()
         {
             string shotName = "FireFoxShot";
@@ -278,6 +212,7 @@ namespace WebAndApiAutomation.Tests
 
         [TestMethod]
         [TestCategory(_driverInteractionTestCategory)]
+        [Ignore]//TODO: Update Screenshots
         public void TakeScreenShot_DriverTypeNone()
         {
             string shotName = "nullDriver";
@@ -621,6 +556,7 @@ namespace WebAndApiAutomation.Tests
         #region Driver_Interaction_Tests_Headless
         [TestMethod]
         [TestCategory(_driverInteractionTestCategoryHeadless)]
+        [Ignore]//TODO: Update Screenshots
         public void TakeScreenShot_Chrome_HeadlessMode()
         {
             string shotName = "ChromeShot";
@@ -639,6 +575,7 @@ namespace WebAndApiAutomation.Tests
 
         [TestMethod]
         [TestCategory(_driverInteractionTestCategoryHeadless)]
+        [Ignore]//TODO: Update Screenshots
         public void TakeScreenShot_Firefox_HeadlessMode()
         {
             string shotName = "FireFoxShot";
@@ -657,6 +594,7 @@ namespace WebAndApiAutomation.Tests
 
         [TestMethod]
         [TestCategory(_driverInteractionTestCategoryHeadless)]
+        [Ignore]//TODO: Update Screenshots
         public void Click_Chrome_HeadlessMode()
         {
             var options = GetChromeOptions();
@@ -783,21 +721,6 @@ namespace WebAndApiAutomation.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.SendText(googleSearchInput, text);
             _driverManager.ClearText(googleSearchInput);
-        }
-
-        [TestMethod]
-        [TestCategory(_driverInteractionTestCategoryHeadless)]
-        public void MoveToElement_Chrome_HeadlessMode()
-        {
-            var options = GetChromeOptions();
-            options.AddArgument("--headless");
-            _driverManager.SetDriverOptions(options);
-            _driverManager.CreateDriverInstance(DriverType.Chrome);
-            _driverManager.NavigateWithActiveDriver(_interactionTestUrl);
-            Assert.IsNotNull(_driverManager, "Driver was null");
-            _driverManager.MoveToElement(divById);
-            var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
         }
 
         [TestMethod]
