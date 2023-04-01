@@ -49,10 +49,8 @@ jobs:
         id: setup-chrome
       - run: |
           echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
-          chrome --version
       - run: |
           echo Installed chromium path: ${{ steps.setup-chrome.outputs.chrome-path }}
-          chrome --path
       - name: Install Gecko driver
         uses: browser-actions/setup-geckodriver@latest
         #with:
