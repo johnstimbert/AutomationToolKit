@@ -56,7 +56,6 @@ jobs:
         #with:
           #token: ${{ secrets.GITHUB_TOKEN }}
       - run: geckodriver --version
-      - run: geckodriver --path
       - name: Test
         run: dotnet test --no-restore --verbosity normal
       - name: Upload dotnet test results
