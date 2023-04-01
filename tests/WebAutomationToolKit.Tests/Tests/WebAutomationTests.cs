@@ -2,7 +2,6 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using WebAutomationToolKit;
 using WebAutomationToolKit.Exceptions;
 using static WebAutomationToolKit.WebAutomationEnums;
 
@@ -28,11 +27,6 @@ namespace WebAutomationToolKit.Tests
         private readonly string _navUrlSeleniumDev = "https://www.selenium.dev/";
         private readonly string _interactionTestUrl = "https://www.selenium.dev/";
         private readonly string _screenShotPath = @"e:\ScreenShots";
-
-        private const string _chromeDriverName = "chromedriver.exe";
-        private const string _firefoxDriverName = "geckodriver.exe";
-
-        private static readonly string _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 

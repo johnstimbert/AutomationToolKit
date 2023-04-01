@@ -20,10 +20,12 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest    
+    runs-on: windows-latest
     strategy:
       matrix:
         dotnet-version: [ '6.0.x' ]
+        firefox: [ 'latest' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -51,10 +53,7 @@ jobs:
           echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
       - run: |
           echo Installed chromium path: ${{ steps.setup-chrome.outputs.chrome-path }}
-      - name: Install Gecko driver
-        uses: browser-actions/setup-geckodriver@latest
-        #with:
-          #token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: browser-actions/setup-geckodriver@latest
       - run: geckodriver --version
       - name: Test
         run: dotnet test --no-restore --verbosity normal
