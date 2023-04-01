@@ -32,6 +32,19 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: latest
+        id: setup-chrome
+      - run: |
+          echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+          chrome --version
+      - name: Install Gecko driver
+        uses: browser-actions/setup-geckodriver@latest
+        #with:
+          #token: ${{ secrets.GITHUB_TOKEN }}
+      - run: geckodriver --version
       - name: Test
         run: dotnet test --no-restore --verbosity normal
       - name: Upload dotnet test results
