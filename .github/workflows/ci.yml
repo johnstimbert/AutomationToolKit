@@ -1,21 +1,8 @@
 name: CI Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-        - info
-        - warning
-        - debug
-  push:
-    branches:
-      - 'master'
-      - 'feature/**'
+  pull_request:
+   types: [opened, reopened, review_requested]
 
 jobs:
   build:
@@ -43,23 +30,24 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: latest
-        id: setup-chrome
-      - run: |
-          echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
-      - run: |
-          echo Installed chromium path: ${{ steps.setup-chrome.outputs.chrome-path }}
-      - uses: browser-actions/setup-geckodriver@latest
-      - run: geckodriver --version
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
-      - name: Upload dotnet test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: dotnet-results-${{ matrix.dotnet-version }}
-          path: TestResults-${{ matrix.dotnet-version }}
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
+      #Testing will target a grid deployment that is TBD until then test are run locally
+      #- name: Install Chrome
+      #  uses: browser-actions/setup-chrome@v1
+      #  with:
+      #    chrome-version: latest
+      #  id: setup-chrome
+      #- run: |
+      #    echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+      #- run: |
+      #    echo Installed chromium path: ${{ steps.setup-chrome.outputs.chrome-path }}
+      #- uses: browser-actions/setup-geckodriver@latest
+      #- run: geckodriver --version
+      #- name: Test
+      #  run: dotnet test --no-restore --verbosity normal
+      #- name: Upload dotnet test results
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: dotnet-results-${{ matrix.dotnet-version }}
+      #    path: TestResults-${{ matrix.dotnet-version }}
+      #  # Use always() to always run this step to publish test results when there are test failures
+      #  if: ${{ always() }}
