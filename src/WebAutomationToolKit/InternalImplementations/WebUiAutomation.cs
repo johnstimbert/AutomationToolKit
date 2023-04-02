@@ -1,11 +1,8 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.Validators;
 using static WebAutomationToolKit.WebAutomationEnums;
-using System.IO;
 
 namespace WebAutomationToolKit
 {

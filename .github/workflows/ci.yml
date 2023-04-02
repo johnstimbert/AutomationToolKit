@@ -1,0 +1,53 @@
+name: CI Workflow
+
+on:
+  pull_request:
+   types: [opened, reopened, review_requested]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+        firefox: [ 'latest' ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}          
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      #Testing will target a grid deployment that is TBD until then test are run locally
+      #- name: Install Chrome
+      #  uses: browser-actions/setup-chrome@v1
+      #  with:
+      #    chrome-version: latest
+      #  id: setup-chrome
+      #- run: |
+      #    echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+      #- run: |
+      #    echo Installed chromium path: ${{ steps.setup-chrome.outputs.chrome-path }}
+      #- uses: browser-actions/setup-geckodriver@latest
+      #- run: geckodriver --version
+      #- name: Test
+      #  run: dotnet test --no-restore --verbosity normal
+      #- name: Upload dotnet test results
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: dotnet-results-${{ matrix.dotnet-version }}
+      #    path: TestResults-${{ matrix.dotnet-version }}
+      #  # Use always() to always run this step to publish test results when there are test failures
+      #  if: ${{ always() }}
