@@ -3,9 +3,15 @@
     {
       "src": [
         {
-          "files": ["src/WebAutomationToolKit/**.csproj" ],
+          "files": [ "src/WebAutomationToolKit/**.csproj" ],
           "src": "../"
         }
+      ],
+      "exclude": [
+        "**/bin/**",
+        "**/obj/**",
+        "_site/**",
+        "**/InternalImplementations/**"
       ],
       "dest": "api",
       "properties": {

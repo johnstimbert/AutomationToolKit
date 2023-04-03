@@ -1,4 +1,5 @@
 ﻿using WebAutomationToolKit.Exceptions;
+using WebAutomationToolKit.InternalImplementations;
 
 namespace WebAutomationToolKit.TestDataCollection
 {

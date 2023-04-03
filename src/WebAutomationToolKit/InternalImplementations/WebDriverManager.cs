@@ -13,7 +13,7 @@ using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.Validators;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit
+namespace WebAutomationToolKit.InternalImplementations
 {
     /// <summary>
     /// Concrete implementation of IWebDriverManager interface to manage web drivers

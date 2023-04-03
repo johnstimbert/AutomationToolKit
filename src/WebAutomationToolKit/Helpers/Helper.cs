@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using WebAutomationToolKit.Exceptions;
+using WebAutomationToolKit.InternalImplementations;
 
 namespace WebAutomationToolKit.Helpers
 {

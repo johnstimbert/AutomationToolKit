@@ -4,7 +4,7 @@ using WebAutomationToolKit.Contracts;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Validators;
 
-namespace WebAutomationToolKit.ConcreteClasses
+namespace WebAutomationToolKit.InternalImplementations
 {    
     internal sealed class DomTree : IDomTree
     {

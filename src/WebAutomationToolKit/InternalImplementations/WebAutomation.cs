@@ -4,7 +4,7 @@ using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.Validators;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit
+namespace WebAutomationToolKit.InternalImplementations
 {
     /// <summary>
     /// This class contains the utility and component instance creation methods for automating cross browser testing of a web site

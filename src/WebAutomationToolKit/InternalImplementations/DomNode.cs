@@ -6,7 +6,7 @@ using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.Contracts;
 
-namespace WebAutomationToolKit
+namespace WebAutomationToolKit.InternalImplementations
 {
     internal sealed class DomNode : IDomNode
     {

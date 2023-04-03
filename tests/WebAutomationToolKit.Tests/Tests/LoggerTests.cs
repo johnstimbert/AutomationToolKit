@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebAutomationToolKit.Exceptions;
+using WebAutomationToolKit.InternalImplementations;
 using static WebAutomationToolKit.WebAutomationEnums;
 
 namespace WebAutomationToolKit.Tests

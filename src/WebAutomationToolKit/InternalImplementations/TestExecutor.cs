@@ -3,7 +3,7 @@ using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.TestDataCollection;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit
+namespace WebAutomationToolKit.InternalImplementations
 {
     /// <summary>
     /// Concrete implementation of ITestExecutor interface to manage test execution

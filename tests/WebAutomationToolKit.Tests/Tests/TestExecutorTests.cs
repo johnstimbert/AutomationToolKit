@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebAutomationToolKit;
+using WebAutomationToolKit.InternalImplementations;
 
 namespace WebAndApiAutomation.Tests.Tests
 {

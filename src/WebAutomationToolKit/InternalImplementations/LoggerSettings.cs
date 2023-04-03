@@ -7,8 +7,10 @@
     {
         /// <summary>
         /// Defines the date format to be used, must be a format that would be accepted by the DateTime.Now.ToString("G") method
-        /// The default is "MM_dd_yyyy".
         /// </summary>
+        /// <description>
+        /// The default is "MM_dd_yyyy".
+        /// </description
         public string DateFormat { get; set; } = "MM_dd_yyyy";
         /// <summary>
         /// Defiens the number of log files to preserve.
