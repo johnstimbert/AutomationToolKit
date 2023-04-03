@@ -57,7 +57,7 @@ namespace WebAutomationToolKit
             }
             else
             {
-                _driverPath = $"{Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)}";
+                _driverPath = $"{Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().ToString()).LocalPath)}";
             }
 
             _timeoutForWait = timeoutForWaitOverride;
