@@ -74,7 +74,7 @@ namespace WebAutomationToolKit
         /// Removes the SelectorData object from the collection matching name value provided
         /// </summary>
         /// <param name="name">Name to search for, not case sensitive</param>
-        /// <exception cref="WebUiAutomationException"/>
+        /// <exception cref="WebAutomationException"/>
         public void RemoveSelectorDataByName(string name)
         {
             var toBeReomved = SelectorDataItems.FirstOrDefault(x => x.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
@@ -89,7 +89,7 @@ namespace WebAutomationToolKit
         /// NOTE: The tag type on the item being added will be overridden using the value set in the HtmlTag property
         /// </summary>
         /// <param name="selectorDataToAdd">Object to add</param>
-        /// <exception cref="WebUiAutomationException"/>
+        /// <exception cref="WebAutomationException"/>
         public void AddSelectorDataByName(SelectorData selectorDataToAdd)
         {
             var dupe = SelectorDataItems.FirstOrDefault(x => x.Name.Equals(selectorDataToAdd.Name, StringComparison.CurrentCultureIgnoreCase));

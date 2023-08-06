@@ -6,7 +6,7 @@ using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Helpers;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit
+namespace WebAutomationToolKit.InternalImplementations
 {
 
     /// <summary>

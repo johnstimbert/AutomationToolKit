@@ -13,7 +13,7 @@ using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.Validators;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit
+namespace WebAutomationToolKit.InternalImplementations
 {
     /// <summary>
     /// Concrete implementation of IWebDriverManager interface to manage web drivers
@@ -57,7 +57,7 @@ namespace WebAutomationToolKit
             }
             else
             {
-                _driverPath = $"{Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)}";
+                _driverPath = $"{Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().ToString()).LocalPath)}";
             }
 
             _timeoutForWait = timeoutForWaitOverride;
