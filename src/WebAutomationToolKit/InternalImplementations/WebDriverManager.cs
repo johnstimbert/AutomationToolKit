@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -26,27 +26,26 @@ namespace WebAutomationToolKit.InternalImplementations
 
         #endregion
 
-        private Dictionary<DriverType, IWebDriver> _drivers;
-        private WebDriverWait _wait;
+        private Dictionary<DriverType, IWebDriver>? _drivers;
+        private WebDriverWait _wait = null!;
         private DriverType _activeDriver = DriverType.None;
 
         private readonly int _timeoutForWait;
-        private string _driverPath;
+        private string? _driverPath;
         private bool _demoMode = false;
 
-        private ChromeOptions _chromeOptions;
-        private FirefoxOptions _firefoxOptions;
-        private EdgeOptions _edgeOptions;
+        private ChromeOptions? _chromeOptions;
+        private FirefoxOptions? _firefoxOptions;
+        private EdgeOptions? _edgeOptions;
 
-        private FirefoxProfile _firefoxProfile;
+        private FirefoxProfile? _firefoxProfile;
 
         private StructureValidator _structureValidator;
 
 
         #region Constructors
-        private WebDriverManager() { }
 
-        internal WebDriverManager(int timeoutForWaitOverride, string driverPath = null)
+        internal WebDriverManager(int timeoutForWaitOverride, string? driverPath = null)
         {
             _driverPath = driverPath; // null = delegate driver resolution to Selenium Manager
             _timeoutForWait = timeoutForWaitOverride;
@@ -79,8 +78,8 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="firefoxOptions"></param>
         /// <param name="internetExplorerOptions"></param>
         /// <param name="edgeOptions"></param>
-        public void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
-            EdgeOptions edgeOptions = null)
+        public void SetDriverOptions(ChromeOptions? chromeOptions = null, FirefoxOptions? firefoxOptions = null,
+            EdgeOptions? edgeOptions = null)
         {
             _chromeOptions = chromeOptions;
             _firefoxOptions = firefoxOptions;
@@ -90,14 +89,14 @@ namespace WebAutomationToolKit.InternalImplementations
             //If they are and the options objcts are not null, quit the existing instance and create a new one.
             if (HasInstance(DriverType.Chrome) && _chromeOptions != null)
             {
-                _drivers[DriverType.Chrome].Quit();
-                _drivers[DriverType.Chrome] = GetDriver(DriverType.Chrome);
+                _drivers![DriverType.Chrome].Quit();
+                _drivers![DriverType.Chrome] = GetDriver(DriverType.Chrome);
             }
 
             if (HasInstance(DriverType.Firefox) && _firefoxOptions != null)
             {
-                _drivers[DriverType.Firefox].Quit();
-                _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
+                _drivers![DriverType.Firefox].Quit();
+                _drivers![DriverType.Firefox] = GetDriver(DriverType.Firefox);
             }
         }
        
@@ -111,8 +110,8 @@ namespace WebAutomationToolKit.InternalImplementations
 
             if (HasInstance(DriverType.Firefox) && _firefoxProfile != null)
             { 
-                _drivers[DriverType.Firefox].Quit();
-                _drivers[DriverType.Firefox] = GetDriver(DriverType.Firefox);
+                _drivers![DriverType.Firefox].Quit();
+                _drivers![DriverType.Firefox] = GetDriver(DriverType.Firefox);
             }
         }
        
@@ -152,7 +151,7 @@ namespace WebAutomationToolKit.InternalImplementations
                     throw new WebAutomationException($"Manager does not contain an instance of DriverType {driverType}. " +
                         $"Call CreateDriverInstance to create a new driver instance");
 
-                _drivers[driverType].Quit();
+                _drivers![driverType].Quit();
                 _drivers.Remove(driverType);
 
                 if (_drivers.Count == 0)
@@ -209,7 +208,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                return _drivers[_activeDriver].PageSource;
+                return _drivers![_activeDriver].PageSource;
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -225,7 +224,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                return _drivers[_activeDriver].Title;
+                return _drivers![_activeDriver].Title;
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -241,7 +240,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                return _drivers[_activeDriver].Url;
+                return _drivers![_activeDriver].Url;
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -257,7 +256,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                return _drivers[_activeDriver].CurrentWindowHandle;
+                return _drivers![_activeDriver].CurrentWindowHandle;
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -273,7 +272,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                return _drivers[_activeDriver].WindowHandles;
+                return _drivers![_activeDriver].WindowHandles;
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -291,7 +290,7 @@ namespace WebAutomationToolKit.InternalImplementations
                 Thread.Sleep(2000);
             try
             {
-                _drivers[_activeDriver].Navigate().GoToUrl(url);
+                _drivers![_activeDriver].Navigate().GoToUrl(url);
                 Thread.Sleep(2000);                
             }
             catch (Exception ex) when (ex is not WebAutomationException)
@@ -310,8 +309,8 @@ namespace WebAutomationToolKit.InternalImplementations
                 Thread.Sleep(2000);
             try
             {
-                _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last()).Close();
-                _drivers[_activeDriver].SwitchTo().Window(mainWindow);
+                _drivers![_activeDriver].SwitchTo().Window(_drivers![_activeDriver].WindowHandles.Last()).Close();
+                _drivers![_activeDriver].SwitchTo().Window(mainWindow);
                 Thread.Sleep(1000);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
@@ -331,8 +330,8 @@ namespace WebAutomationToolKit.InternalImplementations
                 Thread.Sleep(2000);
             try
             {
-                _drivers[_activeDriver].SwitchTo().Window(tabToClose).Close();
-                _drivers[_activeDriver].SwitchTo().Window(targetTab);
+                _drivers![_activeDriver].SwitchTo().Window(tabToClose).Close();
+                _drivers![_activeDriver].SwitchTo().Window(targetTab);
                 Thread.Sleep(1000);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
@@ -350,7 +349,7 @@ namespace WebAutomationToolKit.InternalImplementations
                 Thread.Sleep(2000);
             try
             {
-                _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last());
+                _drivers![_activeDriver].SwitchTo().Window(_drivers![_activeDriver].WindowHandles.Last());
 
                 Thread.Sleep(1000);
             }
@@ -369,8 +368,8 @@ namespace WebAutomationToolKit.InternalImplementations
                 Thread.Sleep(2000);
             try
             {
-                var currentWindow = _drivers[_activeDriver].CurrentWindowHandle;
-                var windows = _drivers[_activeDriver].WindowHandles.Where(w => !w.Equals(currentWindow));
+                var currentWindow = _drivers![_activeDriver].CurrentWindowHandle;
+                var windows = _drivers![_activeDriver].WindowHandles.Where(w => !w.Equals(currentWindow));
                 foreach (var win in windows)
                     CloseTabWithActiveDriver(win, currentWindow);
 
@@ -389,8 +388,9 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                var activeDriver = _drivers[_activeDriver];
-                var frameElement = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, activeDriver, _wait);
+                var activeDriver = _drivers![_activeDriver];
+                var frameElement = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, activeDriver, _wait)
+                    ?? throw new WebAutomationException($"Could not locate the frame element using the selector '{selectorData.Name}'");
 
                 activeDriver.SwitchTo().Frame(frameElement);
             }
@@ -422,13 +422,13 @@ namespace WebAutomationToolKit.InternalImplementations
         ///    if the arguments do not meet these criteria. The arguments will be made available
         ///    to the JavaScript via the "arguments" magic variable, as if the function were
         ///    called via "Function.apply"</remarks>
-        public object ExecuteScript(PinnedScript script, params object[] args)
+        public object? ExecuteScript(PinnedScript script, params object[] args)
         {
             try
             {
                 if (_demoMode)
                     Thread.Sleep(2000);
-                return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteScript(script.Source, args);
+                return Helper.JavaScriptExecutor(_drivers![_activeDriver]).ExecuteScript(script.Source, args);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -441,13 +441,13 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        public object ExecuteAsyncScript(PinnedScript script, params object[] args)
+        public object? ExecuteAsyncScript(PinnedScript script, params object[] args)
         {
             try
             {
                 if (_demoMode)
                     Thread.Sleep(2000);
-                return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteAsyncScript(script.Source, args);
+                return Helper.JavaScriptExecutor(_drivers![_activeDriver]).ExecuteAsyncScript(script.Source, args);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -487,7 +487,8 @@ namespace WebAutomationToolKit.InternalImplementations
             var manager = Helper.IsDriverNull(this);
             try
             {
-                var element = CheckElementExistsReturnIWebElement(selectorData);
+                var element = CheckElementExistsReturnIWebElement(selectorData)
+                    ?? throw new WebAutomationException($"Could not locate element '{selectorData.Name}' for screenshot");
                 Helper.TakeElementScreenShot(sreenShotPath, screenShotName, element);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
@@ -554,13 +555,15 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 try
                 {
-                    var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                    var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait())
+                        ?? throw new WebAutomationException($"Element '{selectorData.Name}' could not be located for click");
                     clickTarget.Click();
                 }
                 catch (ElementClickInterceptedException)
                 {
                     Thread.Sleep(2000);
-                    var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                    var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait())
+                        ?? throw new WebAutomationException($"Element '{selectorData.Name}' could not be located for click (retry)");
                     clickTarget.Click();
                 }
             }
@@ -795,7 +798,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData)
+        public IWebElement? CheckElementExistsReturnIWebElement(SelectorData selectorData)
         {
             var manager = Helper.IsDriverNull(this);
             try
@@ -814,7 +817,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <returns>By.CssSelector</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public By CheckElementExistsReturnCssSelector(SelectorData selectorData)
+        public By? CheckElementExistsReturnCssSelector(SelectorData selectorData)
         {
             var manager = Helper.IsDriverNull(this);
             try
@@ -855,12 +858,12 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="nthParentElement">The Zero based position of the parent element to search with, this is optional</param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        public IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, int nthParentElement = -1)
+        public IWebElement? CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, int nthParentElement = -1)
         {
             var manager = Helper.IsDriverNull(this);
             try
             {
-                IWebElement parentElement = null;
+                IWebElement? parentElement = null;
                 if (nthParentElement > -1)
                 {
                     parentElement = _structureValidator.Check_Nth_ElementExistsReturnIWebElement(parentSelectorData, nthParentElement, manager.GetActiveDriver(), manager.GetWait());
@@ -905,7 +908,9 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                return _drivers[_activeDriver];
+                if (_drivers == null)
+                    throw new WebAutomationException("No driver instances have been created. Call CreateDriverInstance first.");
+                return _drivers![_activeDriver];
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -932,7 +937,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                IWebDriver webDriver = null;
+                IWebDriver? webDriver = null;
 
                 switch (driverType)
                 {
@@ -967,6 +972,9 @@ namespace WebAutomationToolKit.InternalImplementations
                             webDriver = EdgeDriverManager.Create_WebDriver_Instance(_edgeOptions);
                         break;
                 }
+
+                if (webDriver == null)
+                    throw new WebAutomationException($"DriverType '{driverType}' is not supported. Use Chrome, Firefox, or Edge.");
 
                 _wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(_timeoutForWait));
 

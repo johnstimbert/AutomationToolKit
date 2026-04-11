@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Xml.Serialization;
-using WebAutomationToolKit;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Helpers;
 using static WebAutomationToolKit.WebAutomationEnums;
@@ -14,7 +13,7 @@ namespace WebAutomationToolKit.InternalImplementations
     internal sealed class Logger : ILogger
     {
         private string _logFileName;
-        private string _failureLogFileName;
+        private string? _failureLogFileName;
         private string _logFilePath;
         private string _dateFormatProperty;
         private bool _generateFailureLog;
@@ -25,8 +24,6 @@ namespace WebAutomationToolKit.InternalImplementations
         private bool _inTest = false;
         private bool _newTestRun = true;
         StringBuilder _testLogHistory = new StringBuilder();
- 
-        private Logger() { }
 
         internal Logger(LoggerSettings loggerSettings)
         {
@@ -143,7 +140,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// Returns the name of the failure log file currently in use
         /// </summary>
         /// <returns>string </returns>
-        public string GetCurrentFailureLogFileName()
+        public string? GetCurrentFailureLogFileName()
         {
             return _failureLogFileName;
         }

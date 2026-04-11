@@ -47,7 +47,7 @@ namespace WebAutomationToolKit.Tests
         [TestMethod]
         public void BuildCssSelectorBy_None_ReturnsCssSelectorByTagOnly()
         {
-            var sd = new SelectorData("el", HtmlTagType.p, HtmlAttributeType.None, null);
+            var sd = new SelectorData("el", HtmlTagType.p, HtmlAttributeType.None, null!);
             var by = _validator.BuildCssSelectorBy(sd);
             StringAssert.Contains(by.ToString(), "p");
         }

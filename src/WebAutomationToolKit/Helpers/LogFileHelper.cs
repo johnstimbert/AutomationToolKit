@@ -100,7 +100,7 @@
 
         private bool IsFileLocked(FileInfo file)
         {
-            FileStream stream = null;
+            FileStream? stream = null;
 
             try
             {

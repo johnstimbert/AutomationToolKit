@@ -4,7 +4,7 @@ namespace WebAutomationToolKit.DriverManagers
 {
     internal static class EdgeDriverManager
     {
-        internal static EdgeDriver Create_WebDriver_Instance(string driverPath, EdgeOptions driverOptions = null)
+        internal static EdgeDriver Create_WebDriver_Instance(string driverPath, EdgeOptions? driverOptions = null)
         {
            driverOptions = BuildOptions(driverOptions);
             var driver = new EdgeDriver(driverPath, driverOptions);
@@ -12,7 +12,7 @@ namespace WebAutomationToolKit.DriverManagers
             return driver;
         }
 
-        internal static EdgeDriver Create_WebDriver_Instance(EdgeOptions driverOptions = null)
+        internal static EdgeDriver Create_WebDriver_Instance(EdgeOptions? driverOptions = null)
         {
            driverOptions = BuildOptions(driverOptions);
             var driver = new EdgeDriver(driverOptions);
@@ -20,7 +20,7 @@ namespace WebAutomationToolKit.DriverManagers
             return driver;
         }
 
-       private static EdgeOptions BuildOptions(EdgeOptions driverOptions)
+       private static EdgeOptions BuildOptions(EdgeOptions? driverOptions)
        {
            if (driverOptions != null)
                return driverOptions;

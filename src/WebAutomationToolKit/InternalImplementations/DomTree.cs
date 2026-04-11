@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using System;
 using WebAutomationToolKit.Contracts;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Validators;
@@ -9,15 +8,13 @@ namespace WebAutomationToolKit.InternalImplementations
     internal sealed class DomTree : IDomTree
     {
         private readonly StructureValidator _structureValidator;
-        private By _rootNodeSelector;
+        private By _rootNodeSelector = null!;
 
-        private By[] _currentNodeSiblings;
-        
-        private DomNode _rootNode;
-        private DomNode _previousNode;
-        private DomNode _currentNode;
+        private By[]? _currentNodeSiblings;
 
-        private DomTree() { }
+        private DomNode _rootNode = null!;
+        private DomNode? _previousNode;
+        private DomNode _currentNode = null!;
 
         internal DomTree(StructureValidator structureValidator)
         {
@@ -55,7 +52,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// </summary>
         /// <param name="webDriverManager"></param>
         /// <returns>IDomNode</returns>
-        public IDomNode MoveToFirstChild(IWebDriverManager webDriverManager)
+        public IDomNode? MoveToFirstChild(IWebDriverManager webDriverManager)
         { 
             try
             { 
@@ -83,7 +80,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="webDriverManager"></param>
         /// <param name="nthChild">Zero-based index of child node to move to</param>
         /// <returns>IDomNode</returns>
-        public IDomNode MoveToNthChild(IWebDriverManager webDriverManager, int nthChild)
+        public IDomNode? MoveToNthChild(IWebDriverManager webDriverManager, int nthChild)
         {
             try
             { 
@@ -111,7 +108,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// </summary>
         /// <param name="webDriverManager"></param>
         /// <returns>IDomNode</returns>
-        public IDomNode MoveToParent(IWebDriverManager webDriverManager)
+        public IDomNode? MoveToParent(IWebDriverManager webDriverManager)
         {
             //Root node has no parent so we should return null
             if (_currentNode == _rootNode)
@@ -122,9 +119,9 @@ namespace WebAutomationToolKit.InternalImplementations
             //Get the parent node selector from the previous node
             var parentSelector = _previousNode.ParentNodeSelector;
             //Create a DomNode instance for the parent node we are moving to
-            _currentNode = new DomNode(parentSelector, GetConcreteManager(webDriverManager));
+            _currentNode = new DomNode(parentSelector!, GetConcreteManager(webDriverManager));
             //Create a DomNode instance for the parent of the new current node
-            var newParent = new DomNode(_currentNode.ParentNodeSelector, GetConcreteManager(webDriverManager));
+            var newParent = new DomNode(_currentNode.ParentNodeSelector!, GetConcreteManager(webDriverManager));
             //Get the siblings of the new current node
             _currentNodeSiblings = newParent.GetChildren(webDriverManager);
 
@@ -137,7 +134,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// </summary>
         /// <param name="webDriverManager"></param>
         /// <returns>IDomNode</returns>
-        public IDomNode NextSibling(IWebDriverManager webDriverManager)
+        public IDomNode? NextSibling(IWebDriverManager webDriverManager)
         {
             try
             {
@@ -151,7 +148,7 @@ namespace WebAutomationToolKit.InternalImplementations
                 //Create a DomNode instance for the sibling of the current node and set it to be our new current node
                 _currentNode = new DomNode(siblingBy, GetConcreteManager(webDriverManager));
                 //Create a DomNode for the parent of the new current node
-                var parentNode = new DomNode(_currentNode.ParentNodeSelector, GetConcreteManager(webDriverManager));
+                var parentNode = new DomNode(_currentNode.ParentNodeSelector!, GetConcreteManager(webDriverManager));
                 //Get the children if the parent to get the current siblings
                 _currentNodeSiblings = parentNode.GetChildren(webDriverManager);
 
@@ -169,7 +166,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// </summary>
         /// <param name="webDriverManager"></param>
         /// <returns>IDomNode</returns>
-        public IDomNode PreviouSibling(IWebDriverManager webDriverManager)
+        public IDomNode? PreviouSibling(IWebDriverManager webDriverManager)
         {
             try
             {
@@ -183,7 +180,7 @@ namespace WebAutomationToolKit.InternalImplementations
                 //Create a DomNode instance for the sibling of the current node and set it to be our new current node
                 _currentNode = new DomNode(siblingBy, GetConcreteManager(webDriverManager));
                 //Create a DomNode for the parent of the new current node
-                var parentNode = new DomNode(_currentNode.ParentNodeSelector, GetConcreteManager(webDriverManager));
+                var parentNode = new DomNode(_currentNode.ParentNodeSelector!, GetConcreteManager(webDriverManager));
                 //Get the children if the parent to get the current siblings
                 _currentNodeSiblings = parentNode.GetChildren(webDriverManager);
 
@@ -199,9 +196,9 @@ namespace WebAutomationToolKit.InternalImplementations
         private By GetSiblingBy(int indexModifier)
         {
             //Get the index of the current node in the list of siblings
-            var currentIndex = Array.IndexOf(_currentNodeSiblings, _currentNode.NodeSelector);
+            var currentIndex = Array.IndexOf(_currentNodeSiblings!, _currentNode.NodeSelector);
             //Attempt to get the target sibling and return it 
-            return (By)_currentNodeSiblings.GetValue(currentIndex + indexModifier);
+            return (By)_currentNodeSiblings!.GetValue(currentIndex + indexModifier)!;
         }
 
         private WebDriverManager GetConcreteManager(IWebDriverManager webDriverManager)

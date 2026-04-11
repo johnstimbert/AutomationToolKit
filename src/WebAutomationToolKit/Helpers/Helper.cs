@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
-using System;
 using System.ComponentModel;
-using System.IO;
 using System.Reflection;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.InternalImplementations;
@@ -42,8 +40,8 @@ namespace WebAutomationToolKit.Helpers
 
         internal static IJavaScriptExecutor JavaScriptExecutor(IWebDriver driver)
         {
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            return js;
+            return driver as IJavaScriptExecutor
+                ?? throw new WebAutomationException("The active driver does not support JavaScript execution");
         }
 
         internal static void HighlightElement(IWebDriver driver, By locator)
@@ -65,7 +63,11 @@ namespace WebAutomationToolKit.Helpers
 
         internal static string GetDriverBrowserName(IWebDriver driver)
         {
-            return (driver as RemoteWebDriver).Capabilities.GetCapability("browserName").ToString();
+            var remote = driver as RemoteWebDriver
+                ?? throw new WebAutomationException("The active driver does not expose RemoteWebDriver capabilities");
+            var capability = remote.Capabilities.GetCapability("browserName")
+                ?? throw new WebAutomationException("The browserName capability was not found on the active driver");
+            return capability.ToString()!;
         }
 
         internal static IWebDriverManagerInternal IsDriverNull(IWebDriverManager webDriverManager)
@@ -86,14 +88,18 @@ namespace WebAutomationToolKit.Helpers
         {
             if (typeof(T).IsEnum)
             {
-                FieldInfo field = typeof(T).GetField(value.ToString());
-                if (field.IsDefined(typeof(DescriptionAttribute), false))
+                var fieldName = value!.ToString();
+                if (fieldName != null)
                 {
-                    DescriptionAttribute[] xmlEnum = (DescriptionAttribute[])typeof(T).GetField(value.ToString()).GetCustomAttributes(typeof(DescriptionAttribute), false);
-                    return xmlEnum[0].Description;
+                    FieldInfo? field = typeof(T).GetField(fieldName);
+                    if (field != null && field.IsDefined(typeof(DescriptionAttribute), false))
+                    {
+                        var attrs = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                        return attrs[0].Description;
+                    }
                 }
             }
-            return value.ToString();
+            return value!.ToString() ?? string.Empty;
         }
         #endregion
     }

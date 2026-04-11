@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="webDriverManager">Must have an active driver set and navigated to the page the tree was built from</param>
         /// <returns></returns>
-        Dictionary<string, object> GetAttributes(IWebDriverManager webDriverManager);
+        Dictionary<string, object>? GetAttributes(IWebDriverManager webDriverManager);
         /// <summary>
         /// Gets the tag name of this node
         /// </summary>

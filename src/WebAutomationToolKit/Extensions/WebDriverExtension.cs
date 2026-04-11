@@ -1,10 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text.RegularExpressions;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Helpers;
@@ -28,7 +25,7 @@ namespace WebAutomationToolKit.Extensions
        private static bool WaitForCondition(IWebDriver driver, By locator, WebDriverWait wait,
            Func<IWebElement, bool> predicate)
        {
-           IWebElement capturedTarget = null;
+           IWebElement? capturedTarget = null;
 
            var result = wait.Until(condition =>
            {
@@ -106,9 +103,9 @@ namespace WebAutomationToolKit.Extensions
             });
         }
 
-        internal static IWebElement WaitForElementExists(this IWebDriver driver, By locator, WebDriverWait wait)
+        internal static IWebElement? WaitForElementExists(this IWebDriver driver, By locator, WebDriverWait wait)
         {
-            IWebElement target = null;
+            IWebElement? target = null;
 
             if (wait.Until(condition =>
             {
@@ -142,7 +139,7 @@ namespace WebAutomationToolKit.Extensions
                 var attributes =
                     ((IJavaScriptExecutor)driver).ExecuteScript(
                         Helper.GetAttributesScript,
-                        element) as Dictionary<string, object>;
+                        element) as Dictionary<string, object?>;
                 if (attributes == null) throw new NullReferenceException();
 
                 var selector = "//" + element.TagName;
@@ -162,7 +159,7 @@ namespace WebAutomationToolKit.Extensions
             var attributes =
                 ((IJavaScriptExecutor)driver).ExecuteScript(
                     Helper.GetAttributesScript,
-                    element) as Dictionary<string, object>;
+                    element) as Dictionary<string, object?>;
             if (attributes == null) throw new NullReferenceException();
 
             var selector = "//" + element.TagName;
