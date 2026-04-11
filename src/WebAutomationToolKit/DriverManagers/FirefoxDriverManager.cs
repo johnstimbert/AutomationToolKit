@@ -4,7 +4,7 @@ namespace WebAutomationToolKit.DriverManagers
 {
     internal static class FirefoxDriverManager
     {
-        internal static FirefoxDriver Create_WebDriver_Instance(string driverPath, FirefoxOptions driverOptions = null, FirefoxProfile firefoxProfile = null)
+        internal static FirefoxDriver Create_WebDriver_Instance(string driverPath, FirefoxOptions? driverOptions = null, FirefoxProfile? firefoxProfile = null)
         {
             driverOptions = BuildOptions(driverOptions, firefoxProfile);
             var driver = new FirefoxDriver(driverPath, driverOptions);
@@ -12,7 +12,7 @@ namespace WebAutomationToolKit.DriverManagers
             return driver;
         }
 
-        internal static FirefoxDriver Create_WebDriver_Instance(FirefoxOptions driverOptions = null, FirefoxProfile firefoxProfile = null)
+        internal static FirefoxDriver Create_WebDriver_Instance(FirefoxOptions? driverOptions = null, FirefoxProfile? firefoxProfile = null)
         {
             driverOptions = BuildOptions(driverOptions, firefoxProfile);
             var driver = new FirefoxDriver(driverOptions);
@@ -20,7 +20,7 @@ namespace WebAutomationToolKit.DriverManagers
             return driver;
         }
 
-        private static FirefoxOptions BuildOptions(FirefoxOptions driverOptions, FirefoxProfile firefoxProfile)
+        private static FirefoxOptions BuildOptions(FirefoxOptions? driverOptions, FirefoxProfile? firefoxProfile)
         {
             if (driverOptions == null)
                 driverOptions = new FirefoxOptions();

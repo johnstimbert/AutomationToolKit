@@ -30,10 +30,10 @@
         /// <summary>
         /// The name of the file to log to. The file will be created if it does not exist.
         /// </summary>
-        public string LogFileName { get; set; }
+        public string? LogFileName { get; set; }
         /// <summary>
         /// The path in which to write the log file. The path will be created if it does not exist.
         /// </summary>
-        public string LogFilePath { get; set; }
+        public string? LogFilePath { get; set; }
     }
 }

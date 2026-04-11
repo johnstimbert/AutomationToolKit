@@ -1,6 +1,5 @@
 ﻿using System.Runtime.ExceptionServices;
 using WebAutomationToolKit.Exceptions;
-using WebAutomationToolKit.InternalImplementations;
 
 namespace WebAutomationToolKit.InternalImplementations
 {

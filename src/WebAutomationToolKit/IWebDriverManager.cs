@@ -24,8 +24,8 @@ namespace WebAutomationToolKit
         /// <param name="chromeOptions"></param>
         /// <param name="firefoxOptions"></param>
         /// <param name="edgeOptions"></param>
-        void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null, 
-            EdgeOptions edgeOptions = null);
+        void SetDriverOptions(ChromeOptions? chromeOptions = null, FirefoxOptions? firefoxOptions = null, 
+            EdgeOptions? edgeOptions = null);
         /// <summary>
         /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
         /// </summary>
@@ -136,14 +136,14 @@ namespace WebAutomationToolKit
         ///    if the arguments do not meet these criteria. The arguments will be made available
         ///    to the JavaScript via the "arguments" magic variable, as if the function were
         ///    called via "Function.apply"</remarks>
-        object ExecuteAsyncScript(PinnedScript script, params object[] args);
+        object? ExecuteAsyncScript(PinnedScript script, params object[] args);
         /// <summary>
         /// Executes JavaScript asynchronously in the context of the currently selected frame or window.
         /// </summary>
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        object ExecuteScript(PinnedScript script, params object[] args);
+        object? ExecuteScript(PinnedScript script, params object[] args);
         /// <summary>
         /// Finds and returns the child IWebElement using the parameters provided, if none is found null is returned.
         /// If multiple elements match the SelectorData definition utilize the nthParentElement parameter to select the desired parent
@@ -153,21 +153,21 @@ namespace WebAutomationToolKit
         /// <param name="nthParentElement">The Zero based position of the parent element to search with, this is optional</param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        IWebElement CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, int nthParentElement = -1);
+        IWebElement? CheckChildElementExistsAndReturnIt(SelectorData parentSelectorData, SelectorData childSelectorData, int nthParentElement = -1);
         /// <summary>
         /// Finds the IWebElement using the parameters provided and returns the CssSelector based By object, if none is found null is returned
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <returns>By.CssSelector</returns>
         /// <exception cref="WebAutomationException"></exception>
-        By CheckElementExistsReturnCssSelector(SelectorData selectorData);
+        By? CheckElementExistsReturnCssSelector(SelectorData selectorData);
         /// <summary>
         /// Finds and returns the IWebElement using the parameters provided, if none is found null is returned
         /// </summary>
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <returns>IWebElement</returns>
         /// <exception cref="WebAutomationException"></exception>
-        IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData);
+        IWebElement? CheckElementExistsReturnIWebElement(SelectorData selectorData);
         /// <summary>
         /// Builds a CssSelector with the SelectorDataSet provided and uses it to check that an element exists with that data
         /// </summary>

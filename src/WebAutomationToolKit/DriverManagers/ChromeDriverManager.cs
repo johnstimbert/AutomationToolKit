@@ -4,7 +4,7 @@ namespace WebAutomationToolKit.DriverManagers
 {
     internal static class ChromeDriverManager
     {
-        internal static ChromeDriver Create_WebDriver_Instance(string driverPath, ChromeOptions driverOptions = null)
+        internal static ChromeDriver Create_WebDriver_Instance(string driverPath, ChromeOptions? driverOptions = null)
         {
             driverOptions = BuildOptions(driverOptions);
             var driver = new ChromeDriver(driverPath, driverOptions);
@@ -13,7 +13,7 @@ namespace WebAutomationToolKit.DriverManagers
             return driver;
         }
 
-        internal static ChromeDriver Create_WebDriver_Instance(ChromeOptions driverOptions = null)
+        internal static ChromeDriver Create_WebDriver_Instance(ChromeOptions? driverOptions = null)
         {
             driverOptions = BuildOptions(driverOptions);
             var driver = new ChromeDriver(driverOptions);
@@ -22,7 +22,7 @@ namespace WebAutomationToolKit.DriverManagers
             return driver;
         }
 
-        private static ChromeOptions BuildOptions(ChromeOptions driverOptions)
+        private static ChromeOptions BuildOptions(ChromeOptions? driverOptions)
         {
             if (driverOptions != null)
                 return driverOptions;

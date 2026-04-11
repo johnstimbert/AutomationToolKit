@@ -59,7 +59,7 @@ namespace WebAutomationToolKit
         /// </summary>
         /// <param name="name">Name to search for, not case sensitive</param>
         /// <returns cref="SelectorData">Null if not match is found</returns>
-        public SelectorData GetSelectorDataByName(string name)
+        public SelectorData? GetSelectorDataByName(string name)
         {
             return SelectorDataItems.FirstOrDefault(x => x.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
         }

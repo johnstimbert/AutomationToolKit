@@ -7,19 +7,18 @@ namespace WebAndApiAutomation.Tests.Tests
     [TestClass]
     public class TestExecutorTests
     {
-        private static WebAutomation _webAutomation;
-        private static IWebDriverManager _driverManager;
-        LoggerSettings _loggerSettings;
-        ILogger _logger;
-        WebAutomationToolKit.ITestExecutor _testExecutor;
+        private static WebAutomation _webAutomation = null!;
+        private static IWebDriverManager _driverManager = null!;
+        LoggerSettings _loggerSettings = null!;
+        ILogger _logger = null!;
+        WebAutomationToolKit.ITestExecutor _testExecutor = null!;
 
         private const string _loggerTests = "Logger_Tests";
 
-        private string _logPath;
+        private string _logPath = null!;
         private const string _logFileName = "logger.txt";
         private const string _failedTestLogFileName = "logger.txt_Failures";
-        private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = null;// @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+        private static readonly string? _driverPath = null;// @"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         [TestInitialize]
         public void BeforeEachTest()

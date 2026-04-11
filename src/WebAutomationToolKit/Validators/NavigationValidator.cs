@@ -32,7 +32,7 @@ namespace WebAutomationToolKit.Validators
                 NavigationResult navResult = NavigationResult.NavigationNotAttempted;
                 //Get the current anchor using xpath and it's href attribute value
                 IWebElement currentAnchor = driver.FindElement(_anchorXPathBys.ElementAt(i));
-                string hrefValue = currentAnchor.GetAttribute("href");
+                string? hrefValue = currentAnchor.GetAttribute("href");
                 //The href value determines our action
                 if (hrefValue == null)
                 {
@@ -53,9 +53,6 @@ namespace WebAutomationToolKit.Validators
                             navResult = NavigationResult.Success;
                             break;
                         case false:
-                            navResult = NavigationResult.Failed;
-                            break;
-                        default:
                             navResult = NavigationResult.Failed;
                             break;
                     }

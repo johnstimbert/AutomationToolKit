@@ -13,13 +13,11 @@ namespace WebAutomationToolKit.InternalImplementations
        private ILogger? _logger;
         private readonly TestDataCollector? _testDataCollector;
 
-        private string _testId;
-        private string _resultsPath;
+        private string? _testId;
+        private string _resultsPath = null!;
         private Guid _testRunId;
-        
 
-        private TestExecutor() { }
-        
+
         internal TestExecutor(string resultsPath, ILogger? logger = null, bool collectTestData = false)
         {
             _logger = logger;
@@ -38,11 +36,11 @@ namespace WebAutomationToolKit.InternalImplementations
         }
 
         #region Events and Event Delegates
-        internal static event TestBegunEvent TestBegun;
+        internal static event TestBegunEvent? TestBegun;
         internal delegate void TestBegunEvent(Guid runId);
 
-        internal static event TestCompleteEvent TestComplete;
-        internal delegate void TestCompleteEvent(Guid runId, string testMethodName, bool isSuccess, Exception error = null);
+        internal static event TestCompleteEvent? TestComplete;
+        internal delegate void TestCompleteEvent(Guid runId, string testMethodName, bool isSuccess, Exception? error = null);
 
         #endregion
 
@@ -94,7 +92,7 @@ namespace WebAutomationToolKit.InternalImplementations
                     _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
                 }
 
-                throw wae;
+                throw;
             }
             catch(Exception ex)
             {

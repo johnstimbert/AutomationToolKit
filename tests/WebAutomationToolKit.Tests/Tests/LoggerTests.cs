@@ -3,25 +3,24 @@ using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.InternalImplementations;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit.Tests
+namespace WebAutomationToolKit.Tests.Tests
 {
     [TestClass]
     public class LoggerTests
     {
-        private static TestContext _testContext;
-        public TestContext TestContext { get { return _testContext; } set { _testContext = value; } }
+        public TestContext TestContext { get; set; } = null!;
 
-        private static WebAutomation _webAutomation;
-        LoggerSettings _loggerSettings;
+        private static WebAutomation _webAutomation = null!;
+        LoggerSettings _loggerSettings = null!;
 
         private const string _loggerTests = "Logger_Tests";
 
-        private string _logPath;
+        private string _logPath = null!;
         private const string _baseLogFileName = "logger.txt";
-        private string _defaultDateFormatProperty = "MM_dd_yyyy";
-        private static readonly string _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+        private const string _defaultDateFormatProperty = "MM_dd_yyyy";
+        private static readonly string? _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
-        private ILogger _logger;
+        private ILogger _logger = null!;
         
         [TestInitialize]
         public void BeforeEachTest()
@@ -46,7 +45,7 @@ namespace WebAutomationToolKit.Tests
             if (Directory.Exists(_logPath))
                 Directory.Delete(_logPath, recursive: true);
 
-            _webAutomation = null;
+            _webAutomation = null!;
         }
 
         [TestMethod]
@@ -132,7 +131,7 @@ namespace WebAutomationToolKit.Tests
 
             var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentLogFileName()));
 
-            Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
+            Assert.HasCount(7, lines, $"The log contains {lines.Length} lines, expected {7}");
 
         }
 
@@ -155,7 +154,7 @@ namespace WebAutomationToolKit.Tests
 
             var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentLogFileName()));
 
-            Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
+            Assert.HasCount(7, lines, $"The log contains {lines.Length} lines, expected {7}");
 
         }
 
@@ -178,10 +177,9 @@ namespace WebAutomationToolKit.Tests
 
             var logName = _logger.GetCurrentLogFileName();
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentLogFileName()));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, logName));
 
-            Assert.AreEqual(7, lines.Length, $"The log contains {lines.Length} lines, expected {7}");
-
+            Assert.HasCount(7, lines, $"The log contains {lines.Length} lines, expected {7}");
             int x = 0;
             while (x < i + 1)
             {
@@ -209,9 +207,9 @@ namespace WebAutomationToolKit.Tests
             }
             _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName()));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName() ?? string.Empty));
 
-            Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
+            Assert.HasCount(8, lines, $"The log contains {lines.Length} lines, expected {8}");
 
             int x = 0;
             while (x < i + 1)
@@ -251,9 +249,9 @@ namespace WebAutomationToolKit.Tests
             }
             _logger.Log(LogMessageType.TESTFAILED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName()));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName() ?? string.Empty));
 
-            Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
+            Assert.HasCount(8, lines, $"The log contains {lines.Length} lines, expected {8}");
 
             int x = 0;
             while (x < i + 1)
@@ -293,9 +291,9 @@ namespace WebAutomationToolKit.Tests
             }
             _logger.Log(LogMessageType.TESTPASSED, $"Line{i}");
 
-            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName()));
+            var lines = File.ReadAllLines(Path.Combine(_logPath, _logger.GetCurrentFailureLogFileName() ?? string.Empty));
 
-            Assert.AreEqual(8, lines.Length, $"The log contains {lines.Length} lines, expected {8}");
+            Assert.HasCount(8, lines, $"The log contains {lines.Length} lines, expected {8}");
 
             int x = 0;
             while (x < i + 1)

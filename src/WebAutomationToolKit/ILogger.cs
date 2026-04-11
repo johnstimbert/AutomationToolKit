@@ -29,6 +29,6 @@ namespace WebAutomationToolKit
         /// Returns the name of the failure log file currently in use
         /// </summary>
         /// <returns>string </returns>
-        string GetCurrentFailureLogFileName();
+        string? GetCurrentFailureLogFileName();
     }
 }

@@ -1,7 +1,5 @@
 ﻿using OpenQA.Selenium;
 using WebAutomationToolKit.Extensions;
-using System;
-using System.Collections.Generic;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Helpers;
 using WebAutomationToolKit.Contracts;
@@ -11,15 +9,12 @@ namespace WebAutomationToolKit.InternalImplementations
     internal sealed class DomNode : IDomNode
     {
         private const string _xpathForRetrievingChildren = @".//*";
-        private By[] _children;
+        private By[] _children = null!;
 
 
         private int _lastChildPosition = -1;
 
         private bool _hasAttributes = false;
-
-
-        private DomNode() {}
 
         internal DomNode(By parentNodeSelector, By nodeSelector, WebDriverManager webDriverManager)
         {
@@ -38,7 +33,7 @@ namespace WebAutomationToolKit.InternalImplementations
             FindAttributes(webDriverManager);
         }
 
-        internal By ParentNodeSelector { get; }
+        internal By? ParentNodeSelector { get; }
 
         internal By NodeSelector { get; }
 
@@ -74,7 +69,7 @@ namespace WebAutomationToolKit.InternalImplementations
         /// </summary>
         /// <param name="webDriverManager"></param>
         /// <returns></returns>
-        public Dictionary<string, object> GetAttributes(IWebDriverManager webDriverManager)
+        public Dictionary<string, object>? GetAttributes(IWebDriverManager webDriverManager)
         {
             return FindAttributes(webDriverManager);
         }
@@ -99,7 +94,7 @@ namespace WebAutomationToolKit.InternalImplementations
             return GetElementReference(webDriverManager).TagName;
         }
 
-        private Dictionary<string, object> FindAttributes(IWebDriverManager webDriverManager)
+        private Dictionary<string, object>? FindAttributes(IWebDriverManager webDriverManager)
         {
             try
             {
@@ -111,7 +106,7 @@ namespace WebAutomationToolKit.InternalImplementations
                 var executor = Helper.JavaScriptExecutor(manager.GetActiveDriver());
                 var atts = executor.ExecuteScript(Helper.GetAttributesScript, thisNode) as Dictionary<string, object>;
 
-                _hasAttributes = atts.Count > 0;
+                _hasAttributes = atts != null && atts.Count > 0;
 
                 return atts;
             }

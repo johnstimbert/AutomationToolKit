@@ -64,7 +64,7 @@ namespace WebAutomationToolKit.TestDataCollection
             return runSummary;
         }
 
-        private void TestComplete(Guid runId, string testMethodName, bool isSuccess, Exception error = null)
+        private void TestComplete(Guid runId, string testMethodName, bool isSuccess, Exception? error = null)
         {
             try
             {
@@ -103,6 +103,10 @@ namespace WebAutomationToolKit.TestDataCollection
         {
             try
             {
+                // Capture the run ID from the first TestBegun event fired for this collector
+                if (_testRunId == Guid.Empty)
+                    _testRunId = runId;
+
                 //Verify test run id matches the id of the current run. Throw exception if it does not.
                 if (_testRunId.Equals(runId))
                 {

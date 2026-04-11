@@ -19,7 +19,7 @@ namespace WebAutomationToolKit
         /// <param name="htmlText">Raw HTML text to parse.</param>
         /// <returns>The inner text with all HTML tags removed.</returns>
         /// <exception cref="WebAutomationException">Thrown when parsing fails.</exception>
-        public static string ParseInnerText(string htmlText)
+        public static string? ParseInnerText(string htmlText)
         {
             try
             {

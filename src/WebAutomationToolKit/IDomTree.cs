@@ -16,33 +16,33 @@
         /// </summary>
         /// <param name="webDriverManager">Must have an active driver set and navigated to the page the tree was built from</param>
         /// <returns>IDomNode</returns>
-        IDomNode MoveToFirstChild(IWebDriverManager webDriverManager);
+        IDomNode? MoveToFirstChild(IWebDriverManager webDriverManager);
         /// <summary>
         /// Moves to the nth(when reading the DOM top to Bottom) child node of the current node. If no child is found, null is returned
         /// </summary>
         /// <param name="webDriverManager">Must have an active driver set and navigated to the page the tree was built from</param>
         /// <param name="nthChild">Zero-based index of child node to move to</param>
         /// <returns>IDomNode</returns>
-        IDomNode MoveToNthChild(IWebDriverManager webDriverManager, int nthChild);
+        IDomNode? MoveToNthChild(IWebDriverManager webDriverManager, int nthChild);
         /// <summary>
         /// Moves to the parent node of the current node. If no parent is found or if the current node is the root node, null is returned
         /// </summary>
         /// <param name="webDriverManager">Must have an active driver set and navigated to the page the tree was built from</param>
         /// <returns>IDomNode</returns>
-        IDomNode MoveToParent(IWebDriverManager webDriverManager);
+        IDomNode? MoveToParent(IWebDriverManager webDriverManager);
         /// <summary>
         /// Moves to the next(when reading the DOM top to Bottom) sibling node of the current node. 
         /// If no sibling is found or if the current node is the root node, null is returned
         /// </summary>
         /// <param name="webDriverManager">Must have an active driver set and navigated to the page the tree was built from</param>
         /// <returns>IDomNode</returns>
-        IDomNode NextSibling(IWebDriverManager webDriverManager);
+        IDomNode? NextSibling(IWebDriverManager webDriverManager);
         /// <summary>
         /// Moves to the previous(when reading the DOM top to Bottom) sibling node of the current node. 
         /// If no sibling is found or if the current node is the root node, null is returned
         /// </summary>
         /// <param name="webDriverManager">Must have an active driver set and navigated to the page the tree was built from</param>
         /// <returns>IDomNode</returns>
-        IDomNode PreviouSibling(IWebDriverManager webDriverManager);
+        IDomNode? PreviouSibling(IWebDriverManager webDriverManager);
     }
 }

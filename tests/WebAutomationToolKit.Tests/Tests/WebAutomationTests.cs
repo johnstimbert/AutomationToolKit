@@ -13,8 +13,7 @@ namespace WebAutomationToolKit.Tests
     [TestCategory("Browser")]
     public class WebAutomationTests
     {
-        private static TestContext _testContext;
-        public TestContext TestContext { get { return _testContext; } set { _testContext = value; } }
+        public TestContext TestContext { get; set; } = null!;
 
         private const string _driverTestCategory = "Driver_Instance_Creation_Tests";
         private const string _driverInteractionTestCategory = "Driver_Interaction_Tests";
@@ -24,14 +23,14 @@ namespace WebAutomationToolKit.Tests
         private const string _driverInteractionTestCategoryHeadless = "Driver_Interaction_Tests_Headless";
         private const string _elementLocationMethodsTestCategoryHeadless = "Element_Location_Method_Tests_Headless";
 
-        private static WebAutomation _webAutomation;
-        private static IWebDriverManager _driverManager;
+        private static WebAutomation _webAutomation = null!;
+        private static IWebDriverManager _driverManager = null!;
         private readonly string _navUrlGoogle = "https://www.google.com/";
         private readonly string _navUrlSeleniumDev = "https://www.selenium.dev/";
         private readonly string _interactionTestUrl = "https://www.selenium.dev/";
         private readonly string _screenShotPath = @"e:\ScreenShots";
 
-        private static readonly string _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
+        private static readonly string? _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
 
         private readonly string _driverTypeNoneException = "DriverType Provided was not found. Instantiate the driver before performing actions on or with it";
 
@@ -41,7 +40,7 @@ namespace WebAutomationToolKit.Tests
                                                                 "main_navbar");
         private static readonly SelectorData divByClass = new SelectorData("divByClass", HtmlTagType.div, HtmlAttributeType.Class, "container-fluid td-default td-outer");
         private static readonly SelectorData divTagTypeOnly = new SelectorData("divTagTypeOnly", HtmlTagType.div, HtmlAttributeType.None,
-                                                               null);
+                                                               null!);
 
         private static SelectorDataSet divTags = new SelectorDataSet(HtmlTagType.div);
         
@@ -430,7 +429,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.MoveToElement(divById);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+            Assert.IsTrue((element!.Displayed && element!.Enabled), "Target element should be on screen");
         }
 
         [TestMethod]
@@ -443,7 +442,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.MoveToElement(divById);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+            Assert.IsTrue((element!.Displayed && element!.Enabled), "Target element should be on screen");
         }
 
         [TestMethod]
@@ -737,7 +736,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.MoveToElement(divById);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            Assert.IsTrue((element.Displayed && element.Enabled), "Target element should be on screen");
+            Assert.IsTrue((element!.Displayed && element!.Enabled), "Target element should be on screen");
         }
 
         [TestMethod]
@@ -807,7 +806,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
         }
 
@@ -822,7 +821,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
 
         }
@@ -838,7 +837,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
         }
 
@@ -853,7 +852,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
 
         }
@@ -885,7 +884,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -897,7 +896,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -909,7 +908,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -921,7 +920,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -933,7 +932,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -946,7 +945,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var cssBy = _driverManager.CheckElementExistsReturnCssSelector(divById);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -958,7 +957,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -970,7 +969,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -1011,7 +1010,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
         }
 
@@ -1029,7 +1028,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
 
         }
@@ -1048,7 +1047,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
         }
 
@@ -1066,7 +1065,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             var element = _driverManager.CheckElementExistsReturnIWebElement(data);
-            var attributeValue = element.GetAttribute("method");
+            var attributeValue = element!.GetAttribute("method");
             Assert.AreEqual(expectedAttributeValue, attributeValue, $"Expected attribute value was {expectedAttributeValue}, found {attributeValue}");
 
         }
@@ -1082,7 +1081,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -1097,7 +1096,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -1113,7 +1112,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
             Assert.IsNotNull(element, $"An element could not be found with the data defined in SelectorData named {divByClass.Name}");
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -1128,7 +1127,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -1143,7 +1142,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -1158,7 +1157,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divById);
-            var attributeValue = element.GetAttribute("id");
+            var attributeValue = element!.GetAttribute("id");
             Assert.AreEqual(divById.AttributeValue, attributeValue, $"Expected attribute value was {divById.AttributeValue}, found {attributeValue}");
         }
 
@@ -1174,7 +1173,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
             Assert.IsNotNull(element, $"An element could not be found with the data defined in SelectorData named {divByClass.Name}");
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 
@@ -1189,7 +1188,7 @@ namespace WebAutomationToolKit.Tests
             Assert.IsNotNull(_driverManager, "Driver was null");
             _driverManager.NavigateWithActiveDriver(_navUrlSeleniumDev);
             var element = _driverManager.CheckElementExistsReturnIWebElement(divByClass);
-            var attributeValue = element.GetAttribute("class");
+            var attributeValue = element!.GetAttribute("class");
             Assert.AreEqual(divByClass.AttributeValue, attributeValue, $"Expected attribute value was {divByClass.AttributeValue}, found {attributeValue}");
         }
 

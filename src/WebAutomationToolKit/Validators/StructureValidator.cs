@@ -1,7 +1,4 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using static WebAutomationToolKit.WebAutomationEnums;
 using WebAutomationToolKit.Helpers;
@@ -78,9 +75,9 @@ namespace WebAutomationToolKit.Validators
         /// <param name="nthElement">The Zero based position of the element to be returned</param>
         /// <param name="wait"></param>
         /// <returns></returns>
-        internal IWebElement Check_Nth_ElementExistsReturnIWebElement(SelectorData selectorData, int nthElement, IWebDriver driver, WebDriverWait wait)
+        internal IWebElement? Check_Nth_ElementExistsReturnIWebElement(SelectorData selectorData, int nthElement, IWebDriver driver, WebDriverWait wait)
         {
-            IWebElement webElement = null;
+            IWebElement? webElement = null;
             try
             {
                 if (selectorData.AttributeType == HtmlAttributeType.InnerText_Contains || selectorData.AttributeType == HtmlAttributeType.InnerText_ExactMatch)
@@ -133,9 +130,9 @@ namespace WebAutomationToolKit.Validators
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <param name="wait"></param>
         /// <returns>IWebElement</returns>
-        internal IWebElement CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver, WebDriverWait wait)
+        internal IWebElement? CheckElementExistsReturnIWebElement(SelectorData selectorData, IWebDriver driver, WebDriverWait wait)
         {
-            IWebElement webElement = null;
+            IWebElement? webElement = null;
             try
             {
                 if (selectorData.AttributeType == HtmlAttributeType.InnerText_Contains || selectorData.AttributeType == HtmlAttributeType.InnerText_ExactMatch)
@@ -184,9 +181,9 @@ namespace WebAutomationToolKit.Validators
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        internal IWebElement CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement? CheckElementExistsByTagAndInnerText(SelectorData selectorData, IWebDriver driver)
         {
-            IWebElement webElement = null;
+            IWebElement? webElement = null;
             var findSelector = new SelectorData(selectorData.Name, selectorData.TagType, HtmlAttributeType.None, string.Empty);
             var elements = driver.FindElements(BuildCssSelectorBy(findSelector));
             switch (selectorData.AttributeType)
@@ -198,7 +195,7 @@ namespace WebAutomationToolKit.Validators
                     webElement = elements.FirstOrDefault(element => element.Text.Equals(selectorData.AttributeValue));
                     break;
                 default:
-                    throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod().Name} use either " +
+                    throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod()?.Name} use either " +
                                         $"{HtmlAttributeType.InnerText_Contains} or {HtmlAttributeType.InnerText_ExactMatch}");
             }
 
@@ -212,11 +209,11 @@ namespace WebAutomationToolKit.Validators
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <param name="wait"></param>
         /// <returns></returns>
-        internal By CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver, WebDriverWait wait)
+        internal By? CheckElementExistsReturnCssSelector(SelectorData selectorData, IWebDriver driver, WebDriverWait wait)
         {
             try
             {
-                IWebElement webElement = null;
+                IWebElement? webElement = null;
 
                 var cssBy = BuildCssSelectorBy(selectorData);
                 webElement = driver.WaitForElementExists(cssBy, wait);
@@ -244,11 +241,11 @@ namespace WebAutomationToolKit.Validators
         /// <param name="selectorData">>Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        internal IWebElement CheckChildElementExists(IWebElement parentElement, SelectorData selectorData, IWebDriver driver)
+        internal IWebElement? CheckChildElementExists(IWebElement parentElement, SelectorData selectorData, IWebDriver driver)
         {
             try
             {
-                IWebElement webElement = null;
+                IWebElement? webElement = null;
 
                 By childCssSelector = BuildCssSelectorBy(selectorData);
 
@@ -288,7 +285,7 @@ namespace WebAutomationToolKit.Validators
         /// </summary>
         /// <param name="innerText">Raw innerText from an IWebElement that contains html to be removed</param>
         /// <returns></returns>
-        internal string ParseInnerText(string innerText)
+        internal string? ParseInnerText(string? innerText)
         {
             if (string.IsNullOrEmpty(innerText))
                 return null;
@@ -350,10 +347,10 @@ namespace WebAutomationToolKit.Validators
         /// <param name="selectorData">Data to build the CssSelector with</param>
         /// <param name="driver">This must be an initialized IWebDriver object navigated to the page being tested</param>
         /// <returns></returns>
-        internal IWebElement CheckElementExistsByAttributevalue(SelectorData selectorData, IWebDriver driver)
+        internal IWebElement? CheckElementExistsByAttributevalue(SelectorData selectorData, IWebDriver driver)
         {
-            IWebElement webElement = null;
-            Dictionary<string, object> attributes = new Dictionary<string, object>();
+            IWebElement? webElement = null;
+            Dictionary<string, object>? attributes = null;
             IJavaScriptExecutor javaScriptExecutor = Helper.JavaScriptExecutor(driver);
             if(javaScriptExecutor == null)
                 throw new WebAutomationException($"Could not create the needed IJavaScriptExecutor object using the {Helper.GetDriverBrowserName(driver)}");
@@ -365,13 +362,12 @@ namespace WebAutomationToolKit.Validators
                 case HtmlAttributeType.AttributeText_Contains:
                     foreach(var element in elements)
                     {
-                        //Get the attributes of the element using a javascript query
                         var attsObject = javaScriptExecutor.ExecuteScript(Helper.GetAttributesScript, element);
-                        //Cast them to a dictionary object
-                        attributes = (Dictionary<string, object>)attsObject;
+                        attributes = attsObject as Dictionary<string, object>;
+                        if (attributes == null) continue;
                         foreach(var attribute in attributes)
                         {
-                            if (attribute.Value.ToString().ToLower().Contains(selectorData.AttributeValue.ToLower()))
+                            if (attribute.Value?.ToString()?.ToLower().Contains(selectorData.AttributeValue.ToLower()) == true)
                                 return element;
                         }
                     }
@@ -379,19 +375,18 @@ namespace WebAutomationToolKit.Validators
                 case HtmlAttributeType.AttributeText_ExactMatch:
                     foreach (var element in elements)
                     {
-                        //Get the attributes of the element using a javascript query
                         var attsObject = javaScriptExecutor.ExecuteScript(Helper.GetAttributesScript, element);
-                        //Cast them to a dictionary object
-                        attributes = (Dictionary<string, object>)attsObject;
+                        attributes = attsObject as Dictionary<string, object>;
+                        if (attributes == null) continue;
                         foreach (var attribute in attributes)
                         {
-                            if (attribute.Value.ToString().ToLower().Equals(selectorData.AttributeValue.ToLower()))
+                            if (attribute.Value?.ToString()?.ToLower().Equals(selectorData.AttributeValue.ToLower()) == true)
                                 return element;
                         }
                     }
                     break;
                 default:
-                    throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod().Name} use either " +
+                    throw new Exception($"{selectorData.AttributeValue} not support by {MethodBase.GetCurrentMethod()?.Name} use either " +
                                         $"{HtmlAttributeType.InnerText_Contains} or {HtmlAttributeType.InnerText_ExactMatch}");
             }
 
@@ -400,7 +395,7 @@ namespace WebAutomationToolKit.Validators
 
         internal By BuildCssSelectorBy(SelectorData selectorData)
         {
-            By CssSelector = null;
+            By? CssSelector = null;
             var tag = selectorData.TagType.ToLower();
             
             switch (selectorData.AttributeType)
@@ -434,12 +429,12 @@ namespace WebAutomationToolKit.Validators
                     throw new WebAutomationException($"Attribute type {selectorData.AttributeType} is not supported");
             }
             
-            return CssSelector;
+            return CssSelector!;
         }
 
-        internal string AttemptToMatchToTagType(int startingIndex, string value)
+        internal string? AttemptToMatchToTagType(int startingIndex, string value)
         {
-            string tagName = null;
+            string? tagName = null;
             int potentialTagEnd = value.IndexOf(" ", startingIndex);
             string potentialTag = value.Substring(startingIndex + 1, value.Length - (potentialTagEnd - 1));
             if (potentialTagEnd < -1 && Enum.IsDefined(typeof(HtmlTagType), potentialTag))
