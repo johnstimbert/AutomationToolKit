@@ -64,6 +64,14 @@ jobs:
     
     permissions:
       contents: read
+      packages: read   # required to pull WebAutomationToolKit from GitHub Packages
+                       # into WebAutomationToolKit.BrowserTests during restore
+
+    # nuget.config reads %GITHUB_ACTOR% and %GITHUB_TOKEN% for the
+    # github-johnstimbert feed.  Both are available in every Actions run.
+    env:
+      GITHUB_ACTOR: ${{ github.actor }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
     - name: Checkout code
@@ -75,12 +83,17 @@ jobs:
         dotnet-version: '10.0.x'
 
     - name: Restore dependencies
+      # Restores all three projects, including WebAutomationToolKit.BrowserTests
+      # which pulls the published NuGet package from GitHub Packages.
       run: dotnet restore
 
     - name: Build solution
       run: dotnet build --configuration Release --no-restore
 
-    - name: Run Tests
+    - name: Run unit tests
+      # Excludes tests tagged [TestCategory("Browser")] — those require a real
+      # browser and are not run in CI.  LoggerTests (in BrowserTests project but
+      # not tagged Browser) are included and run here.
       run: dotnet test --configuration Release --no-build --verbosity normal --filter "TestCategory!=Browser" --logger "trx;LogFileName=test-results.trx"
     
     - name: Upload test results
@@ -108,6 +121,7 @@ jobs:
         dotnet-version: '10.0.x'
 
     - name: Restore dependencies
+      # Only the library project is needed here; no GitHub Packages feed required.
       run: dotnet restore src/WebAutomationToolKit/WebAutomationToolKit.csproj
 
     - name: Display version
@@ -142,6 +156,16 @@ jobs:
         echo "### Published SDK Package" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "- **NuGet Package**: \`WebAutomationToolKit\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Test Projects" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Project | Scope |" >> $GITHUB_STEP_SUMMARY
+        echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| \`WebAutomationToolKit.Tests\` | Unit tests (StructureValidator, TestExecutor) — run in CI |" >> $GITHUB_STEP_SUMMARY
+        echo "| \`WebAutomationToolKit.BrowserTests\` | Logger tests run in CI; browser-driver tests excluded (\`TestCategory=Browser\`) |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "> Browser-driver tests require a local environment with Chrome/Firefox." >> $GITHUB_STEP_SUMMARY
+        echo "> Run them locally via \`scripts/Restore-BrowserTests.ps1 -Target test\`." >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### View Packages" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
