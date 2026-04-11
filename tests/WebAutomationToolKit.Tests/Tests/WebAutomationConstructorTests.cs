@@ -6,6 +6,7 @@ namespace WebAutomationToolKit.Tests
 {
     [TestClass]
     [TestCategory("Unit")]
+    [TestCategory("Browser")]
     public class WebAutomationConstructorTests
     {
         // ── ValidateDriverPath ──────────────────────────────────────────────
