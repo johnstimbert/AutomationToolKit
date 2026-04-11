@@ -1,0 +1,148 @@
+name: Build and Publish Packages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., 1.0.0) - leave empty for auto-calculated version'
+        required: false
+        default: ''
+      bump:
+        description: 'Version bump type (major, minor, patch)'
+        required: false
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+jobs:
+  calculate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.determine-version.outputs.version }}
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Determine Version
+      id: determine-version
+      run: |
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          VERSION="1.${PR_NUMBER}.0"
+        elif [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          COMMIT_COUNT=$(git rev-list --count --merges origin/main 2>/dev/null || echo "0")
+          VERSION="1.${COMMIT_COUNT}.0"
+        else
+          COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo "0")
+          VERSION="1.${COMMIT_COUNT}.0"
+        fi
+        
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Calculated Version: ${VERSION}"
+    
+    - name: Display calculated version
+      run: |
+        echo "Version: ${{ steps.determine-version.outputs.version }}"
+        echo "Event: ${{ github.event_name }}"
+        echo "Ref: ${{ github.ref }}"
+
+  test:
+    needs: calculate-version
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Run Tests
+      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: '**/TestResults/*.trx'
+
+  build-and-publish-sdk:
+    needs: [calculate-version, test]
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore src/WebAutomationToolKit/WebAutomationToolKit.csproj
+
+    - name: Display version
+      run: echo "Building WebAutomationToolKit with version ${{ needs.calculate-version.outputs.version }}"
+
+    - name: Build
+      run: dotnet build src/WebAutomationToolKit/WebAutomationToolKit.csproj --configuration Release --no-restore
+
+    - name: Pack
+      run: dotnet pack src/WebAutomationToolKit/WebAutomationToolKit.csproj --configuration Release --no-build --output ./artifacts -p:PackageVersion=${{ needs.calculate-version.outputs.version }}
+    
+    - name: Publish to GitHub Packages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: dotnet nuget push ./artifacts/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./artifacts/*.nupkg
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: [build-and-publish-sdk]
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Job Summary
+      run: |
+        echo "## Build and Publish Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Published SDK Package" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **NuGet Package**: \`WebAutomationToolKit\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### View Packages" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Visit: https://github.com/${{ github.repository_owner }}?tab=packages" >> $GITHUB_STEP_SUMMARY
