@@ -4,6 +4,18 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet package metadata -->
+    <PackageId>WebAutomationToolKit</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>johnstimbert</Authors>
+    <Description>A .NET Selenium toolkit for browser automation, providing driver lifecycle management, structured element selectors, DOM traversal, logging, and test execution utilities.</Description>
+    <PackageProjectUrl>https://github.com/johnstimbert/AutomationToolKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/johnstimbert/AutomationToolKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>selenium;automation;testing;webdriver;browser</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
@@ -12,6 +24,10 @@
     <Folder Include="Helpers\" />
     <Folder Include="Validators\" />
     <Folder Include="TestDataCollection\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

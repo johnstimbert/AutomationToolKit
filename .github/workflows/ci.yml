@@ -30,24 +30,10 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      #Testing will target a grid deployment that is TBD until then test are run locally
-      #- name: Install Chrome
-      #  uses: browser-actions/setup-chrome@v1
-      #  with:
-      #    chrome-version: latest
-      #  id: setup-chrome
-      #- run: |
-      #    echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
-      #- run: |
-      #    echo Installed chromium path: ${{ steps.setup-chrome.outputs.chrome-path }}
-      #- uses: browser-actions/setup-geckodriver@latest
-      #- run: geckodriver --version
-      #- name: Test
-      #  run: dotnet test --no-restore --verbosity normal
-      #- name: Upload dotnet test results
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: dotnet-results-${{ matrix.dotnet-version }}
-      #    path: TestResults-${{ matrix.dotnet-version }}
-      #  # Use always() to always run this step to publish test results when there are test failures
-      #  if: ${{ always() }}
+      - name: Pack (validation only)
+        run: dotnet pack --configuration Release --no-build -o ./nupkgs src/WebAutomationToolKit/WebAutomationToolKit.csproj
+      - name: Upload NuGet package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package-${{ matrix.dotnet-version }}
+          path: ./nupkgs/*.nupkg
