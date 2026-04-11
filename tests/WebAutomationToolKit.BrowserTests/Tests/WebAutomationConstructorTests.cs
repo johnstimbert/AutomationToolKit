@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.InternalImplementations;
 
-namespace WebAutomationToolKit.Tests
+namespace WebAutomationToolKit.BrowserTests
 {
     [TestClass]
     [TestCategory("Unit")]

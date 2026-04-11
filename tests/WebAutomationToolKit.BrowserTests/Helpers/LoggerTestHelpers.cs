@@ -1,4 +1,4 @@
-﻿namespace WebAutomationToolKit.Tests
+﻿namespace WebAutomationToolKit.BrowserTests
 {
     public static class LoggerTestHelpers
     {

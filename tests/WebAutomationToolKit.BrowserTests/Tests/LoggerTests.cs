@@ -3,7 +3,7 @@ using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.InternalImplementations;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit.Tests.Tests
+namespace WebAutomationToolKit.BrowserTests
 {
     [TestClass]
     public class LoggerTests
