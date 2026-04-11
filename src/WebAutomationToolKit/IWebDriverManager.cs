@@ -2,7 +2,6 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.IE;
 using static WebAutomationToolKit.WebAutomationEnums;
 using WebAutomationToolKit.Exceptions;
 using OpenQA.Selenium;
@@ -24,10 +23,9 @@ namespace WebAutomationToolKit
         /// </summary>
         /// <param name="chromeOptions"></param>
         /// <param name="firefoxOptions"></param>
-        /// <param name="internetExplorerOptions"></param>
         /// <param name="edgeOptions"></param>
         void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null, 
-            InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null);
+            EdgeOptions edgeOptions = null);
         /// <summary>
         /// Sets the profile for the firefox driver. If the driver is active when this method is called it will be recreated
         /// </summary>

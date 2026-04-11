@@ -71,8 +71,7 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                if (_loggerInstance == null)
-                    _loggerInstance = new Logger(loggerSettings);
+                _loggerInstance = new Logger(loggerSettings);
 
                 return _loggerInstance;
             }

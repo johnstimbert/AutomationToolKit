@@ -19,7 +19,7 @@ namespace WebAutomationToolKit.Helpers
 
             var SSName = Path.Combine(screenShotPath, $"{screenShotName}_{DateTime.Now.ToFileTime()}.jpeg");
             Screenshot ss = ((ITakesScreenshot)driver).GetScreenshot();
-            ss.SaveAsFile(SSName, ScreenshotImageFormat.Jpeg);
+            ss.SaveAsFile(SSName);
         }
 
         internal static void TakeElementScreenShot(string screenShotPath, string screenShotName, IWebElement element)
@@ -29,7 +29,7 @@ namespace WebAutomationToolKit.Helpers
 
             var SSName = Path.Combine(screenShotPath, $"{screenShotName}_{DateTime.Now.ToFileTime()}.jpeg");
             Screenshot ss = ((ITakesScreenshot)element).GetScreenshot();
-            ss.SaveAsFile(SSName, ScreenshotImageFormat.Jpeg);
+            ss.SaveAsFile(SSName);
         }
 
         internal static IJavaScriptExecutor JavaScriptExecutor(IWebDriver driver)

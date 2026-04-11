@@ -2,10 +2,8 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using System.Collections.ObjectModel;
-using System.Reflection;
 using WebAutomationToolKit.DriverManagers;
 using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.Extensions;
@@ -23,8 +21,7 @@ namespace WebAutomationToolKit.InternalImplementations
         #region Constants
         private const string _chromeDriverName = "chromedriver.exe";
         private const string _firefoxDriverName = "geckodriver.exe";
-        private const string _ieDriverName = "IEDriverServer.exe";
-        private const string _edgeDriverName = "MicrosoftWebDriver.exe";
+        private const string _edgeDriverName = "msedgedriver.exe";
 
         #endregion
 
@@ -38,7 +35,6 @@ namespace WebAutomationToolKit.InternalImplementations
 
         private ChromeOptions _chromeOptions;
         private FirefoxOptions _firefoxOptions;
-        private InternetExplorerOptions _internetExplorerOptions;
         private EdgeOptions _edgeOptions;
 
         private FirefoxProfile _firefoxProfile;
@@ -51,15 +47,7 @@ namespace WebAutomationToolKit.InternalImplementations
 
         internal WebDriverManager(int timeoutForWaitOverride, string driverPath = null)
         {
-            if (driverPath != null)
-            {
-                _driverPath = driverPath;
-            }
-            else
-            {
-                _driverPath = $"{Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().ToString()).LocalPath)}";
-            }
-
+            _driverPath = driverPath; // null = delegate driver resolution to Selenium Manager
             _timeoutForWait = timeoutForWaitOverride;
             _structureValidator = new StructureValidator();
         }
@@ -91,11 +79,10 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <param name="internetExplorerOptions"></param>
         /// <param name="edgeOptions"></param>
         public void SetDriverOptions(ChromeOptions chromeOptions = null, FirefoxOptions firefoxOptions = null,
-            InternetExplorerOptions internetExplorerOptions = null, EdgeOptions edgeOptions = null)
+            EdgeOptions edgeOptions = null)
         {
             _chromeOptions = chromeOptions;
             _firefoxOptions = firefoxOptions;
-            _internetExplorerOptions = internetExplorerOptions;
             _edgeOptions = edgeOptions;
 
             //Check if any of the drivers are active. 
@@ -411,8 +398,6 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 _drivers[_activeDriver].SwitchTo().Window(_drivers[_activeDriver].WindowHandles.Last());
-                if (_drivers[_activeDriver] is InternetExplorerDriver)
-                    _drivers[_activeDriver].Manage().Window.Maximize();
 
                 Thread.Sleep(1000);
             }
@@ -667,6 +652,8 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 var cssBy = _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
+                if (cssBy == null)
+                    throw new WebAutomationException($"Element '{selectorData.Name}' was not found on the page");
                 manager.GetActiveDriver().MoveToElement(cssBy, manager.GetWait());
                 WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
                 manager.GetActiveDriver().SendText(cssBy, manager.GetWait(), textToEnter);
@@ -1026,16 +1013,34 @@ namespace WebAutomationToolKit.InternalImplementations
                 switch (driverType)
                 {
                     case DriverType.Chrome:
-                        if (!File.Exists(Path.Combine(_driverPath, _chromeDriverName)))
-                            throw new WebAutomationException($"The driver {_chromeDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, _chromeOptions);
+                        if (_driverPath != null)
+                        {
+                            if (!File.Exists(Path.Combine(_driverPath, _chromeDriverName)))
+                                throw new WebAutomationException($"The driver {_chromeDriverName} was not found in the path {_driverPath}");
+                            webDriver = ChromeDriverManager.Create_WebDriver_Instance(_driverPath, _chromeOptions);
+                        }
+                        else
+                        {
+                            webDriver = ChromeDriverManager.Create_WebDriver_Instance(_chromeOptions);
+                        }
                         break;
                     case DriverType.Firefox:
-                        if (!File.Exists(Path.Combine(_driverPath, _firefoxDriverName)))
-                            throw new WebAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
-
-                        webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, _firefoxOptions, _firefoxProfile);
+                        if (_driverPath != null)
+                        {
+                            if (!File.Exists(Path.Combine(_driverPath, _firefoxDriverName)))
+                                throw new WebAutomationException($"The driver {_firefoxDriverName} was not found in the path {_driverPath}");
+                            webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_driverPath, _firefoxOptions, _firefoxProfile);
+                        }
+                        else
+                        {
+                            webDriver = FirefoxDriverManager.Create_WebDriver_Instance(_firefoxOptions, _firefoxProfile);
+                        }
+                        break;
+                    case DriverType.Edge:
+                        if (_driverPath != null)
+                            webDriver = EdgeDriverManager.Create_WebDriver_Instance(_driverPath, _edgeOptions);
+                        else
+                            webDriver = EdgeDriverManager.Create_WebDriver_Instance(_edgeOptions);
                         break;
                 }
 

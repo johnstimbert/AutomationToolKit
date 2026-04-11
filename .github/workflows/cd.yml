@@ -12,15 +12,15 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.0.x' # SDK Version to use.
-          source-url: https://nuget.pkg.github.com/<owner>/index.json
+          dotnet-version: '10.0.x'
+          source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: dotnet build --configuration Release <my project>
+      - run: dotnet build --configuration Release src/WebAutomationToolKit/WebAutomationToolKit.csproj
       - name: Create the package
-        run: dotnet pack --configuration Release <my project>
+        run: dotnet pack --configuration Release src/WebAutomationToolKit/WebAutomationToolKit.csproj
       - name: Publish the package to GPR
-        run: dotnet nuget push <my project>/bin/Release/*.nupkg
+        run: dotnet nuget push src/WebAutomationToolKit/bin/Release/*.nupkg

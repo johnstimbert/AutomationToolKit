@@ -6,35 +6,30 @@ namespace WebAutomationToolKit.DriverManagers
     {
         internal static FirefoxDriver Create_WebDriver_Instance(string driverPath, FirefoxOptions driverOptions = null, FirefoxProfile firefoxProfile = null)
         {
-            FirefoxDriver driver;
+            driverOptions = BuildOptions(driverOptions, firefoxProfile);
+            var driver = new FirefoxDriver(driverPath, driverOptions);
+            driver.Manage().Window.Maximize();
+            return driver;
+        }
+
+        internal static FirefoxDriver Create_WebDriver_Instance(FirefoxOptions driverOptions = null, FirefoxProfile firefoxProfile = null)
+        {
+            driverOptions = BuildOptions(driverOptions, firefoxProfile);
+            var driver = new FirefoxDriver(driverOptions);
+            driver.Manage().Window.Maximize();
+            return driver;
+        }
+
+        private static FirefoxOptions BuildOptions(FirefoxOptions driverOptions, FirefoxProfile firefoxProfile)
+        {
+            if (driverOptions == null)
+                driverOptions = new FirefoxOptions();
 
             if (firefoxProfile == null)
-            {
-                var defaultProfile = new FirefoxProfile
-                {
-                    //TODO: Is this Needed?
-                };
-
-                firefoxProfile = defaultProfile;
-            }
-
-            if (driverOptions == null)
-            {
-                var defaultOptions = new FirefoxOptions
-                {
-                    //TODO: Is this Needed?
-                };
-
-                driverOptions = defaultOptions;
-            }
+                firefoxProfile = new FirefoxProfile();
 
             driverOptions.Profile = firefoxProfile;
-            
-            driver = new FirefoxDriver(driverPath, driverOptions);
-
-            driver.Manage().Window.Maximize();
-
-            return driver;
+            return driverOptions;
         }
     }
 }

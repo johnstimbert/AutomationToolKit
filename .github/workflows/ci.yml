@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '6.0.x' ]
+        dotnet-version: [ '10.0.x' ]
         firefox: [ 'latest' ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}          
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
