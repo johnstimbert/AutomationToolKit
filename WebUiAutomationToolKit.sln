@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33516.290
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11626.88 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAutomationToolKit", "src\WebAutomationToolKit\WebAutomationToolKit.csproj", "{9A0C4BF4-00AE-4071-80A1-3098699F54E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAutomationToolKit.Tests", "tests\WebAutomationToolKit.Tests\WebAutomationToolKit.Tests.csproj", "{BE138DFF-1F26-4096-B2E3-0CDB3C955F31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B8EFD7CB-D111-431A-BA0D-DCE67BCFC4A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A0C4BF4-00AE-4071-80A1-3098699F54E1} = {B8EFD7CB-D111-431A-BA0D-DCE67BCFC4A4}
+		{BE138DFF-1F26-4096-B2E3-0CDB3C955F31} = {AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {262D9DFF-2892-409F-A272-A8A69AC369AF}
