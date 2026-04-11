@@ -10,8 +10,8 @@ namespace WebAutomationToolKit.InternalImplementations
     /// </summary>
     internal sealed class TestExecutor : ITestExecutor
     {
-        private Logger _logger;
-        private readonly TestDataCollector _testDataCollector;
+       private ILogger? _logger;
+        private readonly TestDataCollector? _testDataCollector;
 
         private string _testId;
         private string _resultsPath;
@@ -20,14 +20,14 @@ namespace WebAutomationToolKit.InternalImplementations
 
         private TestExecutor() { }
         
-        internal TestExecutor(string resultsPath, Logger logger = null, bool collectTestData = false)
+        internal TestExecutor(string resultsPath, ILogger? logger = null, bool collectTestData = false)
         {
             _logger = logger;
             if (collectTestData)
             {
                 _testDataCollector = new TestDataCollector();
 
-                if (_testRunId == null)
+                if (_testRunId == Guid.Empty)
                     _testRunId = Guid.NewGuid();
             }
 
@@ -142,7 +142,8 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                WebDriverManager manager = (WebDriverManager)webDriverManager;
+                var manager = webDriverManager as IWebDriverManagerInternal;
+                if (manager == null) return;
                 Helper.TakeScreenShot(manager.GetActiveDriver(), Path.Combine(resultsPath, "ScreenShots"), testMethodName);
             }
             catch (Exception) { }

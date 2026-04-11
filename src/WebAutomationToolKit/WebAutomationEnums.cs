@@ -133,6 +133,7 @@
         {
             Chrome,
             Firefox,
+            Edge,
             None
         }
         

@@ -9,5 +9,7 @@
         internal WebAutomationException() { }
 
         internal WebAutomationException(string message) : base(message) { }
+
+   internal WebAutomationException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

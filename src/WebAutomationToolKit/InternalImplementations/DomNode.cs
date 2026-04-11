@@ -103,13 +103,13 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                WebDriverManager manager = (WebDriverManager)webDriverManager;
+                var manager = webDriverManager as IWebDriverManagerInternal
+                    ?? throw new WebAutomationException("The provided IWebDriverManager does not implement the required internal interface");
                 //Get fresh refrence to the element this node 
                 var thisNode = GetElementReference(webDriverManager);
 
                 var executor = Helper.JavaScriptExecutor(manager.GetActiveDriver());
-                var atts = executor.ExecuteScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) " +
-                    "{ items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", thisNode) as Dictionary<string, object>;
+                var atts = executor.ExecuteScript(Helper.GetAttributesScript, thisNode) as Dictionary<string, object>;
 
                 _hasAttributes = atts.Count > 0;
 
@@ -129,7 +129,8 @@ namespace WebAutomationToolKit.InternalImplementations
         {
             try
             {
-                WebDriverManager manager = (WebDriverManager)webDriverManager;
+                var manager = webDriverManager as IWebDriverManagerInternal
+                    ?? throw new WebAutomationException("The provided IWebDriverManager does not implement the required internal interface");
                 //Get fresh refrence to the element this node 
                 var thisNode = GetElementReference(webDriverManager);
                 //Find anything that could be child with the Xpath locator ".//*"

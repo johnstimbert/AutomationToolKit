@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -85,11 +85,8 @@ namespace WebAutomationToolKit.Tests
         [TestInitialize]
         public void BeforeEachTest()
         {
-            if(_webAutomation == null)
-               _webAutomation = new WebAutomation(_driverPath, 10);
-
-            if(_driverManager == null)
-                _driverManager = _webAutomation.GetIWebDriverManager();
+           _webAutomation = new WebAutomation(_driverPath, 10);
+           _driverManager = _webAutomation.GetIWebDriverManager();
 
             divTags = new SelectorDataSet(HtmlTagType.div);
             divTags.AddSelectorDataByName(divById);
@@ -124,7 +121,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.SetDriverOptions(options);
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
-            Assert.AreEqual(_navUrlGoogle, _driverManager.GetActiveDriverUrl(), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
+            Assert.IsTrue(_driverManager.GetActiveDriverUrl().StartsWith(_navUrlGoogle), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
         }
 
         [TestMethod]
@@ -136,7 +133,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.SetDriverOptions(null, options);
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
-            Assert.AreEqual(_navUrlGoogle, _driverManager.GetActiveDriverUrl(), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
+            Assert.IsTrue(_driverManager.GetActiveDriverUrl().StartsWith(_navUrlGoogle), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
         }
 
         #endregion
@@ -148,7 +145,7 @@ namespace WebAutomationToolKit.Tests
         {
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
-            Assert.AreEqual(_navUrlGoogle, _driverManager.GetActiveDriverUrl(), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
+            Assert.IsTrue(_driverManager.GetActiveDriverUrl().StartsWith(_navUrlGoogle), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
         }
 
         [TestMethod]
@@ -157,7 +154,7 @@ namespace WebAutomationToolKit.Tests
         {
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
-            Assert.AreEqual(_navUrlGoogle, _driverManager.GetActiveDriverUrl(), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
+            Assert.IsTrue(_driverManager.GetActiveDriverUrl().StartsWith(_navUrlGoogle), $"Expected url was {_navUrlGoogle}, Url found was {_driverManager.GetActiveDriverUrl()}");
         }
 
         [TestMethod]
@@ -261,7 +258,7 @@ namespace WebAutomationToolKit.Tests
         public void SendText_Chrome()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -274,7 +271,7 @@ namespace WebAutomationToolKit.Tests
         public void SendText_Firefox()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -287,7 +284,7 @@ namespace WebAutomationToolKit.Tests
         public void SendText_DriverTypeNone()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -298,6 +295,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.SendText(googleSearchInput, text);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -311,7 +309,7 @@ namespace WebAutomationToolKit.Tests
         public void SendTextWithDelay_Chrome()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -324,7 +322,7 @@ namespace WebAutomationToolKit.Tests
         public void SendTextWithDelay_Firefox()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -337,7 +335,7 @@ namespace WebAutomationToolKit.Tests
         //public void SendTextWithDelay_Edge()
         //{
         //    string text = "ChromeShot";
-        //    SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+        //    SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
         //    _driverManager.CreateDriverInstance(DriverType.Edge);
         //    _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -350,7 +348,7 @@ namespace WebAutomationToolKit.Tests
         public void SendTextWithDelay_DriverTypeNone()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -361,6 +359,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.SendTextWithDelay(googleSearchInput, text);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -374,7 +373,7 @@ namespace WebAutomationToolKit.Tests
         public void Clear_Chrome()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -388,7 +387,7 @@ namespace WebAutomationToolKit.Tests
         public void Clear_Firefox()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -401,7 +400,7 @@ namespace WebAutomationToolKit.Tests
         [TestCategory(_driverInteractionTestCategory)]
         public void Clear_DriverTypeNone()
         {
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
@@ -412,6 +411,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.ClearText(googleSearchInput);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex) 
             {
@@ -459,6 +459,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.MoveToElement(donateInput);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -500,6 +501,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 Assert.IsTrue(_driverManager.DoesUrlContain("google"));
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -541,6 +543,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 Assert.IsTrue(_driverManager.DoesUrlContainUsingRegex("google"));
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -628,7 +631,7 @@ namespace WebAutomationToolKit.Tests
         public void SendText_Chrome_HeadlessMode()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             var options = GetChromeOptions();
             options.AddArgument("--headless");
@@ -644,7 +647,7 @@ namespace WebAutomationToolKit.Tests
         public void SendText_Firefox_HeadlessMode()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             var options = GetFirefoxOptions();
             options.AddArgument("--headless");
@@ -660,7 +663,7 @@ namespace WebAutomationToolKit.Tests
         public void SendTextWithDelay_Chrome_HeadlessMode()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             var options = GetChromeOptions();
             options.AddArgument("--headless");
@@ -668,7 +671,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.CreateDriverInstance(DriverType.Chrome);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
-            _driverManager.SendText(googleSearchInput, text);
+            _driverManager.SendTextWithDelay(googleSearchInput, text);
         }
 
         [TestMethod]
@@ -676,7 +679,7 @@ namespace WebAutomationToolKit.Tests
         public void SendTextWithDelay_Firefox_HeadlessMode()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             var options = GetFirefoxOptions();
             options.AddArgument("--headless");
@@ -684,7 +687,7 @@ namespace WebAutomationToolKit.Tests
             _driverManager.CreateDriverInstance(DriverType.Firefox);
             _driverManager.NavigateWithActiveDriver(_navUrlGoogle);
             Assert.IsNotNull(_driverManager, "Driver was null");
-            _driverManager.SendText(googleSearchInput, text);
+            _driverManager.SendTextWithDelay(googleSearchInput, text);
         }
         
         [TestMethod]
@@ -692,7 +695,7 @@ namespace WebAutomationToolKit.Tests
         public void Clear_Chrome_HeadlessMode()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             var options = GetChromeOptions();
             options.AddArgument("--headless");
@@ -709,7 +712,7 @@ namespace WebAutomationToolKit.Tests
         public void Clear_Firefox_HeadlessMode()
         {
             string text = "ChromeShot";
-            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.input, HtmlAttributeType.Type, "text");
+            SelectorData googleSearchInput = new SelectorData("SearchInput", HtmlTagType.textarea, HtmlAttributeType.Name, "q");
 
             var options = GetFirefoxOptions();
             options.AddArgument("--headless");

@@ -108,15 +108,21 @@ namespace WebAutomationToolKit.Validators
 
                 return webElement;
             }
-            catch (WebAutomationException wae)
+            catch (WebAutomationException)
             {
-                throw wae;
+                throw;
             }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // Variable is declared but never used
+            catch (NoSuchElementException)
             {
-                return webElement;
+                return null;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -154,15 +160,21 @@ namespace WebAutomationToolKit.Validators
 
                 return webElement;
             }
-            catch(WebAutomationException wae)
+            catch (WebAutomationException)
             {
-                throw wae;
+                throw;
             }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // Variable is declared but never used
+            catch (NoSuchElementException)
             {
-                return webElement;
+                return null;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -211,9 +223,17 @@ namespace WebAutomationToolKit.Validators
                                
                 return cssBy;
             }
-            catch (Exception)
+            catch (NoSuchElementException)
             {
                 return null;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return null;
+            }
+            catch (Exception ex) when (ex is not WebAutomationException)
+            {
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -253,7 +273,7 @@ namespace WebAutomationToolKit.Validators
             if (element == null) throw new NullReferenceException();
 
             if (!(((IJavaScriptExecutor)driver).ExecuteScript(
-                    "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
+                    Helper.GetAttributesScript,
                     element) is Dictionary<string, object> attributes)) throw new NullReferenceException();
 
             var selector = "//" + element.TagName;
@@ -346,7 +366,7 @@ namespace WebAutomationToolKit.Validators
                     foreach(var element in elements)
                     {
                         //Get the attributes of the element using a javascript query
-                        var attsObject = javaScriptExecutor.ExecuteScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", element);
+                        var attsObject = javaScriptExecutor.ExecuteScript(Helper.GetAttributesScript, element);
                         //Cast them to a dictionary object
                         attributes = (Dictionary<string, object>)attsObject;
                         foreach(var attribute in attributes)
@@ -360,7 +380,7 @@ namespace WebAutomationToolKit.Validators
                     foreach (var element in elements)
                     {
                         //Get the attributes of the element using a javascript query
-                        var attsObject = javaScriptExecutor.ExecuteScript("var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;", element);
+                        var attsObject = javaScriptExecutor.ExecuteScript(Helper.GetAttributesScript, element);
                         //Cast them to a dictionary object
                         attributes = (Dictionary<string, object>)attsObject;
                         foreach (var attribute in attributes)

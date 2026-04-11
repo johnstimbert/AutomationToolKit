@@ -24,12 +24,9 @@ namespace WebAutomationToolKit
         {
             TagType = tag.ToString();
 
-            foreach(var selectorDataItem in selectorDataItems)
-            {
-                selectorDataItem.TagType = tag.ToString();
-            }
-
-            SelectorDataItems = selectorDataItems;
+           SelectorDataItems = selectorDataItems
+               .Select(item => item with { TagType = tag.ToString() })
+               .ToList();
         }
 
         /// <param name="tag">Tag type for all the items in this collection</param>
@@ -38,12 +35,9 @@ namespace WebAutomationToolKit
         {
             TagType = tag;
 
-            foreach (var selectorDataItem in selectorDataItems)
-            {
-                selectorDataItem.TagType = tag;
-            }
-
-            SelectorDataItems = selectorDataItems;
+           SelectorDataItems = selectorDataItems
+               .Select(item => item with { TagType = tag })
+               .ToList();
         }
 
         /// <param name="tag">Tag type for all the items in this collection</param>
@@ -96,9 +90,7 @@ namespace WebAutomationToolKit
             if (dupe != null)
                 throw new WebAutomationException($"The collection already contains a SelectorData object with the name {selectorDataToAdd.Name}");
 
-            selectorDataToAdd.TagType = TagType;
-
-            SelectorDataItems.Add(selectorDataToAdd);
+           SelectorDataItems.Add(selectorDataToAdd with { TagType = TagType });
         }
     }
 }
