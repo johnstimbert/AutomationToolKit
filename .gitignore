@@ -261,6 +261,8 @@ __pycache__/
 *.pyc
 /.github/agents
 
+/docs/design
+
 # Local credentials - never commit
 .env
 
