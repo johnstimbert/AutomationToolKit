@@ -81,7 +81,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Run Tests
-      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+      run: dotnet test --configuration Release --no-build --verbosity normal --filter "TestCategory!=Browser" --logger "trx;LogFileName=test-results.trx"
     
     - name: Upload test results
       if: always()

@@ -16,7 +16,7 @@ namespace WebAutomationToolKit.Tests
 
         private const string _loggerTests = "Logger_Tests";
 
-        private const string _logPath = @"e:\logger";
+        private string _logPath;
         private const string _baseLogFileName = "logger.txt";
         private string _defaultDateFormatProperty = "MM_dd_yyyy";
         private static readonly string _driverPath = null;//@"E:\source\AutomationToolKit\WebUiAutomationToolKit\bin\Release";
@@ -26,6 +26,9 @@ namespace WebAutomationToolKit.Tests
         [TestInitialize]
         public void BeforeEachTest()
         {
+            _logPath = Path.Combine(Path.GetTempPath(), "WatLoggerTests_" + Guid.NewGuid().ToString("N")[..8]);
+            Directory.CreateDirectory(_logPath);
+
            _webAutomation = new WebAutomation(_driverPath, 10);
 
             _loggerSettings = new LoggerSettings()
@@ -38,17 +41,12 @@ namespace WebAutomationToolKit.Tests
         [TestCleanup]
         public void AfterEachTest()
         {
+            Thread.Sleep(2000); // allow logger to finish flushing before deleting
+
             if (Directory.Exists(_logPath))
-            {
-                var logFiles = Directory.GetFiles(_logPath);
-                foreach (var logFile in logFiles)
-                {
-                    File.Delete(logFile);
-                }
-            }
+                Directory.Delete(_logPath, recursive: true);
 
             _webAutomation = null;
-            Thread.Sleep(2000);
         }
 
         [TestMethod]
