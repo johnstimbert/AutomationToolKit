@@ -7,7 +7,7 @@ using WebAutomationToolKit.Exceptions;
 using WebAutomationToolKit.InternalImplementations;
 using static WebAutomationToolKit.WebAutomationEnums;
 
-namespace WebAutomationToolKit.Tests
+namespace WebAutomationToolKit.BrowserTests
 {
     [TestClass]
     [TestCategory("Browser")]
