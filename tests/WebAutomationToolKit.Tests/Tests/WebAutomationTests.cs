@@ -10,6 +10,7 @@ using static WebAutomationToolKit.WebAutomationEnums;
 namespace WebAutomationToolKit.Tests
 {
     [TestClass]
+    [TestCategory("Browser")]
     public class WebAutomationTests
     {
         private static TestContext _testContext;
