@@ -17,6 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "designs", "designs", "{D930
 		docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md = docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{600A97F8-8FDF-4824-BD95-FC9A892A9A03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1316D7D7-5F9F-42CC-80A8-47BE901E2EF9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\publish-sdk-containers.yml = .github\workflows\publish-sdk-containers.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +45,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9A0C4BF4-00AE-4071-80A1-3098699F54E1} = {B8EFD7CB-D111-431A-BA0D-DCE67BCFC4A4}
 		{BE138DFF-1F26-4096-B2E3-0CDB3C955F31} = {AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}
+		{1316D7D7-5F9F-42CC-80A8-47BE901E2EF9} = {600A97F8-8FDF-4824-BD95-FC9A892A9A03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {262D9DFF-2892-409F-A272-A8A69AC369AF}
