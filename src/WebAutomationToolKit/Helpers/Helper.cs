@@ -11,6 +11,14 @@ namespace WebAutomationToolKit.Helpers
 {
     internal static class Helper
     {
+        /// <summary>
+        /// JavaScript snippet that collects all attributes of a DOM element into a name→value dictionary.
+        /// Shared by StructureValidator, WebDriverExtension, and DomNode to avoid duplication (item 14).
+        /// </summary>
+        internal const string GetAttributesScript =
+            "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) " +
+            "{ items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;";
+
         #region INTERNAL ONLY DO NOT EXPOSE
         internal static void TakeScreenShot(IWebDriver driver, string screenShotPath, string screenShotName)
         {
@@ -60,9 +68,10 @@ namespace WebAutomationToolKit.Helpers
             return (driver as RemoteWebDriver).Capabilities.GetCapability("browserName").ToString();
         }
 
-        internal static WebDriverManager IsDriverNull(IWebDriverManager webDriverManager)
+        internal static IWebDriverManagerInternal IsDriverNull(IWebDriverManager webDriverManager)
         {
-            WebDriverManager m = (WebDriverManager)webDriverManager;
+            var m = webDriverManager as IWebDriverManagerInternal
+                ?? throw new WebAutomationException("The provided IWebDriverManager does not implement the required internal interface");
 
             if (m.GetActiveDriverType() == WebAutomationEnums.DriverType.None)
                 throw new WebAutomationException("DriverType Provided was not found. Instantiate the driver before performing actions on or with it");
@@ -73,24 +82,7 @@ namespace WebAutomationToolKit.Helpers
             return m;
         }
 
-        internal static string GetEnumDescription(Enum value)
-        {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-
-            DescriptionAttribute[] attributes =
-                (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-            if (attributes != null && attributes.Length > 0)
-            {
-                return attributes[0].Description;
-            }
-            else
-            {
-                return value.ToString();
-            }
-        }
-
-        internal static string GetString<T>(this T value) //where T : struct
+        internal static string GetString<T>(this T value)
         {
             if (typeof(T).IsEnum)
             {

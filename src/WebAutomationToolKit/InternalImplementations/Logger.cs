@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Serialization;
 using WebAutomationToolKit;
 using WebAutomationToolKit.Exceptions;
@@ -84,8 +83,6 @@ namespace WebAutomationToolKit.InternalImplementations
 
                     _newTestRun = false;
                 }
-                // Get call stack
-                StackTrace stackTrace = new StackTrace();
 
                 //Switch case for LogLevel message type
                 switch (level)
@@ -181,27 +178,15 @@ namespace WebAutomationToolKit.InternalImplementations
             }
         }
 
-        private string ValidateDateFormatValueBeingSet(string value)
-        {
-            if (DateTime.TryParse(value, out DateTime expectedDate))
-            {
-                return value;
-            }
-
-            throw new LoggerException($"The dateTime format {value} is not valid. " +
-                $"Please reference the folowing article for valid values https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings");
-        }
-
         private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, string logFileName)
         {
-            var logHelper = new LogFileHelper(_logFilePath, _logFileName);
-            if(numberOfLogFilesToPreserve > 0)
+            if (numberOfLogFilesToPreserve > 0)
             {
-                logHelper.IncrementLogFiles(numberOfLogFilesToPreserve);
+                _fileHelper.IncrementLogFiles(numberOfLogFilesToPreserve);
             }
             else
             {
-                logHelper.ClearLogFiles(logFileName);
+                _fileHelper.ClearLogFiles(logFileName);
             }
         }
 

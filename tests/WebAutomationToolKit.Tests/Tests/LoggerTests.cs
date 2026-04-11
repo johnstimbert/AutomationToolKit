@@ -26,8 +26,7 @@ namespace WebAutomationToolKit.Tests
         [TestInitialize]
         public void BeforeEachTest()
         {
-            if(_webAutomation == null)
-                _webAutomation = new WebAutomation(_driverPath, 10);
+           _webAutomation = new WebAutomation(_driverPath, 10);
 
             _loggerSettings = new LoggerSettings()
             {

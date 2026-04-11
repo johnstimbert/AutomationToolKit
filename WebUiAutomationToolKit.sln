@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.4.11626.88 stable
+VisualStudioVersion = 18.4.11626.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAutomationToolKit", "src\WebAutomationToolKit\WebAutomationToolKit.csproj", "{9A0C4BF4-00AE-4071-80A1-3098699F54E1}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B8EFD7CB-D111-431A-BA0D-DCE67BCFC4A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "designs", "designs", "{D930C404-2B6F-4F9C-836B-9AC6190474C0}"
+	ProjectSection(SolutionItems) = preProject
+		docs\design\DESIGN_DOTNET10_UPGRADE.md = docs\design\DESIGN_DOTNET10_UPGRADE.md
+		docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md = docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

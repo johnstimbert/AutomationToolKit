@@ -3,7 +3,7 @@ using WebAutomationToolKit.InternalImplementations;
 
 namespace WebAutomationToolKit.TestDataCollection
 {
-    internal sealed class TestDataCollector
+   internal sealed class TestDataCollector : IDisposable
     {
         private const string _nullTestFailedExceptionMessage = "Exception cannot be null and Exception.Message cannot be empty or whitespace when logging failed test data";
         private const string _testRunChangedMessage = "Cannot change test run id in the middle of a test run";
@@ -16,6 +16,8 @@ namespace WebAutomationToolKit.TestDataCollection
         private List<string> _failedTestsListing;
         private List<string> _passedTestsListing;
 
+       private bool _disposed = false;
+
         internal TestDataCollector()
         {
             TestExecutor.TestBegun += TestBegun;
@@ -24,6 +26,14 @@ namespace WebAutomationToolKit.TestDataCollection
             _failedTestsListing = new List<string>();
             _passedTestsListing = new List<string>();
         }
+
+       public void Dispose()
+       {
+           if (_disposed) return;
+           TestExecutor.TestBegun -= TestBegun;
+           TestExecutor.TestComplete -= TestComplete;
+           _disposed = true;
+       }
 
         internal List<string> GetRunSummary()
         {

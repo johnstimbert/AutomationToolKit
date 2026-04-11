@@ -85,11 +85,8 @@ namespace WebAutomationToolKit.Tests
         [TestInitialize]
         public void BeforeEachTest()
         {
-            if(_webAutomation == null)
-               _webAutomation = new WebAutomation(_driverPath, 10);
-
-            if(_driverManager == null)
-                _driverManager = _webAutomation.GetIWebDriverManager();
+           _webAutomation = new WebAutomation(_driverPath, 10);
+           _driverManager = _webAutomation.GetIWebDriverManager();
 
             divTags = new SelectorDataSet(HtmlTagType.div);
             divTags.AddSelectorDataByName(divById);
@@ -298,6 +295,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.SendText(googleSearchInput, text);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -361,6 +359,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.SendTextWithDelay(googleSearchInput, text);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -412,6 +411,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.ClearText(googleSearchInput);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex) 
             {
@@ -459,6 +459,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 _driverManager.MoveToElement(donateInput);
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -500,6 +501,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 Assert.IsTrue(_driverManager.DoesUrlContain("google"));
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {
@@ -541,6 +543,7 @@ namespace WebAutomationToolKit.Tests
             try
             {
                 Assert.IsTrue(_driverManager.DoesUrlContainUsingRegex("google"));
+                Assert.Fail("Expected WebAutomationException was not thrown");
             }
             catch (WebAutomationException ex)
             {

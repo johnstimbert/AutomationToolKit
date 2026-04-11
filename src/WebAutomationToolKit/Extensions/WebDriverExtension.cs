@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WebAutomationToolKit.Exceptions;
+using WebAutomationToolKit.Helpers;
 
 namespace WebAutomationToolKit.Extensions
 {
@@ -16,141 +17,59 @@ namespace WebAutomationToolKit.Extensions
         private const string ElementNotEnabled = "Target element not enabled";
 
         internal static bool IsEnabled(IWebDriver driver, By locator, WebDriverWait wait)
-        {
-            IWebElement target = null;
+            => WaitForCondition(driver, locator, wait, e => e.Enabled);
 
-            var result = wait.Until(condition =>
-            {
-                try
-                {
-                    target = driver.FindElement(locator);
+       internal static bool IsDisplayed(IWebDriver driver, By locator, WebDriverWait wait)
+           => WaitForCondition(driver, locator, wait, e => e.Displayed);
 
-                    return target.Enabled;
-                }
-                catch (StaleElementReferenceException)
-                {
-                    return false;
-                }
-                catch (NoSuchElementException)
-                {
-                    return false;
-                }
-            });
+       internal static bool IsDisplayedAndEnabled(IWebDriver driver, By locator, WebDriverWait wait)
+           => WaitForCondition(driver, locator, wait, e => e.Displayed && e.Enabled);
 
-            if (!result)
-            {
-                target = driver.FindElement(locator);
+       private static bool WaitForCondition(IWebDriver driver, By locator, WebDriverWait wait,
+           Func<IWebElement, bool> predicate)
+       {
+           IWebElement capturedTarget = null;
 
-                if (!target.Displayed)
-                    throw new WebAutomationException(ElementNotDisplayed);
+           var result = wait.Until(condition =>
+           {
+               try
+               {
+                   capturedTarget = driver.FindElement(locator);
+                   return predicate(capturedTarget);
+               }
+               catch (StaleElementReferenceException) { return false; }
+               catch (NoSuchElementException) { return false; }
+           });
 
-                if (!target.Enabled)
-                    throw new WebAutomationException(ElementNotEnabled);
-            }
+           if (!result)
+           {
+               capturedTarget = driver.FindElement(locator);
+               if (!capturedTarget.Displayed)
+                   throw new WebAutomationException(ElementNotDisplayed);
+               if (!capturedTarget.Enabled)
+                   throw new WebAutomationException(ElementNotEnabled);
+           }
 
-            return result;
-        }
-
-        internal static bool IsDisplayed(IWebDriver driver, By locator, WebDriverWait wait)
-        {
-            IWebElement target = null;
-
-            var result = wait.Until(condition =>
-            {
-                try
-                {
-                    target = driver.FindElement(locator);
-
-                    return target.Displayed;
-                }
-                catch (StaleElementReferenceException)
-                {
-                    return false;
-                }
-                catch (NoSuchElementException)
-                {
-                    return false;
-                }
-            });
-
-            if (!result)
-            {
-                target = driver.FindElement(locator);
-
-                if (!target.Displayed)
-                    throw new WebAutomationException(ElementNotDisplayed);
-
-                if (!target.Enabled)
-                    throw new WebAutomationException(ElementNotEnabled);
-            }
-
-            return result;
-        }
-
-        internal static bool IsDisplayedAndEnabled(IWebDriver driver, By locator, WebDriverWait wait)
-        {
-            IWebElement target = null;
-
-            var result = wait.Until(condition =>
-            {
-                try
-                {
-                    target = driver.FindElement(locator);
-
-                    return target.Displayed && target.Enabled;
-                }
-                catch (StaleElementReferenceException)
-                {
-                    return false;
-                }
-                catch (NoSuchElementException)
-                {
-                    return false;
-                }
-            });
-
-            if (!result)
-            {
-                target = driver.FindElement(locator);
-
-                if (!target.Displayed)
-                    throw new WebAutomationException(ElementNotDisplayed);
-
-                if (!target.Enabled)
-                    throw new WebAutomationException(ElementNotEnabled);
-            }
-
-            return result;
-        }
+           return result;
+       }
 
         internal static void Click(this IWebDriver driver, By locator, WebDriverWait wait)
         {
-            IWebElement target = null;
-
-            if (IsDisplayedAndEnabled(driver, locator, wait))
-                target = driver.FindElement(locator);
-
-            target.Click();
+           IsDisplayedAndEnabled(driver, locator, wait);
+           driver.FindElement(locator).Click();
         }
 
         internal static void SendText(this IWebDriver driver, By locator, WebDriverWait wait, string text)
         {
-            IWebElement target = null;
-
-            if (IsDisplayedAndEnabled(driver, locator, wait))
-                target = driver.FindElement(locator);
-
-            target.SendKeys(text);
+           IsDisplayedAndEnabled(driver, locator, wait);
+           driver.FindElement(locator).SendKeys(text);
         }
                 
         internal static void SendTextWithDelay(this IWebDriver driver, By locator, WebDriverWait wait, string text, int delay = 500)
         {
-            IWebElement target = null;
-
-            if (IsDisplayedAndEnabled(driver, locator, wait))
-                target = driver.FindElement(locator);
-                       
-            foreach (var c in text.ToCharArray())
+           IsDisplayedAndEnabled(driver, locator, wait);
+           var target = driver.FindElement(locator);
+           foreach (var c in text.ToCharArray())
             {
                 System.Threading.Thread.Sleep(delay);
                 target.SendKeys(c.ToString());
@@ -159,22 +78,14 @@ namespace WebAutomationToolKit.Extensions
 
         internal static void Clear(this IWebDriver driver, By locator, WebDriverWait wait)
         {
-            IWebElement target = null;
-
-            if (IsDisplayedAndEnabled(driver, locator, wait))
-                target = driver.FindElement(locator);
-
-            target.Clear();
+           IsDisplayedAndEnabled(driver, locator, wait);
+           driver.FindElement(locator).Clear();
         }
 
         internal static void MoveToElement(this IWebDriver driver, By locator, WebDriverWait wait)
         {
-            IWebElement target = null;
-
-            if (IsDisplayedAndEnabled(driver, locator, wait))
-                target = driver.FindElement(locator);
-            
-            new Actions(driver).MoveToElement(target)
+           IsDisplayedAndEnabled(driver, locator, wait);
+           new Actions(driver).MoveToElement(driver.FindElement(locator))
                 .Build()
                 .Perform();
         }
@@ -230,7 +141,7 @@ namespace WebAutomationToolKit.Extensions
 
                 var attributes =
                     ((IJavaScriptExecutor)driver).ExecuteScript(
-                        "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
+                        Helper.GetAttributesScript,
                         element) as Dictionary<string, object>;
                 if (attributes == null) throw new NullReferenceException();
 
@@ -250,7 +161,7 @@ namespace WebAutomationToolKit.Extensions
 
             var attributes =
                 ((IJavaScriptExecutor)driver).ExecuteScript(
-                    "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
+                    Helper.GetAttributesScript,
                     element) as Dictionary<string, object>;
             if (attributes == null) throw new NullReferenceException();
 

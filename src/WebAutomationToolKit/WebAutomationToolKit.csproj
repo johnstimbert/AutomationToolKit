@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="InternalImplementations\" />
     <Folder Include="Exceptions\" />
     <Folder Include="DriverManagers\" />
     <Folder Include="Extensions\" />

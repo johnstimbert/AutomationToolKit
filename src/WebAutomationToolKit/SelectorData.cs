@@ -5,27 +5,27 @@ namespace WebAutomationToolKit
     /// <summary>
     /// Common object for interaction with the WebAutomation utility
     /// </summary>
-    public class SelectorData
+    public record SelectorData
     {
         /// <summary>
         /// Used to uniquely identify a SelectorData object when used as part of a set
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; init; }
         /// <summary>
         /// Denotes the Html Element Name or Tag
         /// </summary>
-        public string TagType { get; internal set; }
+        public string TagType { get; init; }
         /// <summary>
         /// Denotes the attribute name, unless set to 'None'
         /// </summary>
-        public HtmlAttributeType AttributeType { get; internal set; }
+        public HtmlAttributeType AttributeType { get; init; }
         /// <summary>
         /// Denotes the attribute value text, unless the AttributeType property is set to 'None' 
         /// </summary>
-        public string AttributeValue { get; internal set; }
+        public string AttributeValue { get; init; }
 
         /// <summary>
-        /// Use this contructor when creating a stand alone SelectorData object
+        /// Use this constructor when creating a stand-alone SelectorData object
         /// </summary>
         public SelectorData(string name, HtmlTagType tag, HtmlAttributeType attType, string attValue)
         {
@@ -36,7 +36,7 @@ namespace WebAutomationToolKit
         }
 
         /// <summary>
-        /// Use this contructor when creating a stand alone SelectorData object and the HtmlTagType enum does not contain your tag type
+        /// Use this constructor when creating a stand-alone SelectorData object and the HtmlTagType enum does not contain your tag type
         /// </summary>
         public SelectorData(string name, string tag, HtmlAttributeType attType, string attValue)
         {
@@ -47,11 +47,13 @@ namespace WebAutomationToolKit
         }
 
         /// <summary>
-        /// Use this contructor when creating a SelectorData object that will be included as part of a SelectorDataSet
+        /// Use this constructor when creating a SelectorData object that will be included as part of a SelectorDataSet.
+        /// TagType will be set to the set's tag when the item is added to the set.
         /// </summary>
         public SelectorData(string name, HtmlAttributeType attType, string attValue)
         {
             Name = name;
+            TagType = string.Empty;
             AttributeType = attType;
             AttributeValue = attValue;
         }

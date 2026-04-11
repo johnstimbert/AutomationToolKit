@@ -1,8 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using System.Runtime.ExceptionServices;
 using WebAutomationToolKit.Exceptions;
-using WebAutomationToolKit.Helpers;
-using WebAutomationToolKit.Validators;
-using static WebAutomationToolKit.WebAutomationEnums;
+using WebAutomationToolKit.InternalImplementations;
 
 namespace WebAutomationToolKit.InternalImplementations
 {
@@ -13,18 +11,23 @@ namespace WebAutomationToolKit.InternalImplementations
     {
         private readonly string? _driverPath;
         private readonly int _timeoutForWait;
-        private static WebDriverManager _webDriverManagerInstance;
-        private static Logger _loggerInstance;
-        private static TestExecutor _testExecutorInstance;
+        private WebDriverManager? _webDriverManagerInstance;
+        private ILogger? _loggerInstance;
+        private TestExecutor? _testExecutorInstance;
 
         /// <summary>
-        /// Creates an instance of the WebAutomation class
+        /// Creates an instance of the <see cref="WebAutomation"/> class.
         /// </summary>
-        /// <param name="driverPath">The path to the driver service executables</param>
-        /// <param name="timeoutForWaitOverride">THis can be set to override the defauslt five (5) second timeout in the webdriver</param>
-        public WebAutomation(string driverPath, int timeoutForWaitOverride = 5)
+        /// <param name="driverPath">
+        /// Optional path to the directory containing the browser driver executables (e.g., <c>chromedriver.exe</c>).
+        /// When <see langword="null"/>, Selenium Manager resolves the driver automatically.
+        /// </param>
+        /// <param name="timeoutForWaitOverride">
+        /// Overrides the default five-second WebDriver wait timeout. Values less than or equal to zero are clamped to five seconds.
+        /// </param>
+        public WebAutomation(string? driverPath = null, int timeoutForWaitOverride = 5)
         {
-            if(driverPath != null)
+            if (driverPath != null)
                 driverPath = ValidateDriverPath(driverPath);
 
             if (timeoutForWaitOverride <= 0)
@@ -34,13 +37,10 @@ namespace WebAutomationToolKit.InternalImplementations
             _driverPath = driverPath;
         }
 
-
-        private WebAutomation() { }
-
-        private string ValidateDriverPath(string driverPath)
+        private static string ValidateDriverPath(string driverPath)
         {
-            if (driverPath.LastIndexOf("\\") != driverPath.Length - 1)
-                driverPath += @"\";
+            if (!Path.EndsInDirectorySeparator(driverPath))
+                driverPath += Path.DirectorySeparatorChar;
 
             if (!Directory.Exists(driverPath))
                 throw new WebAutomationException($"The path {driverPath} could not be found");
@@ -48,88 +48,65 @@ namespace WebAutomationToolKit.InternalImplementations
             return driverPath;
         }
 
+        /// <summary>
+        /// Returns the <see cref="IWebDriverManager"/> for this instance, creating it on the first call.
+        /// The driver path supplied to the <see cref="WebAutomation"/> constructor is forwarded to the manager.
+        /// </summary>
+        /// <returns>The <see cref="IWebDriverManager"/> instance owned by this <see cref="WebAutomation"/>.</returns>
         public IWebDriverManager GetIWebDriverManager()
-        {
-            try
-            {
-                if(_webDriverManagerInstance == null)
-                    _webDriverManagerInstance = new WebDriverManager(_timeoutForWait);
+            => WrapException(
+                () =>
+                {
+                    _webDriverManagerInstance ??= new WebDriverManager(_timeoutForWait, _driverPath);
+                    return _webDriverManagerInstance;
+                },
+                (msg, ex) => new WebAutomationException(msg, ex));
 
-                return _webDriverManagerInstance;
-            }
-            catch (WebAutomationException wea)
-            {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
+        /// <summary>
+        /// Creates and returns a new <see cref="ILogger"/> configured with the supplied <paramref name="loggerSettings"/>.
+        /// Call this method before <see cref="GetTestExecutor"/> if you want the executor to use this logger.
+        /// </summary>
+        /// <param name="loggerSettings">Settings that control log file location, naming, and retention.</param>
+        /// <returns>A new <see cref="ILogger"/> instance.</returns>
         public ILogger GetLogger(LoggerSettings loggerSettings)
-        {
-            try
-            {
-                _loggerInstance = new Logger(loggerSettings);
+            => WrapException(
+                () =>
+                {
+                    _loggerInstance = new Logger(loggerSettings);
+                    return _loggerInstance;
+                },
+                (msg, ex) => new LoggerException(msg, ex));
 
-                return _loggerInstance;
-            }
-            catch (LoggerException le)
-            {
-                throw le;
-            }
-            catch (Exception ex)
-            {
-                throw new LoggerException(ex.ToString());
-            }
-        }
-
+        /// <summary>
+        /// Creates and returns a new <see cref="ITestExecutor"/>.
+        /// Always creates a fresh executor on each call.
+        /// Call <see cref="GetLogger"/> before this method to associate a logger with the executor.
+        /// </summary>
+        /// <param name="resultsPath">Directory where test results and screenshots are written.</param>
+        /// <param name="collectTestData">When <see langword="true"/>, enables run-summary data collection.</param>
+        /// <returns>A new <see cref="ITestExecutor"/> instance.</returns>
         public ITestExecutor GetTestExecutor(string resultsPath, bool collectTestData = false)
-        {
-            try
-            {                
-                if (_testExecutorInstance == null)
+            => WrapException(
+                () =>
+                {
                     _testExecutorInstance = new TestExecutor(resultsPath, _loggerInstance, collectTestData);
+                    return _testExecutorInstance;
+                },
+                (msg, ex) => new TestExecutorException(msg, ex));
 
-                return _testExecutorInstance;
-            }
-            catch (TestExecutorException te)
-            {
-                throw te;
-            }
-            catch (Exception ex)
-            {
-                throw new LoggerException(ex.ToString());
-            }
-        }
-        
-        public List<KeyValuePair<By, NavigationResult>> TestLinkNavigationForAllAnchorsFoundInPage(IWebDriverManager webDriverManager)
-        {
-            var manager = Helper.IsDriverNull(webDriverManager);
-            try
-            {
-                var navValidator = new NavigationValidator(manager.GetWait());
-                return navValidator.TestLinkNavigationForAllAnchorsFoundInPage(manager.GetActiveDriver());
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
-            }
-        }
-
-        public string ParseInnerText(string htmlText)
+        private T WrapException<T>(Func<T> action, Func<string, Exception, Exception> wrapperFactory)
         {
             try
             {
-                StructureValidator structureValidator = new StructureValidator();
-                return structureValidator.ParseInnerText(htmlText);
+                return action();
             }
             catch (Exception ex)
             {
-                throw new WebAutomationException(ex.ToString());
+                var candidate = wrapperFactory(ex.Message, ex);
+                if (ex.GetType() == candidate.GetType())
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                throw candidate;
             }
         }
-
     }
 }

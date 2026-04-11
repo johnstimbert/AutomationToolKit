@@ -3,6 +3,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
+using System.Runtime.ExceptionServices;
 using System.Collections.ObjectModel;
 using WebAutomationToolKit.DriverManagers;
 using WebAutomationToolKit.Exceptions;
@@ -16,7 +17,7 @@ namespace WebAutomationToolKit.InternalImplementations
     /// <summary>
     /// Concrete implementation of IWebDriverManager interface to manage web drivers
     /// </summary>
-    internal sealed class WebDriverManager : IWebDriverManager, IWrapsDriver
+    internal sealed class WebDriverManager : IWebDriverManager, IWrapsDriver, IWebDriverManagerInternal
     {
         #region Constants
         private const string _chromeDriverName = "chromedriver.exe";
@@ -132,13 +133,9 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 _activeDriver = driverType;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -162,13 +159,9 @@ namespace WebAutomationToolKit.InternalImplementations
                     _activeDriver = DriverType.None;
 
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -186,18 +179,14 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 _activeDriver = driverType;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
         /// <summary>
-        /// Returns the DriverType value indicating what driver is currently marked as active. The active driver is used for execution.
+        /// Returns the DriverType value
         /// </summary>
         /// <returns>DriverType</returns>
         public DriverType GetActiveDriverType()
@@ -206,18 +195,14 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _activeDriver;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
         /// <summary>
-        /// Gets the source of the page last loaded by the browser.
+        /// Gets the source
         /// </summary>
         /// <returns></returns>
         public string GetActiveDriverPageSource()
@@ -226,13 +211,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _drivers[_activeDriver].PageSource;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -246,13 +227,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _drivers[_activeDriver].Title;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -266,13 +243,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _drivers[_activeDriver].Url;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -286,13 +259,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _drivers[_activeDriver].CurrentWindowHandle;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -306,13 +275,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _drivers[_activeDriver].WindowHandles;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -329,18 +294,14 @@ namespace WebAutomationToolKit.InternalImplementations
                 _drivers[_activeDriver].Navigate().GoToUrl(url);
                 Thread.Sleep(2000);                
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
         /// <summary>
-        /// Closes the farthest tab to the right in the current browser window
+        /// Closes the farthest tab
         /// </summary>
         /// <param name="mainWindow"></param>
         public void CloseLastTabWithActiveDriver(string mainWindow)
@@ -353,18 +314,14 @@ namespace WebAutomationToolKit.InternalImplementations
                 _drivers[_activeDriver].SwitchTo().Window(mainWindow);
                 Thread.Sleep(1000);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
         /// <summary>
-        /// Closes the tab designated in the tabToClose parameter and switches the context to the tab designated in the targetTab parameter
+        /// Closes the tab designated
         /// </summary>
         /// <param name="tabToClose"></param>
         /// <param name="targetTab"></param>
@@ -378,18 +335,14 @@ namespace WebAutomationToolKit.InternalImplementations
                 _drivers[_activeDriver].SwitchTo().Window(targetTab);
                 Thread.Sleep(1000);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
         /// <summary>
-        /// Switches the context to the farthest tab to the right in the current browser window
+        /// Switches the context to the farthest tab
         /// </summary>
         public void SwitchToLastTabWithActiveDriver()
         {
@@ -401,18 +354,14 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 Thread.Sleep(1000);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }            
         }
 
         /// <summary>
-        /// Closes all tabs except for the one currently with focus
+        /// Closes all tabs except
         /// </summary>
         public void CloseAllTabsExceptCurrentWithActiveDriver()
         {
@@ -427,17 +376,13 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 Thread.Sleep(1000);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
         /// <summary>
-        /// Switches the driver context to the frame matching the SelectorData provided
+        /// Switches the driver context to the frame
         /// </summary>
         /// <param name="selectorData"></param>
         public void SwitchToFrame(SelectorData selectorData)
@@ -445,18 +390,13 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 var activeDriver = _drivers[_activeDriver];
-                var structureValidator = new StructureValidator();
-                var frameElement = structureValidator.CheckElementExistsReturnIWebElement(selectorData, activeDriver, _wait);
+                var frameElement = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, activeDriver, _wait);
 
                 activeDriver.SwitchTo().Frame(frameElement);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
         /// <summary>
@@ -490,13 +430,9 @@ namespace WebAutomationToolKit.InternalImplementations
                     Thread.Sleep(2000);
                 return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteScript(script.Source, args);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
         /// <summary>
@@ -513,13 +449,9 @@ namespace WebAutomationToolKit.InternalImplementations
                     Thread.Sleep(2000);
                 return Helper.JavaScriptExecutor(_drivers[_activeDriver]).ExecuteAsyncScript(script.Source, args);
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -536,9 +468,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 Helper.TakeScreenShot(manager.GetActiveDriver(), sreenShotPath, screenShotName);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -558,9 +490,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var element = CheckElementExistsReturnIWebElement(selectorData);
                 Helper.TakeElementScreenShot(sreenShotPath, screenShotName, element);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -579,9 +511,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 Helper.HighlightElement(manager.GetActiveDriver(), cssBy);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -601,9 +533,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 Helper.ClickUsingJavaScript(manager.GetActiveDriver(), cssBy);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -632,14 +564,14 @@ namespace WebAutomationToolKit.InternalImplementations
                     clickTarget.Click();
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
         /// <summary>
-        /// Enters text into the provided element after verifying it exists and is visible
+        /// Enters text into the provided element
         /// </summary>
         /// <param name="selectorData">Object representing the element to receive the text</param>
         /// <param name="textToEnter">Text that will be entered</param>
@@ -658,9 +590,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
                 manager.GetActiveDriver().SendText(cssBy, manager.GetWait(), textToEnter);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -680,9 +612,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 manager.GetActiveDriver().SendTextWithDelay(cssBy, manager.GetWait(), textToEnter, delay);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -702,9 +634,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 manager.GetActiveDriver().Clear(cssBy, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -733,9 +665,9 @@ namespace WebAutomationToolKit.InternalImplementations
                     executor.ExecuteScript("arguments[0].scrollIntoView()", manager.GetActiveDriver().FindElement(cssBy));
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -753,9 +685,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 return WebDriverExtension.IsDisplayed(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -773,9 +705,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 return WebDriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -791,11 +723,11 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
-                return WebDriverExtension.IsEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
+                return WebDriverExtension.IsDisplayed(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -813,9 +745,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 var cssBy = _structureValidator.BuildCssSelectorBy(selectorData);
                 return WebDriverExtension.IsDisplayedAndEnabled(manager.GetActiveDriver(), cssBy, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -832,9 +764,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return manager.GetActiveDriver().WaitForUrlContains(text, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -851,9 +783,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return manager.GetActiveDriver().WaitForUrlRegexContains(pattern, manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -870,9 +802,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -889,9 +821,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _structureValidator.CheckElementExistsReturnCssSelector(selectorData, manager.GetActiveDriver(), manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -908,9 +840,9 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _structureValidator.CheckElementsExist(selectorDataSet, manager.GetActiveDriver(), manager.GetWait());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -943,9 +875,9 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 return _structureValidator.CheckChildElementExists(parentElement, childSelectorData, manager.GetActiveDriver());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -961,43 +893,35 @@ namespace WebAutomationToolKit.InternalImplementations
             {
                 return _structureValidator.GetAllBysUsingMatchingSelectorData(selectorData, manager.GetActiveDriver());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
         #endregion
 
         #region Internal Methods
-        internal IWebDriver GetActiveDriver()
+        public IWebDriver GetActiveDriver()
         {
             try
             {
                 return _drivers[_activeDriver];
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
-        internal WebDriverWait GetWait()
+        public WebDriverWait GetWait()
         {
             try
             {
                 return _wait;
             }
-            catch (WebAutomationException wea)
+            catch (Exception ex) when (ex is not WebAutomationException)
             {
-                throw wea;
-            }
-            catch (Exception ex)
-            {
-                throw new WebAutomationException(ex.ToString());
+                throw new WebAutomationException(ex.Message, ex);
             }
         }
 
@@ -1050,7 +974,7 @@ namespace WebAutomationToolKit.InternalImplementations
             }
             catch (DriverServiceNotFoundException dsnf)
             {
-                throw new WebAutomationException(dsnf.ToString());
+                throw new WebAutomationException(dsnf.Message, dsnf);
             }
         }
 
@@ -1061,6 +985,29 @@ namespace WebAutomationToolKit.InternalImplementations
 
             return true;
         }
+
+        private T WrapException<T>(Func<T> action)
+        {
+            try { return action(); }
+            catch (Exception ex)
+            {
+                if (ex is WebAutomationException)
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                throw new WebAutomationException(ex.Message, ex);
+            }
+        }
+
+        private void WrapException(Action action)
+        {
+            try { action(); }
+            catch (Exception ex)
+            {
+                if (ex is WebAutomationException)
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                throw new WebAutomationException(ex.Message, ex);
+            }
+        }
+
         #endregion
     }
 }
