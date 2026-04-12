@@ -71,7 +71,8 @@ namespace WebAutomationToolKit.InternalImplementations
             => WrapException(
                 () =>
                 {
-                    _loggerInstance = new Logger(loggerSettings);
+                   _loggerInstance?.Dispose();
+                   _loggerInstance = new Logger(loggerSettings);
                     return _loggerInstance;
                 },
                 (msg, ex) => new LoggerException(msg, ex));

@@ -40,15 +40,11 @@ namespace WebAutomationToolKit.BrowserTests
         [TestCleanup]
         public void AfterEachTest()
         {
-            // P3: Flush buffered data, null both references so the Logger and its
-            // StreamWriters become unreachable, then force GC + finalizers.
-            // StreamWriter's finalizer closes the file handle, allowing
-            // Directory.Delete to succeed on Windows.
-            _logger?.Flush();
-            _logger = null!;
-            _webAutomation = null!;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+           // Dispose releases the StreamWriter file handles deterministically,
+           // so Directory.Delete succeeds immediately on Windows.
+           _logger?.Dispose();
+           _logger = null!;
+           _webAutomation = null!;
 
             if (Directory.Exists(_logPath))
                 Directory.Delete(_logPath, recursive: true);

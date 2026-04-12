@@ -1,50 +1,49 @@
-﻿using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using WebAutomationToolKit.Exceptions;
-using WebAutomationToolKit.Helpers;
 using static WebAutomationToolKit.WebAutomationEnums;
 
 namespace WebAutomationToolKit.InternalImplementations
 {
-
     /// <summary>
-    /// This class provides a common utility for formatting logging
+    /// Pure orchestration layer for logging.
+    /// Formats messages, manages per-test state via <see cref="LogContext"/>, and
+    /// delegates all file I/O to an injected <see cref="ILogWriter"/>.
+    /// This class has zero file-system knowledge.
     /// </summary>
-    internal sealed class Logger : ILogger, IDisposable
+    internal sealed class Logger : ILogger
     {
-        private string _logFileName;
-        private string? _failureLogFileName;
-        private string _logFilePath;
-        private string _dateFormatProperty;
-        private bool _generateFailureLog;
-        private bool _appendDateToLogFile;
-        private int _numberOfLogFilesToPreserve;
+        private readonly ILogWriter _writer;
+        private readonly LogContext _defaultContext;
+        private readonly bool _generateFailureLog;
 
-        private LogFileHelper _fileHelper;
-        private bool _inTest = false;
-        private bool _newTestRun = true;
-        StringBuilder _testLogHistory = new StringBuilder();
-
-        private StreamWriter? _executionLogWriter;
-        private StreamWriter? _failureLogWriter;
-
+        /// <summary>
+        /// Production constructor. Validates settings, then creates a <see cref="FileLogWriter"/>.
+        /// </summary>
         internal Logger(LoggerSettings loggerSettings)
         {
-            _logFileName = loggerSettings.LogFileName ?? throw new LoggerException($"Log File Name Must Be Deinfed");
-            _logFilePath = loggerSettings.LogFilePath ?? throw new LoggerException($"Log File Path Must Be Deinfed");
+            if (loggerSettings.LogFileName is null)
+                throw new LoggerException("Log File Name Must Be Deinfed");
+            if (loggerSettings.LogFilePath is null)
+                throw new LoggerException("Log File Path Must Be Deinfed");
 
-            _dateFormatProperty = loggerSettings.DateFormat;
             _generateFailureLog = loggerSettings.GenerateFailureLog;
-            _appendDateToLogFile = loggerSettings.AppendDateToLogFile;
-            _numberOfLogFilesToPreserve = loggerSettings.NumberOfLogFilesToPreserve;
+            _writer = new FileLogWriter(loggerSettings);
+            _defaultContext = new LogContext("__global__", "N/A");
+        }
 
-            _fileHelper = new LogFileHelper(_logFilePath, _logFileName);
-
-            if (!Directory.Exists(_logFilePath))
-                Directory.CreateDirectory(_logFilePath);
+        /// <summary>
+        /// Testability constructor. Accepts any <see cref="ILogWriter"/> implementation,
+        /// enabling unit tests to use an in-memory writer without touching the file system.
+        /// </summary>
+        internal Logger(ILogWriter writer, bool generateFailureLog = true)
+        {
+            _writer = writer;
+            _generateFailureLog = generateFailureLog;
+            _defaultContext = new LogContext("__global__", "N/A");
         }
 
         #region public methods
+
         /// <summary>
         /// Returns an xml respresentation of the proivided object
         /// </summary>
@@ -59,73 +58,80 @@ namespace WebAutomationToolKit.InternalImplementations
                 serializer.Serialize(stringwriter, obj);
                 return stringwriter.ToString();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new LoggerException($"An exception was thrown while serializing an object to XML", ex);
             }
         }
 
         /// <summary>
-        /// Called to log the desired message
+        /// Called to log the desired message using the shared default context.
+        /// Not safe for concurrent use; use <see cref="Log(LogMessageType, string, LogContext)"/>
+        /// when parallel test executions share this logger instance.
         /// </summary>
         /// <param name="level"></param>
         /// <param name="message"></param>
         public void Log(LogMessageType level, string message)
+            => Log(level, message, _defaultContext);
+
+        /// <summary>
+        /// Called to log the desired message within the supplied <paramref name="context"/>
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="message"></param>
+        /// <param name="context">Per-test context that isolates in-test state and history.</param>
+        public void Log(LogMessageType level, string message, LogContext context)
         {
             try
             {
-                if (_newTestRun)
-                {
-                    if (_appendDateToLogFile)
-                        _logFileName = _fileHelper.AppendDateToLogFile(_logFileName, _dateFormatProperty);
-
-                    ModifyExistingLogsBasedOnConfigs(_numberOfLogFilesToPreserve, _logFileName);
-
-                    _newTestRun = false;
-                }
-
-                //Switch case for LogLevel message type
                 switch (level)
                 {
                     case LogMessageType.TESTINFO:
 
-                        if (!_inTest)
+                        if (!context.InTest)
                         {
-                            _testLogHistory.Clear();
-                            WriteEntryToExecutionLog(level.ToString(), $"**** STARTING TEST ****: {message}", true);
-                            _inTest = true;
+                            context.TestLogHistory.Clear();
+                            string startEntry = FormatEntry(level, $"**** STARTING TEST ****: {message}");
+                            context.TestLogHistory.AppendLine(startEntry);
+                            _writer.WriteEntry(startEntry);
+                            context.InTest = true;
                         }
                         else
                         {
-                            WriteEntryToExecutionLog(level.ToString(), $"Test Execution Info: {message}", true);
-                            _inTest = true;
+                            string infoEntry = FormatEntry(level, $"Test Execution Info: {message}");
+                            context.TestLogHistory.AppendLine(infoEntry);
+                            _writer.WriteEntry(infoEntry);
                         }
 
                         break;
+
                     case LogMessageType.TESTFAILED:
 
-                        WriteEntryToExecutionLog(level.ToString(), $"****** TEST FAILURE ****** {message}", true);
+                        string failEntry = FormatEntry(level, $"****** TEST FAILURE ****** {message}");
+                        context.TestLogHistory.AppendLine(failEntry);
+                        _writer.WriteEntry(failEntry);
 
                         if (_generateFailureLog)
-                            WriteEntryToFailureLog(level.ToString(), _testLogHistory.ToString());
+                            _writer.WriteFailureEntry(context.TestLogHistory.ToString());
 
-                        _inTest = false;
-                        _testLogHistory.Clear();
-                        Flush();
+                        context.InTest = false;
+                        context.TestLogHistory.Clear();
+                        _writer.Flush();
 
                         break;
+
                     case LogMessageType.TESTPASSED:
 
-                        WriteEntryToExecutionLog(level.ToString(), $"****** TEST PASSED ****** {message}");
+                        _writer.WriteEntry(FormatEntry(level, $"****** TEST PASSED ****** {message}"));
 
-                        _inTest = false;
-                        _testLogHistory.Clear();
-                        Flush();
+                        context.InTest = false;
+                        context.TestLogHistory.Clear();
+                        _writer.Flush();
 
                         break;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new LoggerException($"An Execption was thrown while attempting to log the message {message} " +
                     $"with level {level}", ex);
@@ -137,73 +143,34 @@ namespace WebAutomationToolKit.InternalImplementations
         /// </summary>
         /// <returns>string </returns>
         public string GetCurrentLogFileName()
-        {
-            return _logFileName;
-        }
+            => _writer.GetLogFileName();
 
         /// <summary>
         /// Returns the name of the failure log file currently in use
         /// </summary>
         /// <returns>string </returns>
         public string? GetCurrentFailureLogFileName()
-        {
-            return _failureLogFileName;
-        }
+            => _writer.GetFailureLogFileName();
 
         /// <summary>
         /// Flushes all buffered log entries to the underlying file.
         /// Call this before examining log file contents or at the end of a test run.
         /// </summary>
         public void Flush()
-        {
-            _executionLogWriter?.Flush();
-            _failureLogWriter?.Flush();
-        }
+            => _writer.Flush();
 
-        // Implements IDisposable to ensure StreamWriters are properly disposed
+        /// <summary>
+        /// Releases the underlying <see cref="ILogWriter"/> and its file handles.
+        /// </summary>
         public void Dispose()
-        {
-            _executionLogWriter?.Dispose();
-            _executionLogWriter = null;
-            _failureLogWriter?.Dispose();
-            _failureLogWriter = null;
-        }
+            => _writer.Dispose();
 
         #endregion
 
         #region private methods
-        private void WriteEntryToExecutionLog(string level, string message, bool addToTestHistory = false)
-        {
-            string fullFileName = Path.Combine(_logFilePath, _logFileName);
 
-            string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} - {message}";
-
-            if (addToTestHistory)
-                _testLogHistory.AppendLine(logEntry);
-
-            _executionLogWriter ??= new StreamWriter(fullFileName, true) { AutoFlush = false };
-            _executionLogWriter.WriteLine(logEntry);
-        }
-
-        private void WriteEntryToFailureLog(string level, string message)
-        {
-            _failureLogFileName = Path.Combine(_logFilePath, $"{_logFileName}_Failures");
-
-            _failureLogWriter ??= new StreamWriter(_failureLogFileName, true) { AutoFlush = false };
-            _failureLogWriter.WriteLine(message);
-        }
-
-        private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, string logFileName)
-        {
-            if (numberOfLogFilesToPreserve > 0)
-            {
-                _fileHelper.IncrementLogFiles(numberOfLogFilesToPreserve);
-            }
-            else
-            {
-                _fileHelper.ClearLogFiles(logFileName);
-            }
-        }
+        private static string FormatEntry(LogMessageType level, string message)
+            => $"{DateTime.Now:G} - Message Type:{level} - {message}";
 
         #endregion
     }

@@ -55,6 +55,7 @@ namespace WebAutomationToolKit.InternalImplementations
             var testMethodName = GetName(testMethod.Method.Name);
             var browserName = webDriverManager.GetActiveDriverType().ToString();
             _testId = $"{testMethodName}.{browserName}";
+           var context = new LogContext(_testId, browserName);
             try
             {
 
@@ -68,9 +69,9 @@ namespace WebAutomationToolKit.InternalImplementations
                 }
                 else
                 {
-                    _logger.Log(LogMessageType.TESTINFO, $"[START] ==== Test Method: {testMethodName} - Driver: {browserName} ====");
+                   _logger.Log(LogMessageType.TESTINFO, $"[START] ==== Test Method: {testMethodName} - Driver: {browserName} ====", context);
                     testMethod();
-                    _logger.Log(LogMessageType.TESTPASSED, ($"[END]   =============== [PASSED] ==============="));
+                   _logger.Log(LogMessageType.TESTPASSED, $"[END]   =============== [PASSED] ===============", context);
                 }
 
                 //Raise the TestComplete event to signal the TestDataCollector a test is completed. Successfully in this case.
@@ -88,8 +89,8 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 if (_logger != null)
                 {
-                    _logger.Log(LogMessageType.TESTFAILED, wae.Message);
-                    _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
+                   _logger.Log(LogMessageType.TESTFAILED, wae.Message, context);
+                   _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============", context);
                 }
 
                 throw;
@@ -107,8 +108,8 @@ namespace WebAutomationToolKit.InternalImplementations
 
                 if (_logger != null)
                 {
-                    _logger.Log(LogMessageType.TESTFAILED, tee.Message);
-                    _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============");
+                   _logger.Log(LogMessageType.TESTFAILED, tee.Message, context);
+                   _logger.Log(LogMessageType.TESTINFO, $"[END]   =============== [FAILED] ===============", context);
                 }
 
                 throw tee;
