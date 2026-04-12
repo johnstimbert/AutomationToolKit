@@ -15,9 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- NuGet package from GitHub Packages (see nuget.config at repo root) -->
-    <PackageReference Include="WebAutomationToolKit" Version="1.145.0" />
-
     <!-- Test framework -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
     <PackageReference Include="MSTest.TestAdapter"     Version="3.11.1" />
@@ -26,6 +23,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+   <!-- Selenium packages — were previously transitive through the NuGet package reference -->
+   <PackageReference Include="Selenium.Support"   Version="4.43.0" />
+   <PackageReference Include="Selenium.WebDriver" Version="4.43.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Project reference replaces the NuGet package so tests build against local source -->
+    <ProjectReference Include="..\..\src\WebAutomationToolKit\WebAutomationToolKit.csproj" />
   </ItemGroup>
 
 </Project>
