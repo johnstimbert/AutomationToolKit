@@ -30,5 +30,10 @@ namespace WebAutomationToolKit
         /// </summary>
         /// <returns>string </returns>
         string? GetCurrentFailureLogFileName();
+        /// <summary>
+        /// Flushes all buffered log entries to the underlying file.
+        /// Call this before examining log file contents or at the end of a test run.
+        /// </summary>
+        void Flush();
     }
 }

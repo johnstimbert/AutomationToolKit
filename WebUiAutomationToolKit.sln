@@ -11,12 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B8EFD7CB-D11
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "designs", "designs", "{D930C404-2B6F-4F9C-836B-9AC6190474C0}"
-	ProjectSection(SolutionItems) = preProject
-		docs\design\DESIGN_DOTNET10_UPGRADE.md = docs\design\DESIGN_DOTNET10_UPGRADE.md
-		docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md = docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{600A97F8-8FDF-4824-BD95-FC9A892A9A03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1316D7D7-5F9F-42CC-80A8-47BE901E2EF9}"

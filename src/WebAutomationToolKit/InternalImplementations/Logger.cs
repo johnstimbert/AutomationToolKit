@@ -25,6 +25,9 @@ namespace WebAutomationToolKit.InternalImplementations
         private bool _newTestRun = true;
         StringBuilder _testLogHistory = new StringBuilder();
 
+        private StreamWriter? _executionLogWriter;
+        private StreamWriter? _failureLogWriter;
+
         internal Logger(LoggerSettings loggerSettings)
         {
             _logFileName = loggerSettings.LogFileName ?? throw new LoggerException($"Log File Name Must Be Deinfed");
@@ -108,6 +111,7 @@ namespace WebAutomationToolKit.InternalImplementations
 
                         _inTest = false;
                         _testLogHistory.Clear();
+                        Flush();
 
                         break;
                     case LogMessageType.TESTPASSED:
@@ -116,6 +120,7 @@ namespace WebAutomationToolKit.InternalImplementations
 
                         _inTest = false;
                         _testLogHistory.Clear();
+                        Flush();
 
                         break;
                 }
@@ -145,34 +150,38 @@ namespace WebAutomationToolKit.InternalImplementations
             return _failureLogFileName;
         }
 
+        /// <summary>
+        /// Flushes all buffered log entries to the underlying file.
+        /// Call this before examining log file contents or at the end of a test run.
+        /// </summary>
+        public void Flush()
+        {
+            _executionLogWriter?.Flush();
+            _failureLogWriter?.Flush();
+        }
+
         #endregion
 
         #region private methods
         private void WriteEntryToExecutionLog(string level, string message, bool addToTestHistory = false)
         {
-            string fullefileName = Path.Combine(_logFilePath, _logFileName);
+            string fullFileName = Path.Combine(_logFilePath, _logFileName);
 
             string logEntry = $"{DateTime.Now.ToString("G")} - Message Type:{level} - {message}";
 
             if (addToTestHistory)
                 _testLogHistory.AppendLine(logEntry);
 
-            //Append new text to an existing file 
-            using (StreamWriter file = new StreamWriter(fullefileName, true))
-            {
-                file.WriteLine(logEntry);
-            }
+            _executionLogWriter ??= new StreamWriter(fullFileName, true) { AutoFlush = false };
+            _executionLogWriter.WriteLine(logEntry);
         }
 
         private void WriteEntryToFailureLog(string level, string message)
         {
             _failureLogFileName = Path.Combine(_logFilePath, $"{_logFileName}_Failures");
 
-            //Append new text to an existing file 
-            using (StreamWriter file = new StreamWriter(_failureLogFileName, true))
-            {
-                file.WriteLine(message);
-            }
+            _failureLogWriter ??= new StreamWriter(_failureLogFileName, true) { AutoFlush = false };
+            _failureLogWriter.WriteLine(message);
         }
 
         private void ModifyExistingLogsBasedOnConfigs(int numberOfLogFilesToPreserve, string logFileName)
