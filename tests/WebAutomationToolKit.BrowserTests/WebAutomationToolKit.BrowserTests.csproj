@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <!-- NuGet package from GitHub Packages (see nuget.config at repo root) -->
-    <PackageReference Include="WebAutomationToolKit" Version="1.22.0" />
+    <PackageReference Include="WebAutomationToolKit" Version="1.145.0" />
 
     <!-- Test framework -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />

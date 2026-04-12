@@ -10,7 +10,7 @@ namespace WebAutomationToolKit.InternalImplementations
     /// <summary>
     /// This class provides a common utility for formatting logging
     /// </summary>
-    internal sealed class Logger : ILogger
+    internal sealed class Logger : ILogger, IDisposable
     {
         private string _logFileName;
         private string? _failureLogFileName;
