@@ -11,12 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B8EFD7CB-D11
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "designs", "designs", "{D930C404-2B6F-4F9C-836B-9AC6190474C0}"
-	ProjectSection(SolutionItems) = preProject
-		docs\design\DESIGN_DOTNET10_UPGRADE.md = docs\design\DESIGN_DOTNET10_UPGRADE.md
-		docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md = docs\design\DESIGN_DRY_SOLID_TESTABILITY_REVIEW.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{600A97F8-8FDF-4824-BD95-FC9A892A9A03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1316D7D7-5F9F-42CC-80A8-47BE901E2EF9}"
@@ -29,6 +23,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{73D99EE6-A39A-4AF6-9D08-A49E7097B5C6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agents", "agents", "{5A2CDC33-8097-4393-93C5-56923D54BE0F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\agents\dotnet-code-reviewer.agent.md = .github\agents\dotnet-code-reviewer.agent.md
+		.github\agents\dotnet-design-architect.agent.md = .github\agents\dotnet-design-architect.agent.md
+		.github\agents\dotnet-implementer.agent.md = .github\agents\dotnet-implementer.agent.md
+		.github\agents\dotnet-technical-writer.agent.md = .github\agents\dotnet-technical-writer.agent.md
+		.github\agents\dotnet-unit-test-engineer.agent.md = .github\agents\dotnet-unit-test-engineer.agent.md
 	EndProjectSection
 EndProject
 Global
@@ -58,6 +61,7 @@ Global
 		{BE138DFF-1F26-4096-B2E3-0CDB3C955F31} = {AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}
 		{1316D7D7-5F9F-42CC-80A8-47BE901E2EF9} = {600A97F8-8FDF-4824-BD95-FC9A892A9A03}
 		{F4E6E482-040E-30D4-FB29-BE8572E83E95} = {AF6CDB92-0C04-4DF0-B7F3-0A0E30C680C2}
+		{5A2CDC33-8097-4393-93C5-56923D54BE0F} = {600A97F8-8FDF-4824-BD95-FC9A892A9A03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {262D9DFF-2892-409F-A272-A8A69AC369AF}

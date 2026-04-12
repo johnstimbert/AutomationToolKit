@@ -145,14 +145,15 @@ namespace WebAutomationToolKit.Validators
                 }
                 else
                 {
-                    var elements = driver.FindElements(BuildCssSelectorBy(selectorData));
-                    
+                    var cssBy = BuildCssSelectorBy(selectorData);
+                    var elements = driver.FindElements(cssBy);
+
                     if (elements.Count > 1)
                         throw new WebAutomationException($"{elements.Count} elements were found with a class attribute of '{selectorData.AttributeValue}'. " +
                             $"Consider using the method GetAllBysUsingMatchingSelectorData and then filtering it to find the desired element.");
 
                     if(elements.Count == 1)
-                        webElement = driver.WaitForElementExists(BuildCssSelectorBy(selectorData), wait);
+                        webElement = elements[0];
                 }
 
                 return webElement;

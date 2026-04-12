@@ -14,10 +14,17 @@ namespace WebAutomationToolKit
     public interface IWebDriverManager
     {
         /// <summary>
-        /// Enables or disables DemoMode. If enabled each action will be preceded by a 2 second delay
+        /// Enables or disables DemoMode. If enabled each action will be preceded by a delay of <see cref="DemoModeDelaySeconds"/> seconds.
         /// </summary>
         /// <param name="setting">true = on/false = off</param>
         void EnableDemoMode(bool setting);
+        /// <summary>
+        /// Gets or sets the DemoMode delay in seconds. When DemoMode is enabled,
+        /// each action is preceded by a delay of this duration.
+        /// Default is 2 seconds.
+        /// </summary>
+        /// <exception cref="WebAutomationException">Thrown when value is less than or equal to 0.</exception>
+        int DemoModeDelaySeconds { get; set; }
         /// <summary>
         /// Sets the options for the associated driver. If the driver is active when this method is called it will be recreated
         /// </summary>
@@ -87,8 +94,11 @@ namespace WebAutomationToolKit
         /// <summary>
         /// Instructs the driver to navigate the browser to another location.
         /// </summary>
-        /// <param name="url"></param>
-        void NavigateWithActiveDriver(string url);
+        /// <param name="url">The URL to navigate to.</param>
+        /// <param name="postNavigationWaitMs">Optional delay in milliseconds to wait after navigation completes.
+        /// Use this for SPA pages where JavaScript rendering continues after document.readyState == "complete".
+        /// Default is 0 (no additional wait).</param>
+        void NavigateWithActiveDriver(string url, int postNavigationWaitMs = 0);
         /// <summary>
         /// Closes the farthest tab to the right in the current browser window
         /// </summary>

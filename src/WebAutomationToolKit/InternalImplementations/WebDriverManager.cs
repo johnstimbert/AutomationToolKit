@@ -33,6 +33,7 @@ namespace WebAutomationToolKit.InternalImplementations
         private readonly int _timeoutForWait;
         private string? _driverPath;
         private bool _demoMode = false;
+        private int _demoModeDelayMs = 2000;
 
         private ChromeOptions? _chromeOptions;
         private FirefoxOptions? _firefoxOptions;
@@ -40,7 +41,7 @@ namespace WebAutomationToolKit.InternalImplementations
 
         private FirefoxProfile? _firefoxProfile;
 
-        private StructureValidator _structureValidator;
+        private readonly StructureValidator _structureValidator;
 
 
         #region Constructors
@@ -57,12 +58,29 @@ namespace WebAutomationToolKit.InternalImplementations
         #region IWebDriverManager Methods
 
         /// <summary>
-        /// Enables or disables DemoMode. If enabled each action will be preceded by a 2 second delay
+        /// Enables or disables DemoMode. If enabled each action will be preceded by a delay of <see cref="DemoModeDelaySeconds"/> seconds.
         /// </summary>
         /// <param name="setting">true = on/false = off</param>
         public void EnableDemoMode(bool setting)
         {
             _demoMode = setting;
+        }
+
+        /// <summary>
+        /// Gets or sets the DemoMode delay in seconds. When DemoMode is enabled,
+        /// each action is preceded by a delay of this duration.
+        /// Default is 2 seconds.
+        /// </summary>
+        /// <exception cref="WebAutomationException">Thrown when value is less than or equal to 0.</exception>
+        public int DemoModeDelaySeconds
+        {
+            get => _demoModeDelayMs / 1000;
+            set
+            {
+                if (value <= 0)
+                    throw new WebAutomationException("DemoModeDelaySeconds must be greater than 0.");
+                _demoModeDelayMs = value * 1000;
+            }
         }
         /// <summary>
         /// Returns the currently active IWebDriver object
@@ -283,15 +301,23 @@ namespace WebAutomationToolKit.InternalImplementations
         /// <summary>
         /// Instructs the driver to navigate the browser to another location.
         /// </summary>
-        /// <param name="url"></param>
-        public void NavigateWithActiveDriver(string url)
+        /// <param name="url">The URL to navigate to.</param>
+        /// <param name="postNavigationWaitMs">Optional delay in milliseconds to wait after navigation completes.
+        /// Use this for SPA pages where JavaScript rendering continues after document.readyState == "complete".
+        /// Default is 0 (no additional wait).</param>
+        public void NavigateWithActiveDriver(string url, int postNavigationWaitMs = 0)
         {
             if(_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             try
             {
                 _drivers![_activeDriver].Navigate().GoToUrl(url);
-                Thread.Sleep(2000);                
+
+                if (postNavigationWaitMs < 0)
+                    throw new ArgumentOutOfRangeException(nameof(postNavigationWaitMs), "postNavigationWaitMs cannot be negative.");
+
+                if (postNavigationWaitMs > 0)
+                    Thread.Sleep(postNavigationWaitMs);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -306,12 +332,12 @@ namespace WebAutomationToolKit.InternalImplementations
         public void CloseLastTabWithActiveDriver(string mainWindow)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             try
             {
                 _drivers![_activeDriver].SwitchTo().Window(_drivers![_activeDriver].WindowHandles.Last()).Close();
                 _drivers![_activeDriver].SwitchTo().Window(mainWindow);
-                Thread.Sleep(1000);
+                _wait.Until(d => d.CurrentWindowHandle == mainWindow);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -327,12 +353,12 @@ namespace WebAutomationToolKit.InternalImplementations
         public void CloseTabWithActiveDriver(string tabToClose, string targetTab)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             try
             {
                 _drivers![_activeDriver].SwitchTo().Window(tabToClose).Close();
                 _drivers![_activeDriver].SwitchTo().Window(targetTab);
-                Thread.Sleep(1000);
+                _wait.Until(d => d.CurrentWindowHandle == targetTab);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -346,12 +372,12 @@ namespace WebAutomationToolKit.InternalImplementations
         public void SwitchToLastTabWithActiveDriver()
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             try
             {
-                _drivers![_activeDriver].SwitchTo().Window(_drivers![_activeDriver].WindowHandles.Last());
-
-                Thread.Sleep(1000);
+                var lastHandle = _drivers![_activeDriver].WindowHandles.Last();
+                _drivers![_activeDriver].SwitchTo().Window(lastHandle);
+                _wait.Until(d => d.CurrentWindowHandle == lastHandle);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -365,7 +391,7 @@ namespace WebAutomationToolKit.InternalImplementations
         public void CloseAllTabsExceptCurrentWithActiveDriver()
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             try
             {
                 var currentWindow = _drivers![_activeDriver].CurrentWindowHandle;
@@ -373,7 +399,7 @@ namespace WebAutomationToolKit.InternalImplementations
                 foreach (var win in windows)
                     CloseTabWithActiveDriver(win, currentWindow);
 
-                Thread.Sleep(1000);
+                _wait.Until(d => d.WindowHandles.Count == 1);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
             {
@@ -427,7 +453,7 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 if (_demoMode)
-                    Thread.Sleep(2000);
+                    Thread.Sleep(_demoModeDelayMs);
                 return Helper.JavaScriptExecutor(_drivers![_activeDriver]).ExecuteScript(script.Source, args);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
@@ -446,7 +472,7 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 if (_demoMode)
-                    Thread.Sleep(2000);
+                    Thread.Sleep(_demoModeDelayMs);
                 return Helper.JavaScriptExecutor(_drivers![_activeDriver]).ExecuteAsyncScript(script.Source, args);
             }
             catch (Exception ex) when (ex is not WebAutomationException)
@@ -505,7 +531,7 @@ namespace WebAutomationToolKit.InternalImplementations
         public void HighlightElement(SelectorData selectorData)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -527,7 +553,7 @@ namespace WebAutomationToolKit.InternalImplementations
         public void JavaScriptClick(SelectorData selectorData)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -544,12 +570,12 @@ namespace WebAutomationToolKit.InternalImplementations
         /// Clicks the provided element after verifying it exists and is clickable
         /// </summary>
         /// <param name="selectorData">Object representing the element to click</param>
-        /// <remarks>This method will retry the click once after waiting 2 seconds after the first ElementClickInterceptedException is thrown</remarks>
+        /// <remarks>This method will retry the click once after waiting for the element to become clickable after the first ElementClickInterceptedException is thrown</remarks>
         /// <exception cref="WebAutomationException"></exception>
         public void Click(SelectorData selectorData)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -561,7 +587,17 @@ namespace WebAutomationToolKit.InternalImplementations
                 }
                 catch (ElementClickInterceptedException)
                 {
-                    Thread.Sleep(2000);
+                    var retryBy = _structureValidator.BuildCssSelectorBy(selectorData);
+                    manager.GetWait().Until(d =>
+                    {
+                        try
+                        {
+                            var el = d.FindElement(retryBy);
+                            return el.Displayed && el.Enabled;
+                        }
+                        catch (NoSuchElementException) { return false; }
+                        catch (StaleElementReferenceException) { return false; }
+                    });
                     var clickTarget = _structureValidator.CheckElementExistsReturnIWebElement(selectorData, manager.GetActiveDriver(), manager.GetWait())
                         ?? throw new WebAutomationException($"Element '{selectorData.Name}' could not be located for click (retry)");
                     clickTarget.Click();
@@ -582,7 +618,7 @@ namespace WebAutomationToolKit.InternalImplementations
         public void SendText(SelectorData selectorData, string textToEnter)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -630,7 +666,7 @@ namespace WebAutomationToolKit.InternalImplementations
         public void ClearText(SelectorData selectorData)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             var manager = Helper.IsDriverNull(this);
             try
             {
@@ -651,7 +687,7 @@ namespace WebAutomationToolKit.InternalImplementations
         public void MoveToElement(SelectorData selectorData)
         {
             if (_demoMode)
-                Thread.Sleep(2000);
+                Thread.Sleep(_demoModeDelayMs);
             var manager = Helper.IsDriverNull(this);
             try
             {
