@@ -160,6 +160,15 @@ namespace WebAutomationToolKit.InternalImplementations
             _failureLogWriter?.Flush();
         }
 
+        // Implements IDisposable to ensure StreamWriters are properly disposed
+        public void Dispose()
+        {
+            _executionLogWriter?.Dispose();
+            _executionLogWriter = null;
+            _failureLogWriter?.Dispose();
+            _failureLogWriter = null;
+        }
+
         #endregion
 
         #region private methods

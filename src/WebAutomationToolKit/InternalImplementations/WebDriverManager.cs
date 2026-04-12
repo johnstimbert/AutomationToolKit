@@ -41,7 +41,7 @@ namespace WebAutomationToolKit.InternalImplementations
 
         private FirefoxProfile? _firefoxProfile;
 
-        private StructureValidator _structureValidator;
+        private readonly StructureValidator _structureValidator;
 
 
         #region Constructors
@@ -312,6 +312,9 @@ namespace WebAutomationToolKit.InternalImplementations
             try
             {
                 _drivers![_activeDriver].Navigate().GoToUrl(url);
+
+                if (postNavigationWaitMs < 0)
+                    throw new ArgumentOutOfRangeException(nameof(postNavigationWaitMs), "postNavigationWaitMs cannot be negative.");
 
                 if (postNavigationWaitMs > 0)
                     Thread.Sleep(postNavigationWaitMs);
