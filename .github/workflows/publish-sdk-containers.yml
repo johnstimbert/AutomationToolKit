@@ -38,19 +38,38 @@ jobs:
     - name: Determine Version
       id: determine-version
       run: |
-        if [ "${{ github.event_name }}" == "pull_request" ]; then
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          VERSION="1.${PR_NUMBER}.0"
-        elif [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
-          COMMIT_COUNT=$(git rev-list --count --merges origin/main 2>/dev/null || echo "0")
-          VERSION="1.${COMMIT_COUNT}.0"
-        else
-          COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo "0")
-          VERSION="1.${COMMIT_COUNT}.0"
-        fi
-        
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT
-        echo "Calculated Version: ${VERSION}"
+       MANUAL_VERSION="${{ github.event.inputs.version }}"
+       BUMP="${{ github.event.inputs.bump }}"
+
+       if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "$MANUAL_VERSION" ]; then
+         # Explicit version override supplied by the user
+         VERSION="$MANUAL_VERSION"
+       elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+         # Bump from the latest git tag; fall back to csproj VersionPrefix
+         LATEST=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "")
+         if [ -z "$LATEST" ]; then
+           LATEST=$(grep -oP '(?<=<VersionPrefix>)[^<]+' src/WebAutomationToolKit/WebAutomationToolKit.csproj 2>/dev/null || echo "1.0.0")
+         fi
+         MAJOR=$(echo "$LATEST" | cut -d. -f1)
+         MINOR=$(echo "$LATEST" | cut -d. -f2)
+         PATCH=$(echo "$LATEST" | cut -d. -f3)
+         case "$BUMP" in
+           major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+           minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+           *)     PATCH=$((PATCH + 1)) ;;
+         esac
+         VERSION="${MAJOR}.${MINOR}.${PATCH}"
+       elif [ "${{ github.event_name }}" == "pull_request" ]; then
+         # PR build: embed PR number for traceability
+         VERSION="1.${{ github.event.pull_request.number }}.0"
+       else
+         # push to main: count ALL commits (not just merges) for reliable auto-increment
+         COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo "0")
+         VERSION="1.${COMMIT_COUNT}.0"
+       fi
+
+       echo "version=${VERSION}" >> $GITHUB_OUTPUT
+       echo "Calculated Version: ${VERSION}"
     
     - name: Display calculated version
       run: |
